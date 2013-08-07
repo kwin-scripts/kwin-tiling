@@ -1,0 +1,16 @@
+* TODO Make rules for tiling
+** HACK Ignore yakuake and menus/dialogs for tiling
+* TODO Resize tiles
+* TODO Floating
+** DONE Toggle floating
+   Somehow client.tiling_floating stays the same across acesses
+** DONE Floating layout/disable script
+** TODO Make floating windows be _above_ tilers
+   Somehow accessing client.keepAbove doesn't work
+* TODO EDGECASES, EDGECASES, EDGECASES!
+** TODO Doesn't tile properly when screen disappears
+** TODO Don't tile fullscreen windows on workspace change
+* DONE Killing three clients in succession without opening another in between kills the script
+** This was the result of removing an element from an array and afterwards accessing it by index
+* DONE Retile on minimize
+

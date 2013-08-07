@@ -1,0 +1,53 @@
+
+This file is supposed to describe the design and planned development of the
+tiling script. What follows is first a list of the goals of the project and then
+design decisions and a coarse description of the design.
+
+Goals:
+ * A functional tiling window management extension for kwin
+ * Automatic layouts should be supported:
+   * Spiral layout
+   * Two columns/rows
+   * Regular grid?
+   * ...
+ * Different layouts for different desktops/screens
+ * A number of different layouts as well as a possibility to disable tiling for
+   a certain screen/desktop combination
+ * The possibility to make some windows floating (remove them from the layout)
+ * Tab groups should be handled correctly (a complete tab group forms one tile)
+ * Individual windows should be resizable and the whole layout should be updated
+   accordingly
+ * Windows should be selected and moved/resized in the layout and between
+   screens and desktops using the keyboard
+ * Windows should be movable/resizable within the layout using the mouse as well
+ * Tiled windows should always be drawn below floating ones
+ * Window borders should maybe be reduced (like with maximized windows) when
+   being tiled, or should be completely hidden with a shortcut to show the
+   title bar of the active window (possibly configurable?)
+ * Some windows cannot be tiled properly (dialogs, non resizable windows, etc.),
+   those should automatically be made floating
+
+Design decisions:
+ * TODO
+
+Design description:
+ * TileList: KWin doesn't give us any information about tab groups, so we have
+   to figure that out ourselves by setting a property and synchronizing it among
+   all clients in a tab. This information needs to be kept up-to-date on tab
+   group changes as well. The code related to this is in tilelist.js which
+   contains a class which keeps track of all tab groups in the system.
+ * Tile: Various window signals (resizing, moving, maximizing etc.) have to be
+   reacted to, this class binds handlers to these signals and filters them as
+   necessary (e.g. intermediate steps in a resize operation are not interesting
+   for us).
+ * Layout: This is the class which allocated the areas of the different tiles in
+   an automatic fashion. It contains functions to get the top/bottom/left/right
+   neighbour of a tile which are used when the user wants to move the focus to
+   a different tile. The different kinds of layouts are classes derived from
+   this class.
+   TODO: Does this class also contain a list of the floating windows, and how is
+   focus switching implemented there?
+ * Tiling: The main class which contains a list of the current layouts (one per
+   screen/desktop combination) and which registers global keyboard shortcuts and
+   some global events (e.g. screen count changes).
+ * The layout switcher is implemented in QML.

@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=Tiling Extension
+Icon=preferences-system-windows-script-test
+
+X-Plasma-API=declarativescript
+X-Plasma-MainScript=ui/main.qml
+X-KWin-Exclude-Listing=false
+
+X-KDE-PluginInfo-Author=Mathias Gottschlag
+X-KDE-PluginInfo-Email=mgottschlag@gmail.com
+X-KDE-PluginInfo-Name=tiling
+X-KDE-PluginInfo-Version=0.1
+
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-ServiceTypes=KWin/Script
+Type=Service

@@ -1,0 +1,173 @@
+
+@startuml tiling-classdiagram.svg
+skinparam classAttributeIconSize 0
+
+class TilingManager {
+	-defaultLayout : LayoutType
+	-availableLayouts : LayoutType
+	-layouts : Tiling[][]
+	-desktopCount : int
+	-screenCount : int
+	-onTileAdded()
+	-onTileRemoved()
+	-onNumberDesktopsChanged()
+	-onNumberScreensChanged()
+	-onCurrentDesktopChanged()
+	-switchLayout(desktop, screen, layoutIndex)
+	-toggleFloating(tile)
+	-switchFocus(direction)
+	-moveTile(direction)
+}
+
+note top of TilingManager
+	Root class which contains one "Tiling"
+	instance per screen/desktop, implements
+	the keyboard shortcuts and keeps track
+	of windows moving from one screen to the
+	other.
+end note
+
+class TileList {
+	+addClient(client : Client) : Tile
+	+getTile(client : Client) : Tile
+	+tileAdded : Signal<Tile>
+	+tileRemoved : Signal<Tile>
+	-onClientAdded(client)
+	-onClientRemoved(client)
+	-onClientTabGroupChanged(client)
+}
+
+class Tile {
+	-savedGeometry : Rect
+	+clients : Client[]
+	+floating : bool
+	+forcedFloating : bool
+	+tileIndex
+	+Tile(firstClient, tileIndex)
+	+setGeometry(geometry : Rect)
+	+saveGeometry()
+	+restoreGeometry()
+	+getActiveClient()
+	+syncCustomProperties()
+	-updateForcedFloating()
+	+movingStarted : Signal<Tile>
+	+movingEnded : Signal<Tile>
+	+movingStep : Signal<Tile>
+	+resizingStarted : Signal<Tile>
+	+resizingEnded : Signal<Tile>
+	+resizingStep : Signal<Tile>
+	+geometryChanged : Signal<Tile>
+	+forcedFloatingChanged : Signal<Tile>
+	+screenChanged : Signal<Tile>
+	+desktopChanged : Signal<Tile>
+	+onClientShadeChanged(client)
+	+onClientGeometryChanged(client)
+	+onClientKeepAboveChanged(client)
+	+onClientKeepBelowChanged(client)
+	+onClientFullScreenChanged(client)
+	+onClientMinimizedChanged(client)
+	+onClientMaximizedStateChanged(client, h, v)
+	+onClientDesktopChanged(client)
+	+onClientStartUserMovedResized(client)
+	+onClientStepUserMovedResized(client)
+	+onClientFinishUserMovedResized(client)
+}
+
+note top of Tile
+	Manages the windows in one tab group and
+	tracks and simplifies resize/move events
+end note
+
+class Client {
+	tiling_tileIndex : int
+	tiling_floating : bool
+}
+
+abstract class Tiling {
+	Tiling(screenRectangle : QRect, layoutType)
+	+setLayoutType(layoutType)
+	+setLayoutArea(area : QRect)
+	+addTile(tile : Tile)
+	+addTile(tile : Tile, x, y)
+	+removeTile(tile : Tile)
+	+swapTiles(tile1 : Tile, tile2 : Tile)
+	+activate()
+	+deactivate()
+	+resetTileSizes()
+	+getTile(x, y) : Tile
+	+getTileGeometry(x, y) : TileGeometry
+	+getTiles() : Tile[]
+	+getAdjacentTile(from : Tile, direction, directOnly : bool) : Tile
+}
+
+note left of Tiling
+	Resizes the windows according to the
+	information the class gets from its
+	Layout instance.
+end note
+
+abstract class Layout {
+	+screenRectangle
+	+tiles : TileGeometry[]
+	+{static}name
+	+{static}image
+	+setLayoutArea(area : QRect)
+	+{abstract}onLayoutAreaChange(oldArea : QRect, newArea : QRect)
+	+{abstract}resetTileSizes()
+	+{abstract}addTile()
+	+{abstract}removeTile(tileIndex : int)
+	+{abstract}resizeTile(tileIndex : int, rectangle : QRect)
+}
+
+note left of Layout
+	Partitions the screens into rectangles, the
+	subclasses implement different layouts.
+end note
+
+class TileGeometry {
+	+rectangle : QRect
+	+neighbours : int[4]
+	+hasDirectNeighbour : bool[4]
+}
+
+class SpiralLayout {
+}
+
+class ZigZagLayout {
+}
+
+class ColumnLayout {
+}
+
+class RowLayout {
+}
+
+class GridLayout {
+}
+
+class MaximizedLayout {
+}
+
+class FloatingLayout {
+}
+
+TilingManager "1" -right-> "1" TileList
+TilingManager "1" --> "*" Tiling
+
+TileList "1" -right-> "*" Tile
+
+Tile "*" <-- "*" Tiling
+Tile "1" --> "*" Client
+
+Tiling "1" --> "1" Layout
+
+Layout <|-- SpiralLayout
+Layout <|-- ZigZagLayout
+Layout <|-- ColumnLayout
+Layout <|-- RowLayout
+Layout <|-- GridLayout
+Layout <|-- MaximizedLayout
+Layout <|-- FloatingLayout
+Layout -right-> "*" TileGeometry
+
+@enduml
