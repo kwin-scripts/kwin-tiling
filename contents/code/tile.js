@@ -177,6 +177,15 @@ Tile.prototype._computeForcedFloating = function() {
     return forcedFloating;
 };
 
+Tile.prototype._recomputeForcedFloating = function(client) {
+	var forcedFloating = false;
+    if (client.shade || client.minimized || client.keepAbove
+        || client.fullScreen || !client.resizeable) {
+        forcedFloating = true;
+	}
+	return forcedFloating;
+}
+
 Tile.prototype._updateForcedFloating = function() {
     var forcedFloating = this._computeForcedFloating();
     if (forcedFloating == this.forcedFloating) {
@@ -187,7 +196,7 @@ Tile.prototype._updateForcedFloating = function() {
 };
 
 Tile.prototype.onClientShadeChanged = function(client) {
-    this._recomputeForcedFloating();
+    this._recomputeForcedFloating(client);
 };
 
 Tile.prototype.onClientGeometryChanged = function(client) {
@@ -208,7 +217,7 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 };
 
 Tile.prototype.onClientKeepAboveChanged = function(client) {
-    this._recomputeForcedFloating();
+    this._recomputeForcedFloating(client);
 };
 
 Tile.prototype.onClientKeepBelowChanged = function(client) {
@@ -216,11 +225,11 @@ Tile.prototype.onClientKeepBelowChanged = function(client) {
 };
 
 Tile.prototype.onClientFullScreenChanged = function(client) {
-    this._recomputeForcedFloating();
+    this._recomputeForcedFloating(client);
 };
 
 Tile.prototype.onClientMinimizedChanged = function(client) {
-    this._recomputeForcedFloating();
+    this._recomputeForcedFloating(client);
 };
 
 Tile.prototype.onClientMaximizedStateChanged = function(client) {

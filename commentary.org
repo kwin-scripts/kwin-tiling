@@ -5,8 +5,9 @@
 ** DONE Toggle floating
    Somehow client.tiling_floating stays the same across acesses
 ** DONE Floating layout/disable script
-** TODO Make floating windows be _above_ tilers
+** DONE Make floating windows be _above_ tilers
    Somehow accessing client.keepAbove doesn't work
+   Make configurable?
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
 ** TODO Don't tile fullscreen windows on workspace change

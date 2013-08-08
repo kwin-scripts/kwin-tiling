@@ -126,6 +126,7 @@ TileList.prototype.addClient = function(client) {
         // If not, create a new tile
         this._addTile(client);
     }
+	client.keepAbove = false;
 };
 
 TileList.prototype.retile = function() {
