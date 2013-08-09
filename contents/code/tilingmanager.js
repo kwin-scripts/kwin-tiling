@@ -174,10 +174,9 @@ function TilingManager() {
 						 print(client.tiling_floating);
 						 if (client.tiling_floating == true) {
 							 self.tiles._onClientRemoved(client);
-							 client.keepAbove = true;
 						 } else {
-							 //self.tiles._onClientAdded(client);
 							 self.tiles.addClient(client);
+							 client.keepBelow = true;
 						 }
 						 self.tiles.retile();
 					 });
