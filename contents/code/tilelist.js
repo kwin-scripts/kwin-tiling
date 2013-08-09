@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * @class
  */
 function TileList() {
-	this.active = true;
     /**
      * List of currently existing tiles.
      */
@@ -44,12 +43,9 @@ function TileList() {
     // new/deleted tiles
     var self = this;
     workspace.clientAdded.connect(function(client) {
-		if (self.active == true) {
-			self._onClientAdded(client);
-		}
+		self._onClientAdded(client);
     });
     workspace.clientRemoved.connect(function(client) {
-		// Even if we aren't active, we need to delete empty tiles
 		self._onClientRemoved(client);
     });
 }
@@ -121,7 +117,16 @@ TileList.prototype.addClient = function(client) {
    // Check whether the client is part of an existing tile
     var tileIndex = client.tiling_tileIndex;
     if (tileIndex >= 0 && tileIndex < this.tiles.length) {
-        this.tiles[tileIndex].clients.push(client);
+		var notInTiles = true;
+		for (var i=0; i< this.tiles.length; i++) {
+			if (this.tiles[i] === client) {
+				notInTiles = false;
+				break;
+			}
+		}
+		if (notInTiles) {
+			this.tiles[tileIndex].clients.push(client);
+		}
     } else {
         // If not, create a new tile
         this._addTile(client);
@@ -135,7 +140,6 @@ TileList.prototype.retile = function() {
 	existingClients.forEach(function(client) {
 		var tileIndex = client.tiling_tileIndex;
 		if (tileIndex >= 0 && tileIndex < self.tiles.length) {
-			self._onClientRemoved(client);
 			self.addClient(client);
 		}
 	});
@@ -265,10 +269,6 @@ TileList._isIgnored = function(client) {
 	}
 	if (client.specialWindow == true) {
 		print("Client is special");
-		return true;
-	}
-	if (this.active == false) {
-		print("Tiling not active");
 		return true;
 	}
     return false;

@@ -232,22 +232,9 @@ function TilingManager() {
 					 "Toggle Tiling",
 					 "Meta+Shift+f11",
 					 function() {
-						 // FIXME: This moves clients when deactivating tiling
-						 self.active = !self.active;
-						 self.tiles.active = self.active;
-						 print("Tiling: ", self.active);
-						 var existingClients = workspace.clientList();
-						 if (self.active == false) {
-							 existingClients.forEach(function(client) {
-								 self.tiles._onClientRemoved(client);
-								 client.tiling_tileIndex = -1;
-							 });
-						 } else {
-							 existingClients.forEach(function(client) {
-								 self.tiles.addClient(client);
-								 self.tiles.retile();
-							 });
-						 }
+						 var currentScreen = workspace.activeScreen;
+						 var currentDesktop = workspace.currentDesktop - 1;
+						 self.layouts[currentDesktop][currentScreen].toggleActive();
 					 });
 }
 
@@ -453,9 +440,16 @@ TilingManager.prototype._changeTileLayouts =
 
 TilingManager.prototype._onCurrentDesktopChanged = function() {
 	// TODO: This is wrong, we need to activate *all* visible layouts
-	this.layouts[this._currentDesktop][this._currentScreen].deactivate();
+	if (this.layouts[this._currentDesktop][this._currentScreen].active) {
+		this.layouts[this._currentDesktop][this._currentScreen].deactivate();
+	}
+	if (this._currentDesktop === workspace.currentDesktop -1) {
+		return;
+	}
 	this._currentDesktop = workspace.currentDesktop - 1;
-	this.layouts[this._currentDesktop][this._currentScreen].activate();
+	if (! this.layouts[this._currentDesktop][this._currentScreen].active) {
+		this.layouts[this._currentDesktop][this._currentScreen].activate();
+	}
 };
 
 TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {

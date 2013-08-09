@@ -65,7 +65,6 @@ Tiling.prototype.addTile = function(tile, x, y) {
     } else {
         this.tiles.push(tile);
     }
-    // TODO: Set "below all" state
     if (this.active) {
         this._updateAllTiles();
         // TODO: Register tile callbacks
@@ -76,10 +75,8 @@ Tiling.prototype.removeTile = function(tile) {
     var tileIndex = this.tiles.indexOf(tile);
     this.tiles.splice(tileIndex, 1);
     this.layout.removeTile(tileIndex);
-    if (this.active) {
-        // TODO: Unregister tile callbacks
-        this._updateAllTiles();
-    }
+    // TODO: Unregister tile callbacks
+    this._updateAllTiles();
 }
 
 Tiling.prototype.swapTiles = function(tile1, tile2) {
@@ -106,6 +103,14 @@ Tiling.prototype.deactivate = function() {
     this.active = false;
     // Unregister callbacks for all tiles
     // TODO
+}
+
+Tiling.prototype.toggleActive = function() {
+	if (this.active) {
+		this.deactivate();
+	} else {
+		this.activate();
+	}
 }
 
 /**
@@ -173,14 +178,20 @@ Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
 
 Tiling.prototype._updateAllTiles = function() {
     // Set the position/size of all tiles
-    for (var i = 0; i < this.layout.tiles.length; i++) {
-        var currentRect = this.tiles[i].clients[0].geometry;
-        var newRect = this.layout.tiles[i].rectangle;
-        if (currentRect.x != newRect.x
+	if (this.active) {
+		for (var i = 0; i < this.layout.tiles.length; i++) {
+			var currentRect = this.tiles[i].clients[0].geometry;
+			var newRect = this.layout.tiles[i].rectangle;
+			if (! newRect) {
+				return;
+			}
+			// Is this necessary?
+			if (currentRect.x != newRect.x
                 || currentRect.y != newRect.y
                 || currentRect.width != newRect.width
                 || currentRect.height != newRect.height) {
-            this.tiles[i].setGeometry(newRect);
-        }
-    }
+				this.tiles[i].setGeometry(newRect);
+			}
+		}
+	}
 }
