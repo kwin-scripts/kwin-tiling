@@ -3,15 +3,32 @@
 * TODO Resize tiles
 * TODO Floating
 ** DONE Toggle floating
-   Somehow client.tiling_floating stays the same across acesses
+   Somehow client.tiling_floating stays the same across acesses (fixed?)
 ** DONE Floating layout/disable script
+   *** Currently moves and resizes windows on disable
 ** DONE Make floating windows be _above_ tilers
    Somehow accessing client.keepAbove doesn't work
    Make configurable?
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
 ** TODO Don't tile fullscreen windows on workspace change
+** TODO Windows can sometimes resize on their own (missing signal?)
+** TODO Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
 * DONE Killing three clients in succession without opening another in between kills the script
 ** This was the result of removing an element from an array and afterwards accessing it by index
 * DONE Retile on minimize
 
+* TODO Testing
+** Weird apps (mplayer, gimp)
+** Weird configurations
+** Multi-monitor (semi-tested right now)
+
+* TODO Learning
+** How to add configuration
+** How to use the tests
+** Javascript
+
+* TODO Optimization
+* TODO Crazy stuff
+  ** Overlap titlebars and abuse keepAbove to save space?
+  Can we even get the size of a window _without_ titlebar?
