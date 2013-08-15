@@ -180,11 +180,6 @@ Tiling.prototype._updateAllTiles = function() {
     // Set the position/size of all tiles
 	if (this.active) {
 		for (var i = 0; i < this.layout.tiles.length; i++) {
-			if (this.tiles[i].clients[0].fullScreen) {
-				this.layout.tiles[i]._savedGeometry = this.layout.tiles[i].rectangle;
-				this.layout.tiles[i].rectangle = this.layout.screenRectangle;
-				break;
-			}
 			var currentRect = this.tiles[i].clients[0].geometry;
 			var newRect = this.layout.tiles[i].rectangle;
 			if (! newRect) {
@@ -192,10 +187,12 @@ Tiling.prototype._updateAllTiles = function() {
 			}
 			// Is this necessary?
 			if (currentRect.x != newRect.x
-                || currentRect.y != newRect.y
-                || currentRect.width != newRect.width
-                || currentRect.height != newRect.height) {
-				this.tiles[i].setGeometry(newRect);
+				|| currentRect.y != newRect.y
+				|| currentRect.width != newRect.width
+				|| currentRect.height != newRect.height) {
+				if (! this.tiles[i].clients[0].fullScreen) {
+					this.tiles[i].setGeometry(newRect);
+				}
 			}
 		}
 	}
