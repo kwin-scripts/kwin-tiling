@@ -225,6 +225,9 @@ Tile.prototype.onClientKeepBelowChanged = function(client) {
 };
 
 Tile.prototype.onClientFullScreenChanged = function(client) {
+	// Let fullscreen windows stay _above_ others
+	client.keepAbove = client.fullScreen;
+	client.keepBelow = !client.fullScreen;
     this._recomputeForcedFloating(client);
 };
 
