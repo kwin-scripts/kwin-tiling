@@ -206,9 +206,12 @@ Tile.prototype.onClientGeometryChanged = function(client) {
     // If the screen has changed, send an event and reset the saved geometry
     if (client.screen != this._currentScreen) {
         this._currentScreen = client.screen;
-         this._savedGeometry = null;
-       this.screenChanged.emit();
+        this._savedGeometry = null;
+		this.screenChanged.emit();
     }
+	if (client.move || client.resize) {
+		return;
+	}
     if (this._moving || this.resizing) {
         return;
     }
@@ -256,33 +259,16 @@ Tile.prototype.onClientStartUserMovedResized = function(client) {
 
 Tile.prototype.onClientStepUserMovedResized = function(client) {
     var newGeometry = client.geometry;
-    if (newGeometry.width != this._lastGeometry.width
-            || newGeometry.height != this._lastGeometry.height) {
-        if (this._moving) {
-            this.movingEnded.emit();
-            this._moving = false;
-        }
-        if (this._resizing) {
-            this.resizingStep.emit();
-        } else {
-            this._resizing = true;
-            this.resizingStarted.emit();
-        }
-    }
-    if (newGeometry.x != this._lastGeometry.x
-            || newGeometry.y != this._lastGeometry.y) {
-        if (this._resizing) {
-            this.resizingEnded.emit();
-            this._resizing = false;
-        }
-        if (this._moving) {
-            this.movingStep.emit();
-        } else {
-            this._moving = true;
-            this.movingStarted.emit();
-        }
-    }
-    this._lastGeometry = newGeometry;
+	if (client.resize) {
+		this.resizingStep.emit();
+		this._resizing = true;
+		return;
+	}
+	if (client.move) {
+		this.movingStep.emit();
+		this._moving = true;
+		return;
+	}
 };
 
 Tile.prototype.onClientFinishUserMovedResized = function(client) {
@@ -293,5 +279,4 @@ Tile.prototype.onClientFinishUserMovedResized = function(client) {
         this.resizingEnded.emit();
         this._resizing = false;
     }
-    this._lastGeometry = null;
 };
