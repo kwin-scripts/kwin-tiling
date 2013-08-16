@@ -43,7 +43,7 @@ SpiralLayout.prototype.resetTileSizes = function() {
     var tileCount = this.tiles.length;
     this.tiles.length = 0;
     for (var i = 0; i < tileCount; i++) {
-        addTile();
+        this.addTile();
     }
 }
 
