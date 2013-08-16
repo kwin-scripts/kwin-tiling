@@ -41,23 +41,17 @@ function Tiling(screenRectangle, layoutType) {
     this.active = false;
 
 	this.screenRectangle = screenRectangle;
-    // TODO
 }
 
 Tiling.prototype.setLayoutType = function(layoutType) {
-	print("setLayoutType");
-	print(layoutType.name);
-	//print(this.layout.name);
 	var newLayout = new layoutType(this.layout.screenRectangle);
-	print("Adding ", this.layout.tiles.length, "tiles");
 	for(i = 0; i < this.layout.tiles.length; i++) {
 		newLayout.addTile();
 		this.layout.tiles[i].tileIndex = i;
 	}
 	this.layout = newLayout;
-	//print(this.layout.name);
-	print("new layout type");
-    // TODO
+	this.layoutType = layoutType;
+	this.layout.resetTileSizes();
 }
 
 Tiling.prototype.setLayoutArea = function(area) {
