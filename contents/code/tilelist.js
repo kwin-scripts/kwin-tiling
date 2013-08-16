@@ -72,19 +72,19 @@ TileList.prototype.addClient = function(client) {
         return self.tiles[client.tiling_tileIndex];
     };
     client.shadeChanged.connect(function() {
-        getTile(client).onClientShadeChanged(client);
+		getTile(client).onClientShadeChanged(client);
     });
     client.geometryChanged.connect(function() {
-        getTile(client).onClientGeometryChanged(client);
+		getTile(client).onClientGeometryChanged(client);
     });
     client.keepAboveChanged.connect(function() {
-        getTile(client).onClientKeepAboveChanged(client);
+		getTile(client).onClientKeepAboveChanged(client);
     });
     client.keepBelowChanged.connect(function() {
-        getTile(client).onClientKeepBelowChanged(client);
+		getTile(client).onClientKeepBelowChanged(client);
     });
     client.fullScreenChanged.connect(function() {
-        getTile(client).onClientFullScreenChanged(client);
+		getTile(client).onClientFullScreenChanged(client);
     });
     client.clientStartUserMovedResized.connect(function() {
 		getTile(client).onClientStartUserMovedResized(client);
@@ -93,26 +93,25 @@ TileList.prototype.addClient = function(client) {
 		getTile(client).onClientStepUserMovedResized(client);
     });
     client.clientFinishUserMovedResized.connect(function() {
-        getTile(client).onClientFinishUserMovedResized(client);
+		getTile(client).onClientFinishUserMovedResized(client);
     });
     client['clientMaximizedStateChanged(KWin::Client*,bool,bool)'].connect(
-            function(client, h, v) {
-        getTile(client).onClientMaximizedStateChanged(client, h, v);
-    });
+        function(client, h, v) {
+			getTile(client).onClientMaximizedStateChanged(client, h, v);
+		});
     client.desktopChanged.connect(function() {
-        getTile(client).onClientDesktopChanged(client);
-    });
-    client.clientMinimized.connect(function(client) {
-        self._onClientRemoved(client);
-		client.tiling_tileIndex = null;
-        getTile(client).onClientMinimizedChanged(client);
-    });
-    client.clientUnminimized.connect(function(client) {
-        self._onClientAdded(client);
-        getTile(client).onClientMinimizedChanged(client);
-    });
-		
-   // Check whether the client is part of an existing tile
+		getTile(client).onClientDesktopChanged(client);
+	});
+	client.clientMinimized.connect(function(client) {
+		self._onClientRemoved(client);
+		getTile(client).onClientMinimizedChanged(client);
+	});
+	client.clientUnminimized.connect(function(client) {
+		self._onClientAdded(client);
+		getTile(client).onClientMinimizedChanged(client);
+	});
+
+	// Check whether the client is part of an existing tile
     var tileIndex = client.tiling_tileIndex;
     if (tileIndex >= 0 && tileIndex < this.tiles.length) {
 		var notInTiles = true;
