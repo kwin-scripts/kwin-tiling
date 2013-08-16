@@ -48,7 +48,6 @@ SpiralLayout.prototype.resetTileSizes = function() {
 }
 
 SpiralLayout.prototype.addTile = function() {
-    //print("SpiralLayout: addTile");
     if (this.tiles.length == 0) {
         // The first tile fills the whole screen
         var rect = Qt.rect(this.screenRectangle.x,
@@ -109,7 +108,6 @@ SpiralLayout.prototype.removeTile = function(tileIndex) {
                               rects[1].y + rects[1].height);
         var lastRect = Qt.rect(left, top, right - left, bottom - top);
         this.tiles[tileCount - 1].rectangle = lastRect;
-		//print("New tilesize:",left,top,right - left,bottom - top);
     }
     // Remove the last array entry
     this.tiles.length--;
@@ -120,7 +118,6 @@ SpiralLayout.prototype.removeTile = function(tileIndex) {
         lastTile.neighbours[Direction.Down] = 0;
         lastTile.hasDirectNeighbour[Direction.Down] = false;
     }
-	print("Now exiting");
 }
 
 SpiralLayout.prototype.resizeTile = function(tileIndex, rectangle) {

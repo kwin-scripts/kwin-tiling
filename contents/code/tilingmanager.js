@@ -269,7 +269,6 @@ TilingManager.prototype._onTileAdded = function(tile) {
     // Add tile callbacks which are needed to move the tile between different
     // screens/desktops
 	var self = this;
-	print("Adding tile");
 	tile.screenChanged.connect(function(oldScreen, newScreen) {
 		self._onTileScreenChanged(tile, oldScreen, newScreen);
 	});

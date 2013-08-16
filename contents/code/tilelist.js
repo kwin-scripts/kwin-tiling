@@ -58,8 +58,6 @@ function TileList() {
  * @param client Client which is added to the tile list.
  */
 TileList.prototype.addClient = function(client) {
-	print("addClient");
-	print(client.resourceClass.toString());
     if (TileList._isIgnored(client)) {
 		client.tileIndex = null;
         return;
@@ -255,24 +253,19 @@ TileList._isIgnored = function(client) {
 	// TODO: Hook this up to the rules
 	var floaters = Array("yakuake", "krunner", "Plasma", "Plasma-desktop", "plasma-desktop", "Plugin-container", "plugin-container");
 	if (floaters.indexOf(client.resourceClass.toString()) > -1) {
-		print("Client is in rules");
 		client.syncTabGroupFor("kwin_tiling_floats", true);
 		return true;
 	}
 	if (client.dialog) {
-		print("Client is a dialog");
 		return true;
 	}
 	if (client.splash) {
-		print("Client is a splash");
 		return true;
 	}
 	if (client.dock) {
-		print("Client is a dock");
 		return true;
 	}
 	if (client.specialWindow == true) {
-		print("Client is special");
 		return true;
 	}
     return false;
