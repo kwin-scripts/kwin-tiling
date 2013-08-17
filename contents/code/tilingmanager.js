@@ -234,6 +234,21 @@ function TilingManager() {
 						 var currentDesktop = workspace.currentDesktop - 1;
 						 self.layouts[currentDesktop][currentScreen].toggleActive();
 					 });
+	registerUserActionsMenu(function(client) {
+		return {
+			text : "Toggle floating",
+			triggered: function () {
+				client.tiling_floating = ! client.tiling_floating;
+				if (client.tiling_floating == true) {
+					self.tiles._onClientRemoved(client);
+				} else {
+					self.tiles.addClient(client);
+					client.keepBelow = true;
+				}
+				self.tiles.retile();
+			}
+		};
+	});
 }
 
 /**
