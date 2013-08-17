@@ -23,6 +23,7 @@ Qt.include("tile.js");
 Qt.include("tilelist.js");
 Qt.include("layout.js");
 Qt.include("spirallayout.js");
+Qt.include("halflayout.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
 
@@ -33,15 +34,15 @@ Qt.include("tests.js");
  * @class
  */
 function TilingManager() {
-	this.active = true;
     /**
      * Default layout type which is selected for new layouts.
      */
-    this.defaultLayout = SpiralLayout;
+    this.defaultLayout = HalfLayout;
     /**
      * List of all available layout types.
      */
     this.availableLayouts = [
+		HalfLayout,
         SpiralLayout/*,
 					  ZigZagLayout,
 					  ColumnLayout,
