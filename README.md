@@ -14,3 +14,7 @@ Features over mgottschlag's version:
 
 - Some bugfixes
 
+- Two layouts
+
+- Useractionsmenu for toggling tiling/floating
+

@@ -1,7 +1,10 @@
 * TODO Make rules for tiling
 ** HACK Ignore yakuake and menus/dialogs for tiling
-* TODO Resize tiles
-* TODO Floating
+   Waiting for KDE 4.11 which allows configuration for kwin scripts
+** DONE Add useractionsmenu
+* DONE Resize tiles
+  Hacked for Spirallayout, working for Halflayout
+* DONE Floating
 ** DONE Toggle floating
    Somehow client.tiling_floating stays the same across acesses (fixed?)
 ** DONE Floating layout/disable script
@@ -11,9 +14,10 @@
    Make configurable?
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
-** TODO Don't tile fullscreen windows on workspace change
+** DONE Don't tile fullscreen windows on workspace change
 ** TODO Windows can sometimes resize on their own (missing signal?)
 ** TODO Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
+** TODO Tileindex not properly set on workspace switch
 * DONE Killing three clients in succession without opening another in between kills the script
 ** This was the result of removing an element from an array and afterwards accessing it by index
 * DONE Retile on minimize
@@ -23,6 +27,7 @@
 ** Weird configurations
 ** Multi-monitor (semi-tested right now)
 
+** Multiple workspaces (e.g. moving windows across, in floating and tiling mode)
 * TODO Learning
 ** How to add configuration
 ** How to use the tests
