@@ -59,7 +59,7 @@ function TileList() {
  */
 TileList.prototype.addClient = function(client) {
     if (TileList._isIgnored(client)) {
-		client.tileIndex = null;
+		client.tileIndex = - 1;
         return;
     }
     var self = this;
@@ -183,7 +183,7 @@ TileList.prototype._onClientRemoved = function(client) {
         // Remove the client from its tile
         tile.clients.splice(tile.clients.indexOf(client), 1);
     }
-	client.tiling_tileIndex = -1;
+	client.tiling_tileIndex = - 1;
 };
 
 TileList.prototype._onClientTabGroupChanged = function(client) {
