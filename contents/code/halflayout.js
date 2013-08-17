@@ -52,20 +52,16 @@ HalfLayout.prototype.onLayoutAreaChange = function(oldArea, newArea) {
 }
 
 HalfLayout.prototype.resetTileSizes = function() {
-	print("Entering resetTileSizes");
     // Simply erase all tiles and recreate them to recompute the initial sizes
     var tileCount = this.tiles.length;
     this.tiles.length = 0;
     for (var i = 0; i < tileCount; i++) {
         this.addTile();
     }
-	print("Exiting resetTileSizes");
 }
 
 HalfLayout.prototype.addTile = function() {
-	print("Entering addTile");
     if (this.tiles.length == 0) {
-		print("First Tile");
         // The first tile fills the whole screen
         var rect = Qt.rect(this.screenRectangle.x,
                            this.screenRectangle.y,
@@ -75,7 +71,6 @@ HalfLayout.prototype.addTile = function() {
 		return;
     } 
 	if (this.tiles.length == 1) {
-		print("Second Tile");
 		// The second tile fills the right half of the screen
 		// Also, javascript sucks
 		var firstRect = Qt.rect(this.tiles[0].rectangle.x,
@@ -89,11 +84,9 @@ HalfLayout.prototype.addTile = function() {
 							  firstRect.width,
 							  firstRect.height)
         this._createTile(newRect);
-		print("Exiting addTile");
 		return;
 	}
 	if (this.tiles.length > 1) {
-		print("Third+ Tile");
 		// Every other tile separates the right half
         var lastRect = this.tiles[0].rectangle;
         var newRect = Qt.rect(lastRect.x + lastRect.width,
@@ -115,22 +108,18 @@ HalfLayout.prototype.addTile = function() {
 		newRect.height = this.screenRectangle.height - newRect.y;
         this._createTile(newRect);
     }
-	print("Exiting addTile");
 }
 
 HalfLayout.prototype.removeTile = function(tileIndex) {
 	//FIXME: There is a crash here
-	print("Entering removeTile");
     // Remove the array entry
 	var oldrect = this.tiles[tileIndex].rectangle;
 	this.tiles.splice(tileIndex, 1);
     // Update the other tiles
 	if (this.tiles.length == 1) {
-		print("One tile left");
 		this.tiles[0].rectangle = this.screenRectangle;
 	}
     if (this.tiles.length > 1) {
-		print("More than one tile left");
         var tileCount = this.tiles.length - 1;
         var lastRect = this.tiles[0].rectangle;
         var newRect = Qt.rect(lastRect.width,
@@ -139,7 +128,6 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
                               Math.floor(lastRect.height / tileCount));
 		var lowest = 1;
 		if (tileIndex == 0) {
-			print("Removed first tile of ", this.tiles.length);
 			this.tiles[0].rectangle = oldrect;
 		}
 		for (i = 1; i < this.tiles.length; i++) {
@@ -161,11 +149,9 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
         lastTile.neighbours[Direction.Down] = 0;
         lastTile.hasDirectNeighbour[Direction.Down] = false;
     }
-	print("Exiting removeTile");
 }
 
 HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
-	print("Entering resizeTile");
 	// TODO: Mark tile as resized so it can keep its size on tileadd/remove
 	if (tileIndex < 0 || tileIndex > this.tiles.length) {
 		print("Tileindex invalid", tileIndex, "/", this.tiles.length);
@@ -249,11 +235,9 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			tile.rectangle.y = this.screenRectangle.y;
 		}
 	}
-	print("Exiting resizeTile");
 }
 
 HalfLayout.prototype._createTile = function(rect) {
-	print("Entering _createTile");
     // Update the last tile in the list
     if (this.tiles.length != 0) {
         var lastTile = this.tiles[this.tiles.length - 1];
@@ -278,5 +262,4 @@ HalfLayout.prototype._createTile = function(rect) {
     // Update the first tile
     this.tiles[0].neighbours[Direction.Up] = this.tiles.length - 1;
     this.tiles[0].hasDirectNeighbour[Direction.Up] = false;
-	print("Exiting _createTile");
 }
