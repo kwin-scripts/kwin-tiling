@@ -252,9 +252,11 @@ Tile.prototype.onClientDesktopChanged = function(client) {
 };
 
 Tile.prototype.onClientStartUserMovedResized = function(client) {
+	/*
     // We want to distinguish between moving and resizing, so we have to wait
     // for the first geometry change
     this._lastGeometry = client.geometry;
+	*/
 };
 
 Tile.prototype.onClientStepUserMovedResized = function(client) {

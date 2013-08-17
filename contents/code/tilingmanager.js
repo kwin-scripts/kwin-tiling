@@ -88,9 +88,6 @@ function TilingManager() {
      */
     this._movingStartScreen = 0;
 	
-	//STUB: Resizing tiles
-	this._resizing = false;
-
     var self = this;
     // Read the script settings
     // TODO (this is currently not supported by kwin)
@@ -289,6 +286,9 @@ TilingManager.prototype._onTileAdded = function(tile) {
 	var tileLayouts = this._getLayouts(client.desktop, client.screen);
 	tileLayouts.forEach(function(layout) {
 		layout.addTile(tile);
+		tile.resizingEnded.connect(function() {
+			layout.resizeTile(tile);
+		});
 	});
 };
 

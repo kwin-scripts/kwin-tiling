@@ -183,6 +183,15 @@ Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
     }
 }
 
+Tiling.prototype.resizeTile = function(tile){
+	if (tile != null) {
+		var tileIndex = this.tiles.indexOf(tile);
+		var client = tile.clients[0];
+		this.layout.resizeTile(tileIndex, client.geometry);
+		this._updateAllTiles();
+	}
+}
+
 Tiling.prototype._updateAllTiles = function() {
     // Set the position/size of all tiles
 	if (this.active) {
