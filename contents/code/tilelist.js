@@ -129,6 +129,7 @@ TileList.prototype.addClient = function(client) {
         this._addTile(client);
     }
 	if (client.fullScreen) {
+		client.keepBelow = false;
 		client.keepAbove = true;
 	} else {
 		client.keepBelow = true;
