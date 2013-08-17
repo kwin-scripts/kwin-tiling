@@ -167,16 +167,13 @@ function TilingManager() {
 							 return;
 						 }
 						 print("Toggling Floating for ", client.resourceClass.toString());
-						 // FIXME: This sometimes retains value!
 						 client.tiling_floating = !client.tiling_floating;
 						 print(client.tiling_floating);
 						 if (client.tiling_floating == true) {
 							 self.tiles._onClientRemoved(client);
 						 } else {
 							 self.tiles.addClient(client);
-							 client.keepBelow = true;
 						 }
-						 self.tiles.retile();
 					 });
     registerShortcut("Switch Focus Left",
                      "Switch Focus Left",
@@ -243,7 +240,6 @@ function TilingManager() {
 					self.tiles._onClientRemoved(client);
 				} else {
 					self.tiles.addClient(client);
-					client.keepBelow = true;
 				}
 				self.tiles.retile();
 			}

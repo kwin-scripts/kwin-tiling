@@ -172,6 +172,8 @@ TileList.prototype._onClientRemoved = function(client) {
     if (!(tileIndex >= 0 && tileIndex < this.tiles.length)) {
         return;
     }
+	// Unset keepBelow because we set it when tiling
+	client.keepBelow = false;
     // Remove the client from its tile
     var tile = this.tiles[tileIndex];
     if (tile.clients.length == 1) {
