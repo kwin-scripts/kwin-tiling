@@ -118,6 +118,10 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
     // Update the other tiles
 	if (this.tiles.length == 1) {
 		this.tiles[0].rectangle = this.screenRectangle;
+		this.tiles[0].hasDirectNeighbour[Direction.Left] = false;
+		this.tiles[0].hasDirectNeighbour[Direction.Right] = false;
+		this.tiles[0].hasDirectNeighbour[Direction.Up] = false;
+		this.tiles[0].hasDirectNeighbour[Direction.Down] = false;
 	}
     if (this.tiles.length > 1) {
         var tileCount = this.tiles.length - 1;
@@ -129,6 +133,11 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 		var lowest = 1;
 		if (tileIndex == 0) {
 			this.tiles[0].rectangle = oldrect;
+			this.tiles[0].hasDirectNeighbour[Direction.Left] = false;
+			this.tiles[0].hasDirectNeighbour[Direction.Right] = true;
+			this.tiles[0].hasDirectNeighbour[Direction.Up] = false;
+			this.tiles[0].hasDirectNeighbour[Direction.Down] = false;
+			this.tiles[0].neighbours[Direction.Right] = 1;
 		}
 		for (i = 1; i < this.tiles.length; i++) {
 			var rect = this.tiles[i].rectangle;
@@ -138,16 +147,29 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 			if (this.tiles[lowest].rectangle.y < this.tiles[i].rectangle.y) {
 				lowest = i;
 			}
+			this.tiles[i].hasDirectNeighbour[Direction.Left] = true;
+			this.tiles[i].hasDirectNeighbour[Direction.Right] = false;
+			if (i == 1) {
+				this.tiles[i].hasDirectNeighbour[Direction.Up] = false;
+			} else {
+				this.tiles[i].hasDirectNeighbour[Direction.Up] = true;
+			}
+			if (i == this.tiles.length - 1) {
+				this.tiles[i].hasDirectNeighbour[Direction.Down] = false;
+			} else {
+				this.tiles[i].hasDirectNeighbour[Direction.Down] = true;
+			}
+			this.tiles[i].neighbours[Direction.Left] = 0;
+			this.tiles[i].neighbours[Direction.Up] = i - 1;
+			this.tiles[i].neighbours[Direction.Down] = i + 1;
 		}
 		// Adjust lowest tile's height for rounding errors
 		this.tiles[lowest].rectangle.height = this.screenRectangle.height - this.tiles[lowest].rectangle.y;
-    }
-    // Fix the neighbour information
-    if (this.tiles.length > 0) {
-        this.tiles[0].neighbours[Direction.Up] = this.tiles.length - 1;
-        var lastTile = this.tiles[this.tiles.length - 1];
-        lastTile.neighbours[Direction.Down] = 0;
-        lastTile.hasDirectNeighbour[Direction.Down] = false;
+
+		/*
+		this.tiles[1].hasDirectNeighbour[Direction.Up] = false;
+		this.tiles[this.tiles.length - 1].hasDirectNeighbour[Direction.Down] = false;
+		*/
     }
 }
 
@@ -239,27 +261,35 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 
 HalfLayout.prototype._createTile = function(rect) {
     // Update the last tile in the list
-    if (this.tiles.length != 0) {
+    if (this.tiles.length > 1) {
         var lastTile = this.tiles[this.tiles.length - 1];
         lastTile.neighbours[Direction.Down] = this.tiles.length;
         lastTile.hasDirectNeighbour[Direction.Down] = true;
     }
+	
+	if (this.tiles.length == 1) {
+        var lastTile2 = this.tiles[0];
+        lastTile2.neighbours[Direction.Right] = 1;
+        lastTile2.hasDirectNeighbour[Direction.Right] = true;
+	}
     // Create a new tile and add it to the list
     var tile = {};
     tile.rectangle = rect;
     tile.neighbours = [];
     tile.hasDirectNeighbour = [];
-    tile.neighbours[Direction.Left] = this.tiles.length;
-    tile.hasDirectNeighbour[Direction.Left] = false;
-    tile.neighbours[Direction.Right] = this.tiles.length;
+    tile.neighbours[Direction.Left] = 0;
+    tile.hasDirectNeighbour[Direction.Left] = (this.tiles.length > 0);
+    tile.neighbours[Direction.Right] = - 1;
     tile.hasDirectNeighbour[Direction.Right] = false;
-    tile.neighbours[Direction.Up] = this.tiles.length - 1;
-    tile.hasDirectNeighbour[Direction.Up] = true;
-    tile.neighbours[Direction.Down] = 0;
+	if (this.tiles.length > 1) {
+		tile.hasDirectNeighbour[Direction.Up] = true;
+		tile.neighbours[Direction.Up] = this.tiles.length - 1;
+	} else {
+		tile.hasDirectNeighbour[Direction.Up] = false;
+		tile.neighbours[Direction.Up] = - 1;
+	}
+    tile.neighbours[Direction.Down] = - 1;
     tile.hasDirectNeighbour[Direction.Down] = false;
 	tile.index = this.tiles.length;
     this.tiles.push(tile);
-    // Update the first tile
-    this.tiles[0].neighbours[Direction.Up] = this.tiles.length - 1;
-    this.tiles[0].hasDirectNeighbour[Direction.Up] = false;
 }
