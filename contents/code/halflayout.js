@@ -41,12 +41,13 @@ HalfLayout.prototype.constructor = HalfLayout;
 HalfLayout.prototype.onLayoutAreaChange = function(oldArea, newArea) {
 	print("Scaling all tiles");
 	this.tiles.forEach(function(tile) {
-		var scale = newArea / oldArea;
+		var xscale = newArea.width / oldArea.width;
+		var yscale = newArea.height / oldArea.height;
 		var lastrect = tile.rectangle;
-		var newrect = Qt.rect(lastrect.x * scale,
-							  lastrect.y * scale,
-							  lastrect.width * scale,
-							  lastrect.height * scale);
+		var newrect = Qt.rect(lastrect.x * xscale,
+							  lastrect.y * yscale,
+							  lastrect.width * xscale,
+							  lastrect.height * yscale);
 		tile.rectangle = newrect;
 	});
 }
