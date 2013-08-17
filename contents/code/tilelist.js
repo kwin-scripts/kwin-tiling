@@ -134,6 +134,7 @@ TileList.prototype.addClient = function(client) {
 	} else {
 		client.keepBelow = true;
 	}
+	client.tiling_floating = false;
 };
 
 TileList.prototype.retile = function() {

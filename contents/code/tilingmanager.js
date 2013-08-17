@@ -244,7 +244,6 @@ function TilingManager() {
 				} else {
 					self.tiles.addClient(client);
 				}
-				self.tiles.retile();
 			}
 		};
 	});
