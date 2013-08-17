@@ -87,9 +87,10 @@ SpiralLayout.prototype.addTile = function() {
             newRect.width = splitX;
             break;
         }
+		this.tiles[this.tiles.length - 1].rectangle = lastRect;
         this._createTile(newRect);
     }
-    var lastRect = this.tiles[this.tiles.length - 1].rectangle;
+    //var lastRect = this.tiles[this.tiles.length - 1].rectangle;
 }
 
 SpiralLayout.prototype.removeTile = function(tileIndex) {
