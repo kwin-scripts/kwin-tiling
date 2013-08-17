@@ -115,14 +115,17 @@ function TilingManager() {
     var existingClients = workspace.clientList();
     existingClients.forEach(function(client) {
 		self.tiles._onClientRemoved(client);
-        client.tiling_tileIndex = null;
-        client.tiling_floating = null;
+		// Don't reset floating so we don't lose the value over restarts
+        //client.tiling_floating = null;
     });
-	// TODO: Properly tile on startup
+	
     // Create the initial list of tiles
     existingClients.forEach(function(client) {
         self.tiles.addClient(client);
     });
+	
+	// TODO: Properly tile on startup
+
     // Register global callbacks
     workspace.numberDesktopsChanged.connect(function() {
         self._onNumberDesktopsChanged();
