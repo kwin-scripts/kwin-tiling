@@ -82,10 +82,6 @@ function Tile(firstClient, tileIndex) {
      */
     this.tileIndex = tileIndex;
     /**
-     * True if this tile has been marked as floating by the user.
-     */
-    this.floating = false;
-    /**
      * True if this tile has to be floating because of client properties.
      */
     this.forcedFloating = this._computeForcedFloating();
@@ -161,7 +157,6 @@ Tile.prototype.getActiveClient = function() {
  */
 Tile.prototype.syncCustomProperties = function() {
     this.clients[0].tiling_tileIndex = this.tileIndex;
-    this.clients[0].tiling_floating = this.floating;
     this.clients[0].syncTabGroupFor("tiling_tileIndex", true);
     this.clients[0].syncTabGroupFor("tiling_floating", true);
 };

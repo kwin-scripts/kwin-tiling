@@ -165,7 +165,7 @@ Tiling.prototype.getTiles = function() {
 }
 
 Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
-    if (from.floating || from.forcedFloating) {
+    if (from.forcedFloating) {
         // TODO
         print("TODO: getAdjacentTile() (floating tile)");
     } else {

@@ -491,7 +491,7 @@ TilingManager.prototype._moveTile = function(direction) {
 		return;
 	}
 	var activeTile = this.tiles.getTile(client);
-	if (activeTile == null || activeTile.floating
+	if (activeTile == null
 		|| activeTile.forcedFloating) {
 		print("Tile is floating");
 		return;
