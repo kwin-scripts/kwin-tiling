@@ -6,12 +6,15 @@ X-Plasma-API=declarativescript
 X-Plasma-MainScript=ui/main.qml
 X-KWin-Exclude-Listing=false
 
-X-KDE-PluginInfo-Author=Mathias Gottschlag
-X-KDE-PluginInfo-Email=mgottschlag@gmail.com
+X-KDE-PluginInfo-Author=Fabian Homborg
+X-KDE-PluginInfo-Email=FHomborg@gmail.com
 X-KDE-PluginInfo-Name=tiling
-X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginKeyword=tiling
+X-KDE-ParentComponents=tiling
+X-KDE-PluginInfo-Version=0.2
 
 X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
-X-KDE-ServiceTypes=KWin/Script
+X-KDE-ServiceTypes=KWin/Script,KCModule
+X-KDE-Library=kcm_kwin4_genericscripted
 Type=Service
