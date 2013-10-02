@@ -38,11 +38,13 @@ function TilingManager() {
      * Default layout type which is selected for new layouts.
      */
     this.defaultLayout = HalfLayout;
+
     /**
      * List of all available layout types.
      */
     this.availableLayouts = [
 		HalfLayout,
+		BladeLayout,
         SpiralLayout/*,
 					  ZigZagLayout,
 					  ColumnLayout,
