@@ -92,7 +92,7 @@ HalfLayout.prototype.addTile = function() {
         var lastRect = this.tiles[0].rectangle;
         var newRect = Qt.rect(lastRect.x + lastRect.width,
                               lastRect.y,
-                              this.screenRectangle.width - (lastRect.x + lastRect.width),
+                              this.screenRectangle.width - lastRect.width,
                               Math.floor(lastRect.height / (this.tiles.length)));
 		newRect.y = newRect.y + newRect.height * (this.tiles.length - 1);
 		// FIXME: Try to keep ratio
@@ -104,9 +104,12 @@ HalfLayout.prototype.addTile = function() {
 			rect.width = newRect.width;
 			rect.height = newRect.height;
 			this.tiles[i].rectangle = rect;
+			print(rect.x,rect.y,rect.width,rect.height);
 		}
 		// Adjust lowest tile's height for rounding errors
-		newRect.height = this.screenRectangle.height - newRect.y;
+		//newRect.y = newRect.y + newRect.width * (this.tiles.length - 1);
+		newRect.height = (this.screenRectangle.y + this.screenRectangle.height) - newRect.y;
+		print(newRect.y,newRect.height);
         this._createTile(newRect);
     }
 }
@@ -247,7 +250,7 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			for (i = 0; i < aboves.length; i++) {
 				this.tiles[aboves[i]].rectangle.width = rectangle.width;
 				this.tiles[aboves[i]].rectangle.x = rectangle.x;
-				this.tiles[aboves[i]].rectangle.y = newHeightAbove * i;
+				this.tiles[aboves[i]].rectangle.y = this.screenRectangle.y + newHeightAbove * i;
 				this.tiles[aboves[i]].rectangle.height = newHeightAbove;
 			}
 		}
