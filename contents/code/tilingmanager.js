@@ -24,6 +24,7 @@ Qt.include("tilelist.js");
 Qt.include("layout.js");
 Qt.include("spirallayout.js");
 Qt.include("halflayout.js");
+Qt.include("bladelayout.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
 
