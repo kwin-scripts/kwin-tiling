@@ -1,6 +1,5 @@
 * TODO Make rules for tiling
-** HACK Ignore yakuake and menus/dialogs for tiling
-   Waiting for KDE 4.11 which allows configuration for kwin scripts
+** DONE HACK Ignore yakuake and menus/dialogs for tiling
 ** DONE Add useractionsmenu
 * DONE Resize tiles
   Hacked for Spirallayout, working for Halflayout
@@ -22,6 +21,8 @@
 ** This was the result of removing an element from an array and afterwards accessing it by index
 * DONE Retile on minimize
 
+* TODO Avoid struts
+  Never noticed because I set the panel to autohide
 * TODO Testing
 ** Weird apps (mplayer, gimp)
 ** Weird configurations

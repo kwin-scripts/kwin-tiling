@@ -5,8 +5,9 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
     <kcfgfile name=""/>
     <group name="">
-        <entry name="FadeToBlack" type="Bool">
-            <default>false</default>
+        <entry name="floaters" type="StringList">
+		  <label>The windows (by class) that should float</label>
+		  <default>yakuake,Plasma,Plasma-desktop,krunner,plugin-container</default>
         </entry>
     </group>
 </kcfg>

@@ -125,6 +125,7 @@ TileList.prototype.addClient = function(client) {
 			this.tiles[tileIndex].clients.push(client);
 		}
     } else {
+		print("Adding client",client.resourceClass.toString(), "to a new tile");
         // If not, create a new tile
         this._addTile(client);
     }
@@ -252,10 +253,16 @@ TileList.prototype._identifyNewTiles = function() {
  * all, e.g. the panel.
  */
 TileList._isIgnored = function(client) {
-    // NOTE: Application workarounds should be put here
-	// TODO: Hook this up to the rules
-	var floaters = Array("yakuake", "krunner", "Plasma", "Plasma-desktop", "plasma-desktop", "Plugin-container", "plugin-container");
+    // Application workarounds should be put here
+	// Qt gives us a method-less QVariant(QStringList) if we ask for an array
+	// Ask for a string instead (which can and should still be a StringList for the UI)
+	var fl = "yakuake,krunner,Plasma,Plasma-desktop,plasma-desktop,Plugin-container,plugin-container,Wine";
+	// TODO: This could break if an entry contains whitespace or a comma - it needs to be validated on the qt side
+	var floaters = String(readConfig("floaters", fl)).replace(/ /g,"").split(",");
+	print("Floaters: ",floaters);
+	print(client.resourceClass.toString());
 	if (floaters.indexOf(client.resourceClass.toString()) > -1) {
+		print("Client floating");
 		client.syncTabGroupFor("kwin_tiling_floats", true);
 		return true;
 	}

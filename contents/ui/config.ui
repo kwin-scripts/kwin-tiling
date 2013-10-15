@@ -12,13 +12,6 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QCheckBox" name="kcfg_FadeToBlack">
-     <property name="text">
-      <string>Fade to black (fullscreen splash screens only)</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -31,8 +24,22 @@
      </property>
     </spacer>
    </item>
+   <item>
+    <widget class="KEditListBox" name="kcfg_floaters">
+     <property name="buttons">
+      <set>KEditListBox::Add|KEditListBox::Remove</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KEditListBox</class>
+   <extends>QGroupBox</extends>
+   <header>keditlistbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
