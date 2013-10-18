@@ -88,7 +88,7 @@ BladeLayout.prototype.addTile = function() {
 		}
 		// Adjust tile's width for rounding errors
 		newRect.x = newRect.x + newRect.width * this.tiles.length;
-		newRect.width = this.screenRectangle.width - newRect.x;
+		newRect.width = (this.screenRectangle.width + this.screenRectangle.x) - newRect.x;
 		// TODO: Move this before setting ratio to simplify
         this._createTile(newRect);
     }
@@ -124,7 +124,7 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
 			this.tiles[i].neighbours[Direction.Right] = i + 1;
 		}
 		// Adjust rightmost tile's height for rounding errors
-		this.tiles[this.tiles.length - 1].rectangle.width = this.screenRectangle.width - this.tiles[this.tiles.length - 1].rectangle.x;
+		this.tiles[this.tiles.length - 1].rectangle.width = (this.screenRectangle.width + this.screenRectangle.x) - this.tiles[this.tiles.length - 1].rectangle.x;
     }
 }
 
