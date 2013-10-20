@@ -1,9 +1,9 @@
-* TODO Make rules for tiling
+* DONE Make rules for tiling
 ** DONE HACK Ignore yakuake and menus/dialogs for tiling
 ** DONE Add useractionsmenu
 * DONE Resize tiles
   Hacked for Spirallayout, working for Halflayout
-* DONE Floating
+* TODO Floating
 ** DONE Toggle floating
    Somehow client.tiling_floating stays the same across acesses (fixed?)
 ** DONE Floating layout/disable script
@@ -11,30 +11,35 @@
 ** DONE Make floating windows be _above_ tilers
    Somehow accessing client.keepAbove doesn't work
    Make configurable?
+   Curently floating windows are still handled somehow
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
 ** DONE Don't tile fullscreen windows on workspace change
 ** TODO Windows can sometimes resize on their own (missing signal?)
 ** TODO Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
 ** TODO Tileindex not properly set on workspace switch
+** TODO Check how windows on all desktops behave
 * DONE Killing three clients in succession without opening another in between kills the script
 ** This was the result of removing an element from an array and afterwards accessing it by index
 * DONE Retile on minimize
-
 * TODO Avoid struts
   Never noticed because I set the panel to autohide
+** DONE Halflayout
+** DONE Spirallayout
+** DONE Bladelayout
 * TODO Testing
 ** Weird apps (mplayer, gimp)
 ** Weird configurations
 ** Multi-monitor (semi-tested right now)
-
 ** Multiple workspaces (e.g. moving windows across, in floating and tiling mode)
 * TODO Learning
-** How to add configuration
 ** How to use the tests
 ** Javascript
-
 * TODO Optimization
+** TODO Refactor layouts to share more code
 * TODO Crazy stuff
-  ** Overlap titlebars and abuse keepAbove to save space?
+** Overlap titlebars and abuse keepAbove to save space?
   Can we even get the size of a window _without_ titlebar?
+** Animate all windows on move
+** Layout switcher
+** Indicate layout/state (tiling on/off) somehow

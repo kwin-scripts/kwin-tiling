@@ -77,13 +77,11 @@ BladeLayout.prototype.addTile = function() {
                               lastRect.y,
 							  Math.floor((this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1)), 
                               this.screenRectangle.height);
-		print("newRect:", newRect.x, newRect.y, newRect.width, newRect.height);
 		// FIXME: Try to keep ratio
 		for (i = 0; i < this.tiles.length; i++) { 
 			var rect = this.tiles[i].rectangle;
 			rect.x = newRect.x + newRect.width * i;
 			rect.width = newRect.width;
-			print("Rect:",rect.x);
 			this.tiles[i].rectangle = rect;
 		}
 		// Adjust tile's width for rounding errors
@@ -115,7 +113,6 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
 		for (i = 0; i < this.tiles.length; i++) {
 			var rect = this.tiles[i].rectangle;
 			rect.x = newRect.x + newRect.width * i;
-			print("Rect:",rect.x);
 			rect.width = newRect.width;
 			this.tiles[i].rectangle = rect;
 			this.tiles[i].hasDirectNeighbour[Direction.Left] = (i > 0);
@@ -160,7 +157,6 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 						  this.screenRectangle.y,
 						  Math.floor(rectangle.x / tileIndex),
 						  this.screenRectangle.height);
-	print("newRect:", newRect.x, newRect.y, newRect.width, newRect.height);
 	for(i = 0; i < tileIndex; i++) {
 		var rect = this.tiles[i].rectangle;
 		rect.x = newRect.x + newRect.width * i;

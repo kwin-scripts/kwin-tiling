@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 function SpiralLayout(screenRectangle) {
     Layout.call(this, screenRectangle);
     // TODO
+	print("Creating SpiralLayout");
 }
 
 SpiralLayout.name = "Spiral";
@@ -132,7 +133,6 @@ SpiralLayout.prototype.removeTile = function(tileIndex) {
 }
 
 SpiralLayout.prototype.resizeTile = function(tileIndex, rectangle) {
-	print("SpiralLayout.resizeTile");
 	if (tileIndex < 0 || tileIndex > this.tiles.length) {
 		print("Tileindex invalid", tileIndex, "/", this.tiles.length);
 		return;

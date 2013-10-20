@@ -122,13 +122,13 @@ function TilingManager() {
         //client.tiling_floating = null;
     });
 	
+	// TODO: Properly tile on startup
     // Create the initial list of tiles
     existingClients.forEach(function(client) {
+		print("Adding existing client", client.resourceClass.toString());
         self.tiles.addClient(client);
     });
 	
-	// TODO: Properly tile on startup
-
     // Register global callbacks
     workspace.numberDesktopsChanged.connect(function() {
         self._onNumberDesktopsChanged();
@@ -172,9 +172,7 @@ function TilingManager() {
 							 print("No active client");
 							 return;
 						 }
-						 print("Toggling Floating for ", client.resourceClass.toString());
 						 client.tiling_floating = !client.tiling_floating;
-						 print(client.tiling_floating);
 						 if (client.tiling_floating == true) {
 							 self.tiles._onClientRemoved(client);
 						 } else {

@@ -259,10 +259,7 @@ TileList._isIgnored = function(client) {
 	var fl = "yakuake,krunner,Plasma,Plasma-desktop,plasma-desktop,Plugin-container,plugin-container,Wine";
 	// TODO: This could break if an entry contains whitespace or a comma - it needs to be validated on the qt side
 	var floaters = String(readConfig("floaters", fl)).replace(/ /g,"").split(",");
-	print("Floaters: ",floaters);
-	print(client.resourceClass.toString());
 	if (floaters.indexOf(client.resourceClass.toString()) > -1) {
-		print("Client floating");
 		client.syncTabGroupFor("kwin_tiling_floats", true);
 		return true;
 	}
