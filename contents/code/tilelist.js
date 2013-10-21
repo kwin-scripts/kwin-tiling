@@ -62,6 +62,10 @@ TileList.prototype.addClient = function(client) {
 		client.tileIndex = - 1;
         return;
     }
+	var noBorder = readConfig("noBorder", false);
+	if (noBorder == true) {
+		client.noBorder = true;
+	}
     var self = this;
     client.tabGroupChanged.connect(function() {
         self._onClientTabGroupChanged(client);
@@ -125,7 +129,6 @@ TileList.prototype.addClient = function(client) {
 			this.tiles[tileIndex].clients.push(client);
 		}
     } else {
-		print("Adding client",client.resourceClass.toString(), "to a new tile");
         // If not, create a new tile
         this._addTile(client);
     }
@@ -186,6 +189,9 @@ TileList.prototype._onClientRemoved = function(client) {
         tile.clients.splice(tile.clients.indexOf(client), 1);
     }
 	client.tiling_tileIndex = - 1;
+	if (client.tiling_floating == true) {
+		client.noBorder = false;
+	}
 };
 
 TileList.prototype._onClientTabGroupChanged = function(client) {

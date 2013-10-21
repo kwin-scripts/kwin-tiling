@@ -9,5 +9,9 @@
 		  <label>The windows (by class) that should float</label>
 		  <default>yakuake,Plasma,Plasma-desktop,krunner,plugin-container</default>
         </entry>
+		<entry name="noBorder" type="bool">
+		  <label>Should borders be removed? FocusUnderMouse recommended</label>
+		  <default>false</default>
+		</entry>
     </group>
 </kcfg>
