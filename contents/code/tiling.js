@@ -72,10 +72,8 @@ Tiling.prototype.addTile = function(tile, x, y) {
     } else {
         this.tiles.push(tile);
     }
-    if (this.active) {
-        this._updateAllTiles();
-        // TODO: Register tile callbacks
-    }
+    this._updateAllTiles();
+    // TODO: Register tile callbacks
 }
 
 Tiling.prototype.removeTile = function(tile) {
@@ -196,20 +194,11 @@ Tiling.prototype._updateAllTiles = function() {
     // Set the position/size of all tiles
 	if (this.active) {
 		for (var i = 0; i < this.layout.tiles.length; i++) {
-			var currentRect = this.tiles[i].clients[0].geometry;
 			var newRect = this.layout.tiles[i].rectangle;
 			if (! newRect) {
 				return;
 			}
-			// Is this necessary?
-			if (currentRect.x != newRect.x
-				|| currentRect.y != newRect.y
-				|| currentRect.width != newRect.width
-				|| currentRect.height != newRect.height) {
-				if (! this.tiles[i].clients[0].fullScreen) {
-					this.tiles[i].setGeometry(newRect);
-				}
-			}
+			this.tiles[i].setGeometry(newRect);
 		}
 	}
 }

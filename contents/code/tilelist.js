@@ -74,7 +74,7 @@ TileList.prototype.addClient = function(client) {
     client.shadeChanged.connect(function() {
 		getTile(client).onClientShadeChanged(client);
     });
-    client.geometryChanged.connect(function() {
+    client.geometryShapeChanged.connect(function() {
 		getTile(client).onClientGeometryChanged(client);
     });
     client.keepAboveChanged.connect(function() {

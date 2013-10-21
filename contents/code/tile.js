@@ -105,6 +105,8 @@ function Tile(firstClient, tileIndex) {
      */
     this._currentDesktop = firstClient.desktop;
 
+	this.rectangle = null;
+
     this.syncCustomProperties();
 }
 
@@ -115,8 +117,17 @@ function Tile(firstClient, tileIndex) {
  * @param geometry New tile geometry.
  */
 Tile.prototype.setGeometry = function(geometry) {
-    this.clients[0].geometry = geometry;
-    // TODO: Inhibit geometryChanged events?
+	if (geometry == null) {
+		return;
+	}
+	this.rectangle = geometry;
+	for(i = 0; i < this.clients.length; i++) {
+		this.clients[i].geometry = geometry;
+	}
+};
+
+Tile.prototype.resetGeometry = function() {
+	this.setGeometry(this.rectangle);
 };
 
 /**
@@ -210,6 +221,12 @@ Tile.prototype.onClientGeometryChanged = function(client) {
     if (this._moving || this.resizing) {
         return;
     }
+	if (this.rectangle != null) {
+		client.geometry.x = this.rectangle.x;
+		client.geometry.y = this.rectangle.y;
+		client.geometry.width = this.rectangle.width;
+		client.geometry.height = this.rectangle.height;
+	}
     // TODO: Check whether we caused the geometry change
     this.geometryChanged.emit();
 };

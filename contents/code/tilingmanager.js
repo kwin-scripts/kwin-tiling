@@ -122,13 +122,6 @@ function TilingManager() {
         //client.tiling_floating = null;
     });
 	
-	// TODO: Properly tile on startup
-    // Create the initial list of tiles
-    existingClients.forEach(function(client) {
-		print("Adding existing client", client.resourceClass.toString());
-        self.tiles.addClient(client);
-    });
-	
     // Register global callbacks
     workspace.numberDesktopsChanged.connect(function() {
         self._onNumberDesktopsChanged();
@@ -309,6 +302,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
 			layout.resizeTile(tile);
 		});
 	});
+	tile.resetGeometry();
 };
 
 TilingManager.prototype._onTileRemoved = function(tile) {
