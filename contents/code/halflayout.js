@@ -128,13 +128,6 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 		this.tiles[0].hasDirectNeighbour[Direction.Down] = false;
 	}
     if (this.tiles.length > 1) {
-        var tileCount = this.tiles.length - 1;
-        var lastRect = this.tiles[0].rectangle;
-        var newRect = Qt.rect(lastRect.width,
-                              lastRect.y,
-                              lastRect.width,
-                              Math.floor(lastRect.height / tileCount));
-		var lowest = 1;
 		if (tileIndex == 0) {
 			this.tiles[0].rectangle = oldrect;
 			this.tiles[0].hasDirectNeighbour[Direction.Left] = false;
@@ -143,6 +136,13 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 			this.tiles[0].hasDirectNeighbour[Direction.Down] = false;
 			this.tiles[0].neighbours[Direction.Right] = 1;
 		}
+        var tileCount = this.tiles.length - 1;
+        var lastRect = this.tiles[0].rectangle;
+        var newRect = Qt.rect(lastRect.width,
+                              lastRect.y,
+                              lastRect.width,
+                              Math.floor(lastRect.height / tileCount));
+		var lowest = 1;
 		for (i = 1; i < this.tiles.length; i++) {
 			var rect = this.tiles[i].rectangle;
 			rect.y = newRect.y + newRect.height * (i - 1);
