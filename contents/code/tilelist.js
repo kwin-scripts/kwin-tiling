@@ -107,12 +107,26 @@ TileList.prototype.addClient = function(client) {
 		getTile(client).onClientDesktopChanged(client);
 	});
 	client.clientMinimized.connect(function(client) {
-		self._onClientRemoved(client);
-		getTile(client).onClientMinimizedChanged(client);
+		try {
+			self._onClientRemoved(client);
+			var tile = getTile(client);
+			if (tile != null) {
+				tile.onClientMinimizedChanged(client);
+			}
+		} catch(err) {
+			print(err, "in mimimized");
+		}
 	});
 	client.clientUnminimized.connect(function(client) {
-		self._onClientAdded(client);
-		getTile(client).onClientMinimizedChanged(client);
+		try {
+			self._onClientAdded(client);
+			var tile = getTile(client);
+			if (tile != null) {
+				tile.onClientMinimizedChanged(client);
+			}
+		} catch(err) {
+			print(err, "in Unminimized");
+		}
 	});
 
 	// Check whether the client is part of an existing tile
@@ -139,6 +153,7 @@ TileList.prototype.addClient = function(client) {
 		client.keepBelow = true;
 	}
 	client.tiling_floating = false;
+	assert(client.tiling_tileIndex >= 0, "Client added with invalid tileIndex");
 };
 
 TileList.prototype.retile = function() {
