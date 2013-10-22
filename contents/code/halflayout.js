@@ -38,20 +38,6 @@ HalfLayout.image = null;
 HalfLayout.prototype = new Layout();
 HalfLayout.prototype.constructor = HalfLayout;
 
-HalfLayout.prototype.onLayoutAreaChange = function(oldArea, newArea) {
-	print("Scaling all tiles");
-	this.tiles.forEach(function(tile) {
-		var xscale = newArea.width / oldArea.width;
-		var yscale = newArea.height / oldArea.height;
-		var lastrect = tile.rectangle;
-		var newrect = Qt.rect(lastrect.x * xscale,
-							  lastrect.y * yscale,
-							  lastrect.width * xscale,
-							  lastrect.height * yscale);
-		tile.rectangle = newrect;
-	});
-}
-
 HalfLayout.prototype.resetTileSizes = function() {
     // Simply erase all tiles and recreate them to recompute the initial sizes
     var tileCount = this.tiles.length;

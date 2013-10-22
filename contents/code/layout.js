@@ -47,3 +47,18 @@ Layout.prototype.setLayoutArea = function(area) {
     this.screenRectangle = area;
     this.onLayoutAreaChange(oldArea, area);
 }
+
+Layout.prototype.onLayoutAreaChange = function(oldArea, newArea) {
+	var xscale = newArea.width / oldArea.width;
+	var yscale = newArea.height / oldArea.height;
+	var xoffset = newArea.x - oldArea.x;
+	var yoffset = newArea.y - oldArea.y;
+	this.tiles.forEach(function(tile) {
+		var lastrect = tile.rectangle;
+		var newrect = Qt.rect(lastrect.x + xoffset,
+							  lastrect.y + yoffset,
+							  lastrect.width * xscale,
+							  lastrect.height * yscale);
+		tile.rectangle = newrect;
+	});
+}

@@ -35,20 +35,6 @@ SpiralLayout.image = null;
 SpiralLayout.prototype = new Layout();
 SpiralLayout.prototype.constructor = SpiralLayout;
 
-SpiralLayout.prototype.onLayoutAreaChange = function(oldArea, newArea) {
-	print("Scaling all tiles");
-	this.tiles.forEach(function(tile) {
-		var xscale = newArea.width / oldArea.width;
-		var yscale = newArea.height / oldArea.height;
-		var lastrect = tile.rectangle;
-		var newrect = Qt.rect(lastrect.x * xscale,
-							  lastrect.y * yscale,
-							  lastrect.width * xscale,
-							  lastrect.height * yscale);
-		tile.rectangle = newrect;
-	});
-}
-
 SpiralLayout.prototype.resetTileSizes = function() {
     // Simply erase all tiles and recreate them to recompute the initial sizes
     var tileCount = this.tiles.length;
