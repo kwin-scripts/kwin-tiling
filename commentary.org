@@ -3,7 +3,7 @@
 ** DONE Add useractionsmenu
 * DONE Resize tiles
   Hacked for Spirallayout, working for Halflayout
-* TODO Floating
+* DONE Floating
 ** DONE Toggle floating
    Somehow client.tiling_floating stays the same across acesses (fixed?)
 ** DONE Floating layout/disable script
@@ -15,14 +15,14 @@
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
 ** DONE Don't tile fullscreen windows on workspace change
-** TODO Windows can sometimes resize on their own (missing signal?)
+** DONE Windows can sometimes resize on their own (missing signal?)
 ** TODO Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
 ** TODO Tileindex not properly set on workspace switch
 ** TODO Check how windows on all desktops behave
 * DONE Killing three clients in succession without opening another in between kills the script
 ** This was the result of removing an element from an array and afterwards accessing it by index
 * DONE Retile on minimize
-* TODO Avoid struts
+* DONE Avoid struts
   Never noticed because I set the panel to autohide
 ** DONE Halflayout
 ** DONE Spirallayout
@@ -38,8 +38,9 @@
 * TODO Optimization
 ** TODO Refactor layouts to share more code
 * TODO Crazy stuff
-** Overlap titlebars and abuse keepAbove to save space?
-  Can we even get the size of a window _without_ titlebar?
 ** Animate all windows on move
 ** Layout switcher
 ** Indicate layout/state (tiling on/off) somehow
+** DONE Minimize stack
+   Maybe something for a different script (or just unminimize last minimized window)
+   Made it a different script
