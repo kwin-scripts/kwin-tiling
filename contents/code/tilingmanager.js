@@ -254,10 +254,6 @@ function TilingManager() {
  */
 TilingManager.getTilingArea = function(desktop, screen) {
     // TODO: Should this function be moved to Layout?
-	print("getTilingArea");
-    //print(workspace.clientArea(KWin.PlacementArea, screen, desktop).y);
-    print(workspace.clientArea(KWin.MaximizeArea, screen, desktop).height);
-    //print(workspace.clientArea(KWin.WorkArea, screen, desktop).y);
     return workspace.clientArea(KWin.MaximizeArea, screen, desktop);
 };
 

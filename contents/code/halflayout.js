@@ -90,12 +90,10 @@ HalfLayout.prototype.addTile = function() {
 			rect.width = newRect.width;
 			rect.height = newRect.height;
 			this.tiles[i].rectangle = rect;
-			print(rect.x,rect.y,rect.width,rect.height);
 		}
 		// Adjust lowest tile's height for rounding errors
 		//newRect.y = newRect.y + newRect.width * (this.tiles.length - 1);
 		newRect.height = (this.screenRectangle.y + this.screenRectangle.height) - newRect.y;
-		print(newRect.y,newRect.height);
         this._createTile(newRect);
     }
 }
