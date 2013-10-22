@@ -107,7 +107,10 @@ TileList.prototype.addClient = function(client) {
         return self.tiles[client.tiling_tileIndex];
     };
     client.geometryShapeChanged.connect(function() {
-		getTile(client).onClientGeometryChanged(client);
+		var tile = getTile(client);
+		if (tile != null) {
+			tile.onClientGeometryChanged(client);
+		}
     });
 	// Don't handle these - if the user does something, we should let them
 	/*
@@ -119,20 +122,35 @@ TileList.prototype.addClient = function(client) {
     });
 	*/
     client.clientStartUserMovedResized.connect(function() {
-		getTile(client).onClientStartUserMovedResized(client);
+		var tile = getTile(client);
+		if (tile != null) {
+			tile.onClientStartUserMovedResized(client);
+		}
     });
     client.clientStepUserMovedResized.connect(function() {
-		getTile(client).onClientStepUserMovedResized(client);
+		var tile = getTile(client);
+		if (tile != null) {
+			tile.onClientStepUserMovedResized(client);
+		}
     });
     client.clientFinishUserMovedResized.connect(function() {
-		getTile(client).onClientFinishUserMovedResized(client);
+		var tile = getTile(client);
+		if (tile != null) {
+			tile.onClientFinishUserMovedResized(client);
+		}
     });
     client['clientMaximizedStateChanged(KWin::Client*,bool,bool)'].connect(
         function(client, h, v) {
-			getTile(client).onClientMaximizedStateChanged(client, h, v);
+			var tile = getTile(client);
+			if (tile != null) {
+				tile.onClientMaximizedStateChanged(client, h, v);
+			}
 		});
     client.desktopChanged.connect(function() {
-		getTile(client).onClientDesktopChanged(client);
+		var tile = getTile(client);
+		if (tile != null) {
+			tile.onClientDesktopChanged(client);
+		}
 	});
 	client.clientMinimized.connect(function(client) {
 		try {
@@ -210,24 +228,38 @@ TileList.prototype._onClientAdded = function(client) {
 };
 
 TileList.prototype._onClientRemoved = function(client) {
-    var tileIndex = client.tiling_tileIndex;
-    if (!(tileIndex >= 0 && tileIndex < this.tiles.length)) {
-        return;
-    }
-	// Unset keepBelow because we set it when tiling
-	client.keepBelow = false;
-    // Remove the client from its tile
-    var tile = this.tiles[tileIndex];
-    if (tile.clients.length == 1) {
-        // Remove the tile if this was the last client in it
-        this._removeTile(tileIndex);
-    } else {
-        // Remove the client from its tile
-        tile.clients.splice(tile.clients.indexOf(client), 1);
-    }
-	client.tiling_tileIndex = - 1;
-	if (client.tiling_floating == true) {
-		client.noBorder = false;
+	// HACK: Set this client to active even if it floats, as it can only be set floating when it is active (with FFM)
+	var cactive = false;
+	if (options.focusPolicy < 2) {
+		if (workspace.activeClient == client) {
+			cactive = true;
+		}
+	}
+	try {
+		var tileIndex = client.tiling_tileIndex;
+		if (!(tileIndex >= 0 && tileIndex < this.tiles.length)) {
+			return;
+		}
+		// Unset keepBelow because we set it when tiling
+		client.keepBelow = false;
+		// Remove the client from its tile
+		var tile = this.tiles[tileIndex];
+		if (tile.clients.length == 1) {
+			// Remove the tile if this was the last client in it
+			this._removeTile(tileIndex);
+		} else {
+			// Remove the client from its tile
+			tile.clients.splice(tile.clients.indexOf(client), 1);
+		}
+		client.tiling_tileIndex = - 1;
+		if (client.tiling_floating == true) {
+			client.noBorder = false;
+			if (cactive == true) {
+				workspace.activeClient = client;
+			}
+		}
+	} catch(err) {
+		print(err, "in onClientRemoved with", client.resourceClass.toString());
 	}
 };
 
