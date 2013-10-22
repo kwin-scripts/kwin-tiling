@@ -154,7 +154,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 			this.tiles[i].neighbours[Direction.Down] = i + 1;
 		}
 		// Adjust lowest tile's height for rounding errors
-		this.tiles[lowest].rectangle.height = this.screenRectangle.height - this.tiles[lowest].rectangle.y;
+		this.tiles[lowest].rectangle.height = (this.screenRectangle.y + this.screenRectangle.height) - this.tiles[lowest].rectangle.y;
 
 		/*
 		this.tiles[1].hasDirectNeighbour[Direction.Up] = false;
