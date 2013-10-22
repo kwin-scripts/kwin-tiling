@@ -62,11 +62,42 @@ TileList.prototype.addClient = function(client) {
 		client.tileIndex = - 1;
         return;
     }
+
+	// First handle fullscreen and shade as they can change and affect the tiling or floating decision
+    client.fullScreenChanged.connect(function() {
+		if (client.fullScreen == true) {
+			client.tiling_floating = true;
+			client.keepAbove = true;
+			self._onClientRemoved(client);
+		} else {
+			client.keepAbove = false;
+			self.addClient(client);
+		}
+    });
+    client.shadeChanged.connect(function() {
+		if (client.shade == true) {
+			client.tiling_floating = true;
+			self._onClientRemoved(client);
+		} else {
+			self.addClient(client);
+		}
+    });
+	// shade can't be activated without borders, so it's okay to handle it here
+	if (client.fullScreen == true || client.shade == true) {
+		client.keepBelow = false;
+		client.keepAbove = true;
+		return;
+	}
+
+	client.keepAbove = false;
+	client.keepBelow = true;
+
 	var noBorder = readConfig("noBorder", false);
 	if (noBorder == true) {
 		client.noBorder = true;
 	}
     var self = this;
+
     client.tabGroupChanged.connect(function() {
         self._onClientTabGroupChanged(client);
     });
@@ -75,21 +106,18 @@ TileList.prototype.addClient = function(client) {
     var getTile = function(client) {
         return self.tiles[client.tiling_tileIndex];
     };
-    client.shadeChanged.connect(function() {
-		getTile(client).onClientShadeChanged(client);
-    });
     client.geometryShapeChanged.connect(function() {
 		getTile(client).onClientGeometryChanged(client);
     });
+	// Don't handle these - if the user does something, we should let them
+	/*
     client.keepAboveChanged.connect(function() {
 		getTile(client).onClientKeepAboveChanged(client);
     });
     client.keepBelowChanged.connect(function() {
 		getTile(client).onClientKeepBelowChanged(client);
     });
-    client.fullScreenChanged.connect(function() {
-		getTile(client).onClientFullScreenChanged(client);
-    });
+	*/
     client.clientStartUserMovedResized.connect(function() {
 		getTile(client).onClientStartUserMovedResized(client);
     });
@@ -146,12 +174,6 @@ TileList.prototype.addClient = function(client) {
         // If not, create a new tile
         this._addTile(client);
     }
-	if (client.fullScreen) {
-		client.keepBelow = false;
-		client.keepAbove = true;
-	} else {
-		client.keepBelow = true;
-	}
 	client.tiling_floating = false;
 	assert(client.tiling_tileIndex >= 0, "Client added with invalid tileIndex");
 };

@@ -231,6 +231,7 @@ Tile.prototype.onClientGeometryChanged = function(client) {
     this.geometryChanged.emit();
 };
 
+/*
 Tile.prototype.onClientKeepAboveChanged = function(client) {
     this._recomputeForcedFloating(client);
 };
@@ -245,6 +246,7 @@ Tile.prototype.onClientFullScreenChanged = function(client) {
 	client.keepBelow = !client.fullScreen;
     this._recomputeForcedFloating(client);
 };
+*/
 
 Tile.prototype.onClientMinimizedChanged = function(client) {
     this._recomputeForcedFloating(client);
