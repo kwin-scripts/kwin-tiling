@@ -50,18 +50,12 @@ function TileList() {
     });
 }
 
-/**
- * Adds another client to the tile list. When this is called, the tile list also
- * adds callback functions to the relevant client signals to trigger tile change
- * events when necessary. This function might trigger a tileAdded event.
- *
- * @param client Client which is added to the tile list.
- */
-TileList.prototype.addClient = function(client) {
-    if (TileList._isIgnored(client)) {
-		client.tileIndex = - 1;
-        return;
-    }
+TileList.prototype.connectSignals = function(client) {
+	if (client.tiling_connected == true) {
+		return;
+	}
+
+    var self = this;
 
 	// First handle fullscreen and shade as they can change and affect the tiling or floating decision
     client.fullScreenChanged.connect(function() {
@@ -71,7 +65,7 @@ TileList.prototype.addClient = function(client) {
 			self._onClientRemoved(client);
 		} else {
 			client.keepAbove = false;
-			self.addClient(client);
+			self._onClientAdded(client);
 		}
     });
     client.shadeChanged.connect(function() {
@@ -82,21 +76,6 @@ TileList.prototype.addClient = function(client) {
 			self.addClient(client);
 		}
     });
-	// shade can't be activated without borders, so it's okay to handle it here
-	if (client.fullScreen == true || client.shade == true) {
-		client.keepBelow = false;
-		client.keepAbove = true;
-		return;
-	}
-
-	client.keepAbove = false;
-	client.keepBelow = true;
-
-	var noBorder = readConfig("noBorder", false);
-	if (noBorder == true) {
-		client.noBorder = true;
-	}
-    var self = this;
 
     client.tabGroupChanged.connect(function() {
         self._onClientTabGroupChanged(client);
@@ -112,27 +91,20 @@ TileList.prototype.addClient = function(client) {
 			tile.onClientGeometryChanged(client);
 		}
     });
-	// Don't handle these - if the user does something, we should let them
-	/*
-    client.keepAboveChanged.connect(function() {
-		getTile(client).onClientKeepAboveChanged(client);
-    });
-    client.keepBelowChanged.connect(function() {
-		getTile(client).onClientKeepBelowChanged(client);
-    });
-	*/
     client.clientStartUserMovedResized.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
 			tile.onClientStartUserMovedResized(client);
 		}
     });
+	/*
     client.clientStepUserMovedResized.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
 			tile.onClientStepUserMovedResized(client);
 		}
     });
+	*/
     client.clientFinishUserMovedResized.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
@@ -174,6 +146,38 @@ TileList.prototype.addClient = function(client) {
 			print(err, "in Unminimized");
 		}
 	});
+	client.tiling_connected = true;
+};
+	
+/**
+ * Adds another client to the tile list. When this is called, the tile list also
+ * adds callback functions to the relevant client signals to trigger tile change
+ * events when necessary. This function might trigger a tileAdded event.
+ *
+ * @param client Client which is added to the tile list.
+ */
+TileList.prototype.addClient = function(client) {
+    if (TileList._isIgnored(client)) {
+		client.tileIndex = - 1;
+        return;
+    }
+
+	this.connectSignals(client);
+
+	// shade can't be activated without borders, so it's okay to handle it here
+	if (client.fullScreen == true || client.shade == true) {
+		client.keepBelow = false;
+		client.keepAbove = true;
+		return;
+	}
+
+	client.keepAbove = false;
+	client.keepBelow = true;
+
+	var noBorder = readConfig("noBorder", false);
+	if (noBorder == true) {
+		client.noBorder = true;
+	}
 
 	// Check whether the client is part of an existing tile
     var tileIndex = client.tiling_tileIndex;
