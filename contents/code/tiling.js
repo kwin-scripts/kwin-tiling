@@ -72,38 +72,50 @@ Tiling.prototype.setLayoutArea = function(area) {
 }
 
 Tiling.prototype.addTile = function(tile, x, y) {
-    this.layout.addTile();
-    // If a position was specified, we insert the tile at the specified position
-    if (x != null && y != null) {
-        var index = this._getTileIndex(x, y);
-        if (index == -1) {
-            this.tiles.push(tile);
-        } else {
-            this.tiles.splice(index, 0, tile);
-        }
-    } else {
-        this.tiles.push(tile);
-    }
-    this._updateAllTiles();
-    // TODO: Register tile callbacks
+	try {
+		this.layout.addTile();
+		// If a position was specified, we insert the tile at the specified position
+		if (x != null && y != null) {
+			var index = this._getTileIndex(x, y);
+			if (index == -1) {
+				this.tiles.push(tile);
+			} else {
+				this.tiles.splice(index, 0, tile);
+			}
+		} else {
+			this.tiles.push(tile);
+		}
+		this._updateAllTiles();
+		// TODO: Register tile callbacks
+	} catch(err) {
+		print(err, "in Tiling.addTile");
+	}
 }
 
 Tiling.prototype.removeTile = function(tile) {
-    var tileIndex = this.tiles.indexOf(tile);
-    this.tiles.splice(tileIndex, 1);
-    this.layout.removeTile(tileIndex);
-    // TODO: Unregister tile callbacks
-    this._updateAllTiles();
+	try {
+		var tileIndex = this.tiles.indexOf(tile);
+		this.tiles.splice(tileIndex, 1);
+		this.layout.removeTile(tileIndex);
+		// TODO: Unregister tile callbacks
+		this._updateAllTiles();
+	} catch(err) {
+		print(err, "in Tiling.removeTile");
+	}
 }
 
 Tiling.prototype.swapTiles = function(tile1, tile2) {
-    if (tile1 != tile2) {
-        var index1 = this.tiles.indexOf(tile1);
-        var index2 = this.tiles.indexOf(tile2);
-        this.tiles[index1] = tile2;
-        this.tiles[index2] = tile1;
-    }
-    this._updateAllTiles();
+	try {
+		if (tile1 != tile2) {
+			var index1 = this.tiles.indexOf(tile1);
+			var index2 = this.tiles.indexOf(tile2);
+			this.tiles[index1] = tile2;
+			this.tiles[index2] = tile1;
+		}
+		this._updateAllTiles();
+	} catch(err) {
+		print(err, "in Tiling.swapTiles");
+	}
 }
 
 Tiling.prototype.activate = function() {
@@ -140,34 +152,46 @@ Tiling.prototype.resetTileSizes = function() {
 }
 
 Tiling.prototype.getTile = function(x, y) {
-    var index = this._getTileIndex(x, y);
-    if (index != -1) {
-        return this.tiles[index];
-    } else {
-        return null;
-    }
+	try {
+		var index = this._getTileIndex(x, y);
+		if (index != -1) {
+			return this.tiles[index];
+		} else {
+			return null;
+		}
+	} catch(err) {
+		print(err, "in Tiling.getTile");
+	}
 }
 
 Tiling.prototype.getTileGeometry = function(x, y) {
-    var index = this._getTileIndex(x, y);
-    if (index != -1) {
-        return this.layout.tiles[index];
-    } else {
-        return null;
-    }
+	try {
+		var index = this._getTileIndex(x, y);
+		if (index != -1) {
+			return this.layout.tiles[index];
+		} else {
+			return null;
+		}
+	} catch(err) {
+		print(err, "in Tiling.getTileGeometry");
+	}
 }
 
 Tiling.prototype._getTileIndex = function(x, y) {
-    for (var i = 0; i < this.layout.tiles.length; i++) {
-        var tile = this.layout.tiles[i];
-        if (tile.rectangle.x <= x
+	try {
+		for (var i = 0; i < this.layout.tiles.length; i++) {
+			var tile = this.layout.tiles[i];
+			if (tile.rectangle.x <= x
                 && tile.rectangle.y <= y
                 && tile.rectangle.x + tile.rectangle.width > x
                 && tile.rectangle.y + tile.rectangle.height > y) {
-            return i;
-        }
-    }
-    return -1;
+				return i;
+			}
+		}
+		return -1;
+	} catch(err) {
+		print(err, "in Tiling._getTileIndex");
+	}
 }
 
 Tiling.prototype.getTiles = function() {
@@ -189,11 +213,15 @@ Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
 }
 
 Tiling.prototype.resizeTile = function(tile){
-	if (tile != null) {
-		var tileIndex = this.tiles.indexOf(tile);
-		var client = tile.clients[0];
-		this.layout.resizeTile(tileIndex, client.geometry);
-		this._updateAllTiles();
+	try {
+		if (tile != null) {
+			var tileIndex = this.tiles.indexOf(tile);
+			var client = tile.clients[0];
+			this.layout.resizeTile(tileIndex, client.geometry);
+			this._updateAllTiles();
+		}
+	} catch(err) {
+		print(err, "in Tiling.resizeTile");
 	}
 }
 

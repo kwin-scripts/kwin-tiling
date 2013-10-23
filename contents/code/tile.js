@@ -24,80 +24,84 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * @class
  */
 function Tile(firstClient, tileIndex) {
-    /**
-     * Signal which is triggered whenever the user starts to move the tile.
-     */
-    this.movingStarted = new Signal();
-    /**
-     * Signal which is triggered whenever the user stops moving the tile.
-     */
-    this.movingEnded = new Signal();
-    /**
-     * Signal which is triggered whenever the geometry changes between
-     * movingStarted and movingEnded.
-     */
-    this.movingStep = new Signal();
-    /**
-     * Signal which is triggered whenever the user starts to resize the tile.
-     */
-    this.resizingStarted = new Signal();
-    /**
-     * Signal which is triggered whenever the user stops resizing the tile.
-     */
-    this.resizingEnded = new Signal();
-    /**
-     * Signal which is triggered whenever the geometry changes between
-     * resizingStarted and resizingEnded.
-     */
-    this.resizingStep = new Signal();
-    /**
-     * Signal which is triggered when the geometry of the tile changes because
-     * of something different to a user move or resize action.
-     */
-    this.geometryChanged = new Signal();
-    /**
-     * Signal which is triggered whenever the tile is moved to a different
-     * screen. Two parameters are passed to the handlers, the old and the new
-     * screen.
-     */
-    this.screenChanged = new Signal();
-    /**
-     * Signal which is triggered whenever the tile is moved to a different
-     * desktop. Two parameters are passed to the handlers, the old and the new
-     * desktop.
-     */
-    this.desktopChanged = new Signal();
-    /**
-     * List of the clients in this tile.
-     */
-    this.clients = [firstClient];
-    /**
-     * Index of this tile in the TileList to which the tile belongs.
-     */
-    this.tileIndex = tileIndex;
-    /**
-     * True if this tile is currently moved by the user.
-     */
-    this._moving = false;
-    /**
-     * True if this tile is currently moved by the user.
-     */
-    this._resizing = false;
-    /**
-     * Stores the current screen of the tile in order to be able to detect
-     * movement between screens.
-     */
-    this._currentScreen = firstClient.screen;
+	try {
+		/**
+		 * Signal which is triggered whenever the user starts to move the tile.
+		 */
+		this.movingStarted = new Signal();
+		/**
+		 * Signal which is triggered whenever the user stops moving the tile.
+		 */
+		this.movingEnded = new Signal();
+		/**
+		 * Signal which is triggered whenever the geometry changes between
+		 * movingStarted and movingEnded.
+		 */
+		this.movingStep = new Signal();
+		/**
+		 * Signal which is triggered whenever the user starts to resize the tile.
+		 */
+		this.resizingStarted = new Signal();
+		/**
+		 * Signal which is triggered whenever the user stops resizing the tile.
+		 */
+		this.resizingEnded = new Signal();
+		/**
+		 * Signal which is triggered whenever the geometry changes between
+		 * resizingStarted and resizingEnded.
+		 */
+		this.resizingStep = new Signal();
+		/**
+		 * Signal which is triggered when the geometry of the tile changes because
+		 * of something different to a user move or resize action.
+		 */
+		this.geometryChanged = new Signal();
+		/**
+		 * Signal which is triggered whenever the tile is moved to a different
+		 * screen. Two parameters are passed to the handlers, the old and the new
+		 * screen.
+		 */
+		this.screenChanged = new Signal();
+		/**
+		 * Signal which is triggered whenever the tile is moved to a different
+		 * desktop. Two parameters are passed to the handlers, the old and the new
+		 * desktop.
+		 */
+		this.desktopChanged = new Signal();
+		/**
+		 * List of the clients in this tile.
+		 */
+		this.clients = [firstClient];
+		/**
+		 * Index of this tile in the TileList to which the tile belongs.
+		 */
+		this.tileIndex = tileIndex;
+		/**
+		 * True if this tile is currently moved by the user.
+		 */
+		this._moving = false;
+		/**
+		 * True if this tile is currently moved by the user.
+		 */
+		this._resizing = false;
+		/**
+		 * Stores the current screen of the tile in order to be able to detect
+		 * movement between screens.
+		 */
+		this._currentScreen = firstClient.screen;
 
-    /**
-     * Stores the current desktop as this is needed as a desktopChanged
-     * parameter.
-     */
-    this._currentDesktop = firstClient.desktop;
+		/**
+		 * Stores the current desktop as this is needed as a desktopChanged
+		 * parameter.
+		 */
+		this._currentDesktop = firstClient.desktop;
 
-	this.rectangle = null;
+		this.rectangle = null;
 
-    this.syncCustomProperties();
+		this.syncCustomProperties();
+	} catch(err) {
+		print(err, "in Tile");
+	}
 }
 
 /**
@@ -107,12 +111,16 @@ function Tile(firstClient, tileIndex) {
  * @param geometry New tile geometry.
  */
 Tile.prototype.setGeometry = function(geometry) {
-	if (geometry == null) {
-		return;
-	}
-	this.rectangle = geometry;
-	for(i = 0; i < this.clients.length; i++) {
-		this.clients[i].geometry = geometry;
+	try {
+		if (geometry == null) {
+			return;
+		}
+		this.rectangle = geometry;
+		for(i = 0; i < this.clients.length; i++) {
+			this.clients[i].geometry = geometry;
+		}
+	} catch(err) {
+		print(err, "in Tile.setGeometry");
 	}
 };
 
@@ -135,7 +143,11 @@ Tile.prototype.saveGeometry = function() {
  * Restores the previously saved geometry.
  */
 Tile.prototype.restoreGeometry = function() {
-    this.clients[0].geometry = this._savedGeometry;
+	try {
+		this.clients[0].geometry = this._savedGeometry;
+	} catch(err) {
+		print(err, "in restoreGeometry");
+	}
     // TODO: Inhibit geometryChanged events?
 };
 
@@ -143,13 +155,17 @@ Tile.prototype.restoreGeometry = function() {
  * Returns the currently active client in the tile.
  */
 Tile.prototype.getActiveClient = function() {
-    var active;
-    this.clients.forEach(function(client) {
-        if (client.isCurrentTab) {
-            active = client;
-        }
-    });
-    return active;
+	try {
+		var active;
+		this.clients.forEach(function(client) {
+			if (client.isCurrentTab) {
+				active = client;
+			}
+		});
+		return active;
+	} catch(err) {
+		print(err, "in Tile.getActiveClient");
+	}
 };
 
 /**
@@ -157,75 +173,90 @@ Tile.prototype.getActiveClient = function() {
  * in the tile).
  */
 Tile.prototype.syncCustomProperties = function() {
-    this.clients[0].tiling_tileIndex = this.tileIndex;
-    this.clients[0].syncTabGroupFor("tiling_tileIndex", true);
-    this.clients[0].syncTabGroupFor("tiling_floating", true);
-	this.clients[0].syncTabGroupFor("fullScreen", true);
+	try {
+		this.clients[0].tiling_tileIndex = this.tileIndex;
+		this.clients[0].syncTabGroupFor("tiling_tileIndex", true);
+		this.clients[0].syncTabGroupFor("tiling_floating", true);
+		this.clients[0].syncTabGroupFor("fullScreen", true);
+	} catch(err) {
+		print(err, "in Tile.syncCustomProperties");
+	}
 };
 
 Tile.prototype.onClientGeometryChanged = function(client) {
-    if (!client.isCurrentTab) {
-        return;
-    }
-    // If the screen has changed, send an event and reset the saved geometry
-    if (client.screen != this._currentScreen) {
-        this._currentScreen = client.screen;
-        this._savedGeometry = null;
-		this.screenChanged.emit();
-    }
-	if (client.move || client.resize) {
-		return;
+	try {
+		if (!client.isCurrentTab) {
+			return;
+		}
+		// If the screen has changed, send an event and reset the saved geometry
+		if (client.screen != this._currentScreen) {
+			this._currentScreen = client.screen;
+			this._savedGeometry = null;
+			this.screenChanged.emit();
+		}
+		if (client.move || client.resize) {
+			return;
+		}
+		if (this._moving || this.resizing) {
+			return;
+		}
+		if (this.rectangle != null) {
+			// Workaround an infinite signal loop by setting this in pieces
+			client.geometry.x = this.rectangle.x;
+			client.geometry.y = this.rectangle.y;
+			client.geometry.width = this.rectangle.width;
+			client.geometry.height = this.rectangle.height;
+		}
+		// TODO: Check whether we caused the geometry change
+		this.geometryChanged.emit();
+	} catch(err) {
+		print(err, "in Tile.onClientGeometryChanged");
 	}
-    if (this._moving || this.resizing) {
-        return;
-    }
-	if (this.rectangle != null) {
-		client.geometry.x = this.rectangle.x;
-		client.geometry.y = this.rectangle.y;
-		client.geometry.width = this.rectangle.width;
-		client.geometry.height = this.rectangle.height;
-	}
-    // TODO: Check whether we caused the geometry change
-    this.geometryChanged.emit();
 };
 
 Tile.prototype.onClientDesktopChanged = function(client) {
-    if (!client.isCurrentTab) {
-        return;
-    }
-    var oldDesktop = this._currentDesktop;
-    this._currentDesktop = client.desktop;
-    this.desktopChanged.emit(oldDesktop, this._currentDesktop);
+	try {
+		if (!client.isCurrentTab) {
+			return;
+		}
+		var oldDesktop = this._currentDesktop;
+		this._currentDesktop = client.desktop;
+		this.desktopChanged.emit(oldDesktop, this._currentDesktop);
+	} catch(err) {
+		print(err, "in Tile.onClientDesktopChanged");
+	}
 };
 
 Tile.prototype.onClientStartUserMovedResized = function(client) {
-	/*
-    // We want to distinguish between moving and resizing, so we have to wait
-    // for the first geometry change
-    this._lastGeometry = client.geometry;
-	*/
 };
 
 Tile.prototype.onClientStepUserMovedResized = function(client) {
-    var newGeometry = client.geometry;
-	if (client.resize) {
-		this.resizingStep.emit();
-		this._resizing = true;
-		return;
-	}
-	if (client.move) {
-		this.movingStep.emit();
-		this._moving = true;
-		return;
+	try {
+		if (client.resize) {
+			this.resizingStep.emit();
+			this._resizing = true;
+			return;
+		}
+		if (client.move) {
+			this.movingStep.emit();
+			this._moving = true;
+			return;
+		}
+	} catch(err) {
+		print(err, "in Tile.onClientStepUserMovedResized");
 	}
 };
 
 Tile.prototype.onClientFinishUserMovedResized = function(client) {
-    if (this._moving) {
-        this.movingEnded.emit();
-        this._moving = false;
-    } else if (this._resizing) {
-        this.resizingEnded.emit();
-        this._resizing = false;
-    }
+	try {
+		if (this._moving) {
+			this.movingEnded.emit();
+			this._moving = false;
+		} else if (this._resizing) {
+			this.resizingEnded.emit();
+			this._resizing = false;
+		}
+	} catch(err) {
+		print(err, "in Tile.onClientFinishUserMovedResized");
+	}
 };

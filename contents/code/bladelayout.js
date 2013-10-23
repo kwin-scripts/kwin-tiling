@@ -25,9 +25,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * the left half of the screen.
  */
 function BladeLayout(screenRectangle) {
-	print("Creating BladeLayout");
-    Layout.call(this, screenRectangle);
-    // TODO
+	try {
+		print("Creating BladeLayout");
+		Layout.call(this, screenRectangle);
+		// TODO
+	} catch(err) {
+		print(err, "in BladeLayout");
+	}
 }
 
 BladeLayout.name = "Blade";
@@ -38,160 +42,180 @@ BladeLayout.prototype = new Layout();
 BladeLayout.prototype.constructor = BladeLayout;
 
 BladeLayout.prototype.resetTileSizes = function() {
-    // Simply erase all tiles and recreate them to recompute the initial sizes
-    var tileCount = this.tiles.length;
-    this.tiles.length = 0;
-    for (var i = 0; i < tileCount; i++) {
-        this.addTile();
-    }
+	try {
+		// Simply erase all tiles and recreate them to recompute the initial sizes
+		var tileCount = this.tiles.length;
+		this.tiles.length = 0;
+		for (var i = 0; i < tileCount; i++) {
+			this.addTile();
+		}
+	} catch(err) {
+		print(err, "in BladeLayout.resetTileSizes");
+	}
 }
 
 BladeLayout.prototype.addTile = function() {
-    if (this.tiles.length == 0) {
-        // The first tile fills the whole screen
-        var rect = Qt.rect(this.screenRectangle.x,
-                           this.screenRectangle.y,
-                           this.screenRectangle.width,
-                           this.screenRectangle.height);
-        this._createTile(rect);
-		return;
-    } else {
-		// Divide the screen width evenly between full-height tiles
-		// FIXME: Screenrectangle for struts is weird
-        var lastRect = this.tiles[0].rectangle;
-        var newRect = Qt.rect(this.screenRectangle.x,
-                              lastRect.y,
-							  Math.floor((this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1)), 
-                              this.screenRectangle.height);
-		// FIXME: Try to keep ratio
-		for (i = 0; i < this.tiles.length; i++) { 
-			var rect = this.tiles[i].rectangle;
-			rect.x = newRect.x + newRect.width * i;
-			rect.width = newRect.width;
-			this.tiles[i].rectangle = rect;
+	try {
+		if (this.tiles.length == 0) {
+			// The first tile fills the whole screen
+			var rect = Qt.rect(this.screenRectangle.x,
+							   this.screenRectangle.y,
+							   this.screenRectangle.width,
+							   this.screenRectangle.height);
+			this._createTile(rect);
+			return;
+		} else {
+			// Divide the screen width evenly between full-height tiles
+			// FIXME: Screenrectangle for struts is weird
+			var lastRect = this.tiles[0].rectangle;
+			var newRect = Qt.rect(this.screenRectangle.x,
+								  lastRect.y,
+								  Math.floor((this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1)), 
+								  this.screenRectangle.height);
+			// FIXME: Try to keep ratio
+			for (i = 0; i < this.tiles.length; i++) { 
+				var rect = this.tiles[i].rectangle;
+				rect.x = newRect.x + newRect.width * i;
+				rect.width = newRect.width;
+				this.tiles[i].rectangle = rect;
+			}
+			// Adjust tile's width for rounding errors
+			newRect.x = newRect.x + newRect.width * this.tiles.length;
+			newRect.width = (this.screenRectangle.width + this.screenRectangle.x) - newRect.x;
+			// TODO: Move this before setting ratio to simplify
+			this._createTile(newRect);
 		}
-		// Adjust tile's width for rounding errors
-		newRect.x = newRect.x + newRect.width * this.tiles.length;
-		newRect.width = (this.screenRectangle.width + this.screenRectangle.x) - newRect.x;
-		// TODO: Move this before setting ratio to simplify
-        this._createTile(newRect);
-    }
+	} catch(err) {
+		print(err, "in BladeLayout.addTile");
+	}
 }
 
 BladeLayout.prototype.removeTile = function(tileIndex) {
-    // Remove the array entry
-	var oldrect = this.tiles[tileIndex].rectangle;
-	this.tiles.splice(tileIndex, 1);
-    // Update the other tiles
-	if (this.tiles.length == 1) {
-		this.tiles[0].rectangle = this.screenRectangle;
-		this.tiles[0].hasDirectNeighbour[Direction.Left] = false;
-		this.tiles[0].hasDirectNeighbour[Direction.Right] = false;
+	try {
+		// Remove the array entry
+		var oldrect = this.tiles[tileIndex].rectangle;
+		this.tiles.splice(tileIndex, 1);
+		// Update the other tiles
+		if (this.tiles.length == 1) {
+			this.tiles[0].rectangle = this.screenRectangle;
+			this.tiles[0].hasDirectNeighbour[Direction.Left] = false;
+			this.tiles[0].hasDirectNeighbour[Direction.Right] = false;
+		}
+		if (this.tiles.length > 1) {
+			var tileCount = this.tiles.length;
+			var lastRect = this.tiles[0].rectangle;
+			var newRect = Qt.rect(this.screenRectangle.x,
+								  this.screenRectangle.y,
+								  Math.floor(this.screenRectangle.width / tileCount),
+								  this.screenRectangle.height);
+			var lowest = 1;
+			for (i = 0; i < this.tiles.length; i++) {
+				var rect = this.tiles[i].rectangle;
+				rect.x = newRect.x + newRect.width * i;
+				rect.width = newRect.width;
+				this.tiles[i].rectangle = rect;
+				this.tiles[i].hasDirectNeighbour[Direction.Left] = (i > 0);
+				this.tiles[i].hasDirectNeighbour[Direction.Right] = (i < this.tiles.length - 1);
+				this.tiles[i].neighbours[Direction.Left] = i - 1;
+				this.tiles[i].neighbours[Direction.Right] = i + 1;
+			}
+			// Adjust rightmost tile's height for rounding errors
+			this.tiles[this.tiles.length - 1].rectangle.width = (this.screenRectangle.width + this.screenRectangle.x) - this.tiles[this.tiles.length - 1].rectangle.x;
+		}
+	} catch(err) {
+		print(err, "in BladeLayout.removeTile");
 	}
-    if (this.tiles.length > 1) {
-        var tileCount = this.tiles.length;
-        var lastRect = this.tiles[0].rectangle;
-        var newRect = Qt.rect(this.screenRectangle.x,
-                              this.screenRectangle.y,
-                              Math.floor(this.screenRectangle.width / tileCount),
-                              this.screenRectangle.height);
-		var lowest = 1;
-		for (i = 0; i < this.tiles.length; i++) {
+}
+
+BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
+	try {
+		// TODO: Mark tile as resized so it can keep its size on tileadd/remove
+		if (tileIndex < 0 || tileIndex > this.tiles.length) {
+			print("Tileindex invalid", tileIndex, "/", this.tiles.length);
+			return;
+		}
+		var tile = this.tiles[tileIndex];
+		if (tile == null) {
+			print("No tile");
+			return;
+		}
+		if (rectangle == null){
+			print("No rect");
+			return;
+		}
+		// Cap rectangle at screenedges
+		if (rectangle.x < this.screenRectangle.x) {
+			rectangle.x = this.screenRectangle.x;
+		}
+		if (rectangle.y < this.screenRectangle.y) {
+			rectangle.y = this.screenRectangle.y;
+		}
+		if (rectangle.y + rectangle.height > this.screenRectangle.y + this.screenRectangle.height) {
+			rectangle.height = this.screenRectangle.y + this.screenRectangle.height - rectangle.y;
+		}
+		if (rectangle.x + rectangle.width > this.screenRectangle.x + this.screenRectangle.width) {
+			rectangle.width = this.screenRectangle.x + this.screenRectangle.width - rectangle.x;
+		}
+		var newRect = Qt.Rect(this.screenRectangle.x,
+							  this.screenRectangle.y,
+							  Math.floor(rectangle.x / tileIndex),
+							  this.screenRectangle.height);
+		for(i = 0; i < tileIndex; i++) {
 			var rect = this.tiles[i].rectangle;
 			rect.x = newRect.x + newRect.width * i;
 			rect.width = newRect.width;
 			this.tiles[i].rectangle = rect;
-			this.tiles[i].hasDirectNeighbour[Direction.Left] = (i > 0);
-			this.tiles[i].hasDirectNeighbour[Direction.Right] = (i < this.tiles.length - 1);
-			this.tiles[i].neighbours[Direction.Left] = i - 1;
-			this.tiles[i].neighbours[Direction.Right] = i + 1;
 		}
-		// Adjust rightmost tile's height for rounding errors
-		this.tiles[this.tiles.length - 1].rectangle.width = (this.screenRectangle.width + this.screenRectangle.x) - this.tiles[this.tiles.length - 1].rectangle.x;
-    }
-}
-
-BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
-	// TODO: Mark tile as resized so it can keep its size on tileadd/remove
-	if (tileIndex < 0 || tileIndex > this.tiles.length) {
-		print("Tileindex invalid", tileIndex, "/", this.tiles.length);
-		return;
-	}
-	var tile = this.tiles[tileIndex];
-	if (tile == null) {
-		print("No tile");
-		return;
-	}
-	if (rectangle == null){
-		print("No rect");
-		return;
-	}
-	// Cap rectangle at screenedges
-	if (rectangle.x < this.screenRectangle.x) {
-		rectangle.x = this.screenRectangle.x;
-	}
-	if (rectangle.y < this.screenRectangle.y) {
+		newRect.width = Math.floor((this.screenRectangle.width - rectangle.x) / (this.tiles.length - tileIndex - 1));
+		for(i = tileIndex + 1; i < this.tiles.length; i++){
+			var rect = this.tiles[i].rectangle;
+			rect.x = newRect.x + newRect.width * i;
+			rect.width = newRect.width;
+			this.tiles[i].rectangle = rect;
+		}
 		rectangle.y = this.screenRectangle.y;
+		rectangle.height = this.screenRectangle.height;
+		this.tiles[tileIndex].rectangle = rectangle;
+	} catch(err) {
+		print(err, "in BladeLayout.resizeTile");
 	}
-	if (rectangle.y + rectangle.height > this.screenRectangle.y + this.screenRectangle.height) {
-		rectangle.height = this.screenRectangle.y + this.screenRectangle.height - rectangle.y;
-	}
-	if (rectangle.x + rectangle.width > this.screenRectangle.x + this.screenRectangle.width) {
-		rectangle.width = this.screenRectangle.x + this.screenRectangle.width - rectangle.x;
-	}
-	var newRect = Qt.Rect(this.screenRectangle.x,
-						  this.screenRectangle.y,
-						  Math.floor(rectangle.x / tileIndex),
-						  this.screenRectangle.height);
-	for(i = 0; i < tileIndex; i++) {
-		var rect = this.tiles[i].rectangle;
-		rect.x = newRect.x + newRect.width * i;
-		rect.width = newRect.width;
-		this.tiles[i].rectangle = rect;
-	}
-	newRect.width = Math.floor((this.screenRectangle.width - rectangle.x) / (this.tiles.length - tileIndex - 1));
-	for(i = tileIndex + 1; i < this.tiles.length; i++){
-		var rect = this.tiles[i].rectangle;
-		rect.x = newRect.x + newRect.width * i;
-		rect.width = newRect.width;
-		this.tiles[i].rectangle = rect;
-	}
-	rectangle.y = this.screenRectangle.y;
-	rectangle.height = this.screenRectangle.height;
-	this.tiles[tileIndex].rectangle = rectangle;
 }
 
 BladeLayout.prototype._createTile = function(rect) {
-    // Update the last tile in the list
-    if (this.tiles.length > 1) {
-        var lastTile = this.tiles[this.tiles.length - 1];
-        lastTile.neighbours[Direction.Down] = this.tiles.length;
-        lastTile.hasDirectNeighbour[Direction.Down] = true;
-    }
-	
-	if (this.tiles.length == 1) {
-        var lastTile2 = this.tiles[0];
-        lastTile2.neighbours[Direction.Right] = 1;
-        lastTile2.hasDirectNeighbour[Direction.Right] = true;
+	try {
+		// Update the last tile in the list
+		if (this.tiles.length > 1) {
+			var lastTile = this.tiles[this.tiles.length - 1];
+			lastTile.neighbours[Direction.Down] = this.tiles.length;
+			lastTile.hasDirectNeighbour[Direction.Down] = true;
+		}
+		
+		if (this.tiles.length == 1) {
+			var lastTile2 = this.tiles[0];
+			lastTile2.neighbours[Direction.Right] = 1;
+			lastTile2.hasDirectNeighbour[Direction.Right] = true;
+		}
+		// Create a new tile and add it to the list
+		var tile = {};
+		tile.rectangle = rect;
+		tile.neighbours = [];
+		tile.hasDirectNeighbour = [];
+		tile.neighbours[Direction.Left] = 0;
+		tile.hasDirectNeighbour[Direction.Left] = (this.tiles.length > 0);
+		tile.neighbours[Direction.Right] = - 1;
+		tile.hasDirectNeighbour[Direction.Right] = false;
+		if (this.tiles.length > 1) {
+			tile.hasDirectNeighbour[Direction.Up] = true;
+			tile.neighbours[Direction.Up] = this.tiles.length - 1;
+		} else {
+			tile.hasDirectNeighbour[Direction.Up] = false;
+			tile.neighbours[Direction.Up] = - 1;
+		}
+		tile.neighbours[Direction.Down] = - 1;
+		tile.hasDirectNeighbour[Direction.Down] = false;
+		tile.index = this.tiles.length;
+		this.tiles.push(tile);
+	} catch(err) {
+		print(err, "in BladeLayout._createTile");
 	}
-    // Create a new tile and add it to the list
-    var tile = {};
-    tile.rectangle = rect;
-    tile.neighbours = [];
-    tile.hasDirectNeighbour = [];
-    tile.neighbours[Direction.Left] = 0;
-    tile.hasDirectNeighbour[Direction.Left] = (this.tiles.length > 0);
-    tile.neighbours[Direction.Right] = - 1;
-    tile.hasDirectNeighbour[Direction.Right] = false;
-	if (this.tiles.length > 1) {
-		tile.hasDirectNeighbour[Direction.Up] = true;
-		tile.neighbours[Direction.Up] = this.tiles.length - 1;
-	} else {
-		tile.hasDirectNeighbour[Direction.Up] = false;
-		tile.neighbours[Direction.Up] = - 1;
-	}
-    tile.neighbours[Direction.Down] = - 1;
-    tile.hasDirectNeighbour[Direction.Down] = false;
-	tile.index = this.tiles.length;
-    this.tiles.push(tile);
 }
