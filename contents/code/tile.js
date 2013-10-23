@@ -234,6 +234,8 @@ Tile.prototype.onClientStepUserMovedResized = function(client) {
 	try {
 		if (client.resize) {
 			this.resizingStep.emit();
+			// This means it gets animated
+			this.resizingEnded.emit();
 			this._resizing = true;
 			return;
 		}
