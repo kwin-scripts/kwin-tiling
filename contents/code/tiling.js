@@ -163,21 +163,16 @@ Tiling.prototype.getTiles = function() {
 }
 
 Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
-    if (from.forcedFloating) {
+    var index = this.tiles.indexOf(from);
+    var geometry = this.layout.tiles[index];
+    var nextIndex = geometry.neighbours[direction];
+    if (!geometry.hasDirectNeighbour && !directOnly) {
+        // This is not a direct neighbour (wrap-around situation), so cycle
+        // through the floating windows first
         // TODO
-        print("TODO: getAdjacentTile() (floating tile)");
+        print("TODO: getAdjacentTile(): Not a direct neighbour!");
     } else {
-        var index = this.tiles.indexOf(from);
-        var geometry = this.layout.tiles[index];
-        var nextIndex = geometry.neighbours[direction];
-        if (!geometry.hasDirectNeighbour && !directOnly) {
-            // This is not a direct neighbour (wrap-around situation), so cycle
-            // through the floating windows first
-            // TODO
-            print("TODO: getAdjacentTile(): Not a direct neighbour!");
-        } else {
-            return this.tiles[nextIndex];
-        }
+        return this.tiles[nextIndex];
     }
 }
 
