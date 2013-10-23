@@ -30,35 +30,49 @@ var Direction = {
  * @class
  */
 function Layout(screenRectangle) {
-    /**
-     * Screen area which is used by the layout.
-     */
-    this.screenRectangle = screenRectangle;
-    /**
-     * Geometry of the different tiles. This array stays empty in the case of
-     * floating layouts.
-     */
-    this.tiles = [];
-    // TODO
+	try {
+		/**
+		 * Screen area which is used by the layout.
+		 */
+		this.screenRectangle = screenRectangle;
+		/**
+		 * Geometry of the different tiles. This array stays empty in the case of
+		 * floating layouts.
+		 */
+		this.tiles = [];
+		// TODO
+	} catch(err) {
+		print(err, "in Layout");
+	}
 }
 
 Layout.prototype.setLayoutArea = function(area) {
-    var oldArea = this.screenRectangle;
-    this.screenRectangle = area;
-    this.onLayoutAreaChange(oldArea, area);
+	try {
+		var oldArea = this.screenRectangle;
+		this.screenRectangle = area;
+		this.onLayoutAreaChange(oldArea, area);
+	} catch(err) {
+		print(err, "in Layout.setLayoutArea");
+	}
 }
 
-Layout.prototype.onLayoutAreaChange = function(oldArea, newArea) {
-	var xscale = newArea.width / oldArea.width;
-	var yscale = newArea.height / oldArea.height;
-	var xoffset = newArea.x - oldArea.x;
-	var yoffset = newArea.y - oldArea.y;
-	this.tiles.forEach(function(tile) {
-		var lastrect = tile.rectangle;
-		var newrect = Qt.rect(lastrect.x + xoffset,
-							  lastrect.y + yoffset,
-							  lastrect.width * xscale,
-							  lastrect.height * yscale);
-		tile.rectangle = newrect;
-	});
+Layout.prototype.onLayoutAreaChange = function(newArea) {
+	try {
+		var oldArea = this.screenRectangle;
+		var xscale = newArea.width / oldArea.width;
+		var yscale = newArea.height / oldArea.height;
+		var xoffset = newArea.x - oldArea.x;
+		var yoffset = newArea.y - oldArea.y;
+		this.tiles.forEach(function(tile) {
+			var lastrect = tile.rectangle;
+			var newrect = Qt.rect(lastrect.x + xoffset,
+								  lastrect.y + yoffset,
+								  lastrect.width * xscale,
+								  lastrect.height * yscale);
+			tile.rectangle = newrect;
+		});
+		this.screenRectangle = newArea;
+	} catch(err) {
+		print(err, "in Layout.onLayoutAreaChange");
+	}
 }

@@ -22,36 +22,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Class which implements tiling for a single screen.
  * @class
  */
-function Tiling(screenRectangle, layoutType) {
-    /**
-     * Tiles which have been added to the layout
-     */
-    this.tiles = [];
-    /**
-     * Layout type which provided the current layout.
-     */
-    this.layoutType = layoutType;
-    /**
-     * Layout which specifies window sizes/positions.
-     */
-    this.layout = new layoutType(screenRectangle);
-    /**
-     * True if the layout is active.
-     */
-    this.active = false;
+function Tiling(screenRectangle, layoutType, desktop, screen) {
+	try {
+		/**
+		 * Tiles which have been added to the layout
+		 */
+		this.tiles = [];
+		/**
+		 * Layout type which provided the current layout.
+		 */
+		this.layoutType = layoutType;
+		/**
+		 * Layout which specifies window sizes/positions.
+		 */
+		this.layout = new layoutType(screenRectangle);
+		/**
+		 * True if the layout is active.
+		 */
+		this.active = false;
 
-	this.screenRectangle = screenRectangle;
+		this.screenRectangle = screenRectangle;
+		
+		this.desktop = desktop;
+		
+		this.screen  = screen;
+	} catch(err) {
+		print(err, "in Tiling");
+	}
 }
 
 Tiling.prototype.setLayoutType = function(layoutType) {
-	var newLayout = new layoutType(this.layout.screenRectangle);
-	for(i = 0; i < this.layout.tiles.length; i++) {
-		newLayout.addTile();
-		this.layout.tiles[i].tileIndex = i;
+	try {
+		var newLayout = new layoutType(this.layout.screenRectangle);
+		for(i = 0; i < this.layout.tiles.length; i++) {
+			newLayout.addTile();
+			this.layout.tiles[i].tileIndex = i;
+		}
+		this.layout = newLayout;
+		this.layoutType = layoutType;
+		this.layout.resetTileSizes();
+	} catch(err) {
+		print(err, "in Tiling.setLayoutType");
 	}
-	this.layout = newLayout;
-	this.layoutType = layoutType;
-	this.layout.resetTileSizes();
 }
 
 Tiling.prototype.setLayoutArea = function(area) {
@@ -186,14 +198,21 @@ Tiling.prototype.resizeTile = function(tile){
 }
 
 Tiling.prototype._updateAllTiles = function() {
-    // Set the position/size of all tiles
-	if (this.active) {
-		for (var i = 0; i < this.layout.tiles.length; i++) {
-			var newRect = this.layout.tiles[i].rectangle;
-			if (! newRect) {
-				return;
+	try {
+		// Set the position/size of all tiles
+		if (this.active) {
+			var rect = workspace.clientArea(KWin.PlacementArea, this.desktop, this.screen);
+			this.layout.onLayoutAreaChange(rect);
+			for (var i = 0; i < this.layout.tiles.length; i++) {
+				var newRect = this.layout.tiles[i].rectangle;
+				if (! newRect) {
+					return;
+				}
+				this.tiles[i].setGeometry(newRect);
 			}
-			this.tiles[i].setGeometry(newRect);
 		}
+	} catch(err) {
+		print(err, "in Tiling._updateAllTiles");
 	}
+
 }

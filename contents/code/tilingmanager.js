@@ -254,6 +254,7 @@ function TilingManager() {
  */
 TilingManager.getTilingArea = function(desktop, screen) {
     // TODO: Should this function be moved to Layout?
+	return workspace.clientArea(KWin.PlacementArea, screen, desktop);
     return workspace.clientArea(KWin.MaximizeArea, screen, desktop);
 };
 
@@ -261,7 +262,7 @@ TilingManager.prototype._createDefaultLayouts = function(desktop) {
     var screenLayouts = [];
     for (var j = 0; j < this.screenCount; j++) {
         var area = TilingManager.getTilingArea(desktop, j);
-        screenLayouts[j] = new Tiling(area, this.defaultLayout);
+        screenLayouts[j] = new Tiling(area, this.defaultLayout, desktop, j);
     }
     this.layouts[desktop] = screenLayouts;
 };
@@ -344,7 +345,7 @@ TilingManager.prototype._onNumberScreensChanged = function() {
 		for (var i = 0; i < this.desktopCount; i++) {
 			for (var j = this.screenCount; j < workspace.numScreens; j++) {
 				var area = TilingManager.getTilingArea(i, j);
-				this.layouts[i][j] = new Tiling(area, this.defaultLayout);
+				this.layouts[i][j] = new Tiling(area, this.defaultLayout, i, j);
 				// Activate the new layout if necessary
 				if (i == workspace.currentDesktop - 1) {
 					this.layouts[i][j].activate();
