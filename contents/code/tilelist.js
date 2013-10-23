@@ -97,14 +97,12 @@ TileList.prototype.connectSignals = function(client) {
 			tile.onClientStartUserMovedResized(client);
 		}
     });
-	/*
     client.clientStepUserMovedResized.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
 			tile.onClientStepUserMovedResized(client);
 		}
     });
-	*/
     client.clientFinishUserMovedResized.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {

@@ -416,7 +416,6 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
 }
 
 TilingManager.prototype._onTileMovingStep = function(tile) {
-	/*
 	var client = tile.clients[0];
 	// Calculate the rectangle in which the window is placed if it is dropped
 	var layout = this.layouts[this._currentDesktop][client.screen];
@@ -432,8 +431,7 @@ TilingManager.prototype._onTileMovingStep = function(tile) {
 	// Show an outline where the window would be placed
 	// TODO: This is not working yet, the window movement code already disables
 	// any active outline
-	workspace.showOutline(targetArea);
-	*/
+	//workspace.showOutline(targetArea);
 }
 
 TilingManager.prototype._changeTileLayouts =
