@@ -156,9 +156,9 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 		if (rectangle.x + rectangle.width > this.screenRectangle.x + this.screenRectangle.width) {
 			rectangle.width = this.screenRectangle.x + this.screenRectangle.width - rectangle.x;
 		}
-		var newRect = Qt.Rect(this.screenRectangle.x,
+		var newRect = Qt.rect(this.screenRectangle.x,
 							  this.screenRectangle.y,
-							  Math.floor(rectangle.x / tileIndex),
+							  Math.floor((rectangle.x - this.screenRectangle.x) / tileIndex),
 							  this.screenRectangle.height);
 		for(i = 0; i < tileIndex; i++) {
 			var rect = this.tiles[i].rectangle;
@@ -166,10 +166,14 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			rect.width = newRect.width;
 			this.tiles[i].rectangle = rect;
 		}
-		newRect.width = Math.floor((this.screenRectangle.width - rectangle.x) / (this.tiles.length - tileIndex - 1));
+		// Rightmost point - Right edge of resized window / number of tiles on the right side
+		// Do rounding later to preserve accuracy
+		newRect.width = ((this.screenRectangle.width + this.screenRectangle.x)
+									- (rectangle.x + rectangle.width)) 
+								   / (this.tiles.length - (tileIndex + 1));
 		for(i = tileIndex + 1; i < this.tiles.length; i++){
 			var rect = this.tiles[i].rectangle;
-			rect.x = newRect.x + newRect.width * i;
+			rect.x = (rectangle.x + rectangle.width) + Math.floor(newRect.width * (i - 2));
 			rect.width = newRect.width;
 			this.tiles[i].rectangle = rect;
 		}
