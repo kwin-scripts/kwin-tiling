@@ -292,8 +292,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
 		self._onTileMovingStep(tile);
 	});
 	// Add the tile to the layouts
-	var client = tile.clients[0];
-	var tileLayouts = this._getLayouts(client.desktop, client.screen);
+	var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
 	tileLayouts.forEach(function(layout) {
 		layout.addTile(tile);
 		tile.resizingEnded.connect(function() {
@@ -304,8 +303,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
 };
 
 TilingManager.prototype._onTileRemoved = function(tile) {
-	var client = tile.clients[0];
-	var tileLayouts = this._getLayouts(client.desktop, client.screen);
+	var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
 	tileLayouts.forEach(function(layout) {
 		layout.removeTile(tile);
 	});
