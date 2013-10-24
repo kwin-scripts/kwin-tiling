@@ -177,7 +177,6 @@ Tile.prototype.syncCustomProperties = function() {
 		this.clients[0].tiling_tileIndex = this.tileIndex;
 		this.clients[0].syncTabGroupFor("tiling_tileIndex", true);
 		this.clients[0].syncTabGroupFor("tiling_floating", true);
-		this.clients[0].syncTabGroupFor("fullScreen", true);
 	} catch(err) {
 		print(err, "in Tile.syncCustomProperties");
 	}

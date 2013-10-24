@@ -229,7 +229,8 @@ Tiling.prototype._updateAllTiles = function() {
 	try {
 		// Set the position/size of all tiles
 		if (this.active) {
-			var rect = workspace.clientArea(KWin.PlacementArea, this.desktop, this.screen);
+			// FIXME: KWin hands us the wrong area if we ask for our real desktop
+			var rect = workspace.clientArea(KWin.PlacementArea, 0, this.screen);
 			this.layout.onLayoutAreaChange(rect);
 			for (var i = 0; i < this.layout.tiles.length; i++) {
 				var newRect = this.layout.tiles[i].rectangle;
