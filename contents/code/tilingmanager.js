@@ -93,8 +93,6 @@ function TilingManager() {
     this._movingStartScreen = 0;
 	
     var self = this;
-    // Read the script settings
-    // TODO (this is currently not supported by kwin)
     // Create the various layouts, one for every desktop
     for (var i = 0; i < this.desktopCount; i++) {
         this._createDefaultLayouts(i);

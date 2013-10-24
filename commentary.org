@@ -7,7 +7,7 @@
 ** DONE Toggle floating
    Somehow client.tiling_floating stays the same across acesses (fixed?)
 ** DONE Floating layout/disable script
-   *** Currently moves and resizes windows on disable
+   Currently moves and resizes windows on disable
 ** DONE Make floating windows be _above_ tilers
    Somehow accessing client.keepAbove doesn't work
    Make configurable?
