@@ -184,6 +184,9 @@ Tile.prototype.syncCustomProperties = function() {
 
 Tile.prototype.onClientGeometryChanged = function(client) {
 	try {
+		if (client == null) {
+			return;
+		}
 		if (!client.isCurrentTab) {
 			return;
 		}

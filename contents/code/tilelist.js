@@ -155,6 +155,9 @@ TileList.prototype.connectSignals = function(client) {
  * @param client Client which is added to the tile list.
  */
 TileList.prototype.addClient = function(client) {
+	if (client == null) {
+		return;
+	}
     if (TileList._isIgnored(client)) {
 		client.tileIndex = - 1;
         return;
@@ -300,13 +303,17 @@ TileList.prototype._addTile = function(client) {
 };
 
 TileList.prototype._removeTile = function(tileIndex) {
-    // Remove the tile if this was the last client in it
-	var tile = this.tiles[tileIndex];
-	this.tiles[tileIndex] = this.tiles[this.tiles.length - 1];
-	this.tiles[tileIndex].tileIndex = tileIndex;
-    this.tiles[tileIndex].syncCustomProperties();
-    this.tileRemoved.emit(tile);
-	this.tiles.length--;
+	try {
+		// Remove the tile if this was the last client in it
+		var tile = this.tiles[tileIndex];
+		this.tiles[tileIndex] = this.tiles[this.tiles.length - 1];
+		this.tiles[tileIndex].tileIndex = tileIndex;
+		this.tiles[tileIndex].syncCustomProperties();
+		this.tileRemoved.emit(tile);
+		this.tiles.length--;
+	} catch(err) {
+		print(err, "in TileList._removeTile");
+	}
 };
 
 /**
