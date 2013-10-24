@@ -18,14 +18,14 @@ Goals:
  * Individual windows should be resizable and the whole layout should be updated
    accordingly
  * Windows should be selected and moved/resized in the layout and between
-   screens and desktops using the keyboard
- * Windows should be movable/resizable within the layout using the mouse as well
+   screens and desktops using the keyboard or the mouse
  * Tiled windows should always be drawn below floating ones
  * Window borders should maybe be reduced (like with maximized windows) when
    being tiled, or should be completely hidden with a shortcut to show the
    title bar of the active window (possibly configurable?)
  * Some windows cannot be tiled properly (dialogs, non resizable windows, etc.),
-   those should automatically be made floating
+   those should automatically be made floating.
+ ** Also keep a configurable list with sensible defaults (nobody wants yakuake to float)
 
 Design decisions:
  * TODO
@@ -45,8 +45,7 @@ Design description:
    neighbour of a tile which are used when the user wants to move the focus to
    a different tile. The different kinds of layouts are classes derived from
    this class.
-   TODO: Does this class also contain a list of the floating windows, and how is
-   focus switching implemented there?
+   Floating windows are _not_ handled in layouts or tiles.
  * Tiling: The main class which contains a list of the current layouts (one per
    screen/desktop combination) and which registers global keyboard shortcuts and
    some global events (e.g. screen count changes).
