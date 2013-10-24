@@ -225,7 +225,7 @@ function TilingManager() {
 					 function() {
 						 var currentScreen = workspace.activeScreen;
 						 var currentDesktop = workspace.currentDesktop - 1;
-						 self.layouts[currentDesktop][currentScreen].toggleActive();
+						 self.layouts[currentDesktop][currentScreen].toggleUserActive();
 					 });
 	registerUserActionsMenu(function(client) {
 		return {

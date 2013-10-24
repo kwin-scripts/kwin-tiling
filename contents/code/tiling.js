@@ -40,6 +40,7 @@ function Tiling(screenRectangle, layoutType, desktop, screen) {
 		 * True if the layout is active.
 		 */
 		this.active = false;
+		this.userActive = true;
 
 		this.screenRectangle = screenRectangle;
 		
@@ -119,13 +120,11 @@ Tiling.prototype.swapTiles = function(tile1, tile2) {
 }
 
 Tiling.prototype.activate = function() {
-    this.active = true;
-    // Resize the tiles like specified by the layout
-    this._updateAllTiles();
-    // If no tile geometry was specified, just restore the saved geometry
-    // TODO
-    // Register callbacks for all tiles
-    // TODO
+	if (this.userActive == true) {
+		this.active = true;
+		// Resize the tiles like specified by the layout
+		this._updateAllTiles();
+	}
 }
 
 Tiling.prototype.deactivate = function() {
@@ -138,6 +137,16 @@ Tiling.prototype.toggleActive = function() {
 	if (this.active) {
 		this.deactivate();
 	} else {
+		this.activate();
+	}
+}
+
+Tiling.prototype.toggleUserActive = function() {
+	if (this.userActive == true) {
+		this.userActive = false;
+		this.deactivate();
+	} else {
+		this.userActive = true;
 		this.activate();
 	}
 }
