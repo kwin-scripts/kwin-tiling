@@ -62,6 +62,7 @@ Tiling.prototype.setLayoutType = function(layoutType) {
 		this.layout = newLayout;
 		this.layoutType = layoutType;
 		this.layout.resetTileSizes();
+		this._updateAllTiles();
 	} catch(err) {
 		print(err, "in Tiling.setLayoutType");
 	}
