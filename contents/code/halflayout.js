@@ -290,8 +290,10 @@ HalfLayout.prototype._createTile = function(rect) {
 			tile.hasDirectNeighbour[Direction.Up] = true;
 			tile.neighbours[Direction.Up] = this.tiles.length - 1;
 		} else {
-			tile.hasDirectNeighbour[Direction.Up] = false;
-			tile.neighbours[Direction.Up] = - 1;
+			if (this.tiles.length == 0) {
+				tile.hasDirectNeighbour[Direction.Up] = false;
+				tile.neighbours[Direction.Up] = - 1;
+			}
 		}
 		tile.neighbours[Direction.Down] = - 1;
 		tile.hasDirectNeighbour[Direction.Down] = false;
