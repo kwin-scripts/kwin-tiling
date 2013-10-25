@@ -209,7 +209,16 @@ Tiling.prototype.getTiles = function() {
 }
 
 Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
-    var index = this.tiles.indexOf(from);
+	// If there is no tile, we can't select a thing
+	if (this.layout.tiles.length == 0) {
+		return;
+	}
+	// If no window is selected, just use the first
+	if (from != null) {
+		var index = this.tiles.indexOf(from);
+	} else {
+		return this.tiles[0];
+	}
     var geometry = this.layout.tiles[index];
     var nextIndex = geometry.neighbours[direction];
     if (!geometry.hasDirectNeighbour && !directOnly) {
