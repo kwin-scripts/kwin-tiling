@@ -174,9 +174,12 @@ Tile.prototype.getActiveClient = function() {
  */
 Tile.prototype.syncCustomProperties = function() {
 	try {
-		this.clients[0].tiling_tileIndex = this.tileIndex;
-		this.clients[0].syncTabGroupFor("tiling_tileIndex", true);
-		this.clients[0].syncTabGroupFor("tiling_floating", true);
+		var client = this.getActiveClient();
+		if (client != null) {
+			client.tiling_tileIndex = this.tileIndex;
+			client.syncTabGroupFor("tiling_tileIndex", true);
+			client.syncTabGroupFor("tiling_floating", true);
+		}
 	} catch(err) {
 		print(err, "in Tile.syncCustomProperties");
 	}
@@ -264,3 +267,22 @@ Tile.prototype.onClientFinishUserMovedResized = function(client) {
 		print(err, "in Tile.onClientFinishUserMovedResized");
 	}
 };
+
+Tile.prototype.removeClient = function(client) {
+	try {
+		this.clients.splice(this.clients.indexOf(client), 1);
+	} catch(err) {
+		print(err, "in Tile.removeClient");
+	}
+}
+
+Tile.prototype.addClient = function(client) {
+	try {
+		if (this.clients.indexOf(client) == -1) {
+			this.clients.push(client);
+			this.syncCustomProperties();
+		}
+	} catch(err) {
+		print(err, "in Tile.addClient");
+	}
+}

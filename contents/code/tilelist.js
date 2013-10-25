@@ -191,7 +191,7 @@ TileList.prototype.addClient = function(client) {
 			}
 		}
 		if (notInTiles) {
-			this.tiles[tileIndex].clients.push(client);
+			this.tiles[tileIndex].addClient(client);
 		}
     } else {
         // If not, create a new tile
@@ -254,7 +254,7 @@ TileList.prototype._onClientRemoved = function(client) {
 			this._removeTile(tileIndex);
 		} else {
 			// Remove the client from its tile
-			tile.clients.splice(tile.clients.indexOf(client), 1);
+			tile.removeClient(client);
 		}
 		client.tiling_tileIndex = - 1;
 		if (client.tiling_floating == true) {
@@ -269,31 +269,46 @@ TileList.prototype._onClientRemoved = function(client) {
 };
 
 TileList.prototype._onClientTabGroupChanged = function(client) {
-    var tileIndex = client.tiling_tileIndex;
-    var tile = this.tiles[tileIndex];
-    if (tile.clients.length == 1) {
-        // If this is the only client in the tile, the tile either does not
-        // change or is destroyed
-        this.tiles.forEach(function(otherTile) {
-            if (otherTile != tile) {
-                otherTile.syncCustomProperties();
-            }
-        });
-        if (client.tiling_tileIndex != tileIndex) {
-            this._removeTile(tileIndex);
-            this.tiles[client.tiling_tileIndex].clients.push(client);
-        }
-    } else {
-        tile.clients.splice(tile.clients.indexOf(client), 1);
-        client.tiling_tileIndex = this.tiles.length;
-        // Check whether the client has been added to an existing tile
-        this._identifyNewTiles();
-        if (client.tiling_tileIndex != this.tiles.length) {
-            this.tiles[client.tiling_tileIndex].clients.push(client);
-        } else {
-            this._addTile(client);
-        }
-    }
+	try {
+		var tileIndex = client.tiling_tileIndex;
+		client.syncTabGroupFor("tiling_tileIndex", false);
+		var newTileIndex = client.tiling_tileIndex;
+		// If the tileIndex changed, it must have come from another client in the tabGroup
+		// Hence, there must be a tabgroup
+		if (newTileIndex != tileIndex) {
+			var tile = this.tiles[tileIndex];
+			var newTile = this.tiles[newTileIndex];
+			if (tile != null) {
+				// Tile is now empty and can be removed
+				if (tile.clients.length <= 1) {
+					this._removeTile(tileIndex);
+				} else {
+					// Tile still has elements, remove stale client entry
+					// TODO: This makes clients disappear
+					tile.removeClient(client);
+				}
+			}
+			if (newTile != null) {
+				newTile.addClient(client);
+			}
+		} else {
+			// This may also be called for a client that is still in the tabgroup
+			if (this.tiles[tileIndex] == null) {
+				// Nothing we can do except bail out
+				return;
+			} else if (this.tiles[tileIndex].clients.length < 1) {
+				// Tile empty, reuse it for this client
+				//this._removeTile(tileIndex);
+				this.tiles[tileIndex].addClient(client);
+			} else {
+				// Somehow, this doesn't actually moveresize the client (similar to issues on start)
+				client.tiling_tileIndex = -1;
+				this._onClientAdded(client);
+			}
+		}
+	} catch(err) {
+		print(err, "in TileList._onClientTabGroupChanged");
+	}
 };
 
 TileList.prototype._addTile = function(client) {
@@ -306,9 +321,11 @@ TileList.prototype._removeTile = function(tileIndex) {
 	try {
 		// Remove the tile if this was the last client in it
 		var tile = this.tiles[tileIndex];
-		this.tiles[tileIndex] = this.tiles[this.tiles.length - 1];
-		this.tiles[tileIndex].tileIndex = tileIndex;
-		this.tiles[tileIndex].syncCustomProperties();
+		if (tileIndex < this.tiles.length - 1) {
+			this.tiles[tileIndex] = this.tiles[this.tiles.length - 1];
+			this.tiles[tileIndex].tileIndex = tileIndex;
+			this.tiles[tileIndex].syncCustomProperties();
+		}
 		this.tileRemoved.emit(tile);
 		this.tiles.length--;
 	} catch(err) {
