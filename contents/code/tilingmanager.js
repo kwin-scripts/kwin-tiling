@@ -301,10 +301,14 @@ TilingManager.prototype._onTileAdded = function(tile) {
 };
 
 TilingManager.prototype._onTileRemoved = function(tile) {
-	var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
-	tileLayouts.forEach(function(layout) {
-		layout.removeTile(tile);
-	});
+	try {
+		var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
+		tileLayouts.forEach(function(layout) {
+			layout.removeTile(tile);
+		});
+	} catch(err) {
+		print(err, "in TilingManager._onTileRemoved");
+	}
 };
 
 TilingManager.prototype._onNumberDesktopsChanged = function() {

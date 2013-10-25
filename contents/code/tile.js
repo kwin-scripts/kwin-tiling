@@ -115,9 +115,23 @@ Tile.prototype.setGeometry = function(geometry) {
 		if (geometry == null) {
 			return;
 		}
-		this.rectangle = geometry;
+		if (this.rectangle == null) {
+			this.rectangle = Qt.rect(geometry.x,
+									 geometry.y,
+									 geometry.width,
+									 geometry.height);
+		} else {
+			this.rectangle.x = geometry.x;
+			this.rectangle.y = geometry.y;
+			this.rectangle.width = geometry.width;
+			this.rectangle.height = geometry.height;
+		}
 		for(i = 0; i < this.clients.length; i++) {
-			this.clients[i].geometry = geometry;
+			this.clients[i].geometry = Qt.rect(geometry.x,
+										   geometry.y,
+										   geometry.width,
+										   geometry.height);
+			this.onClientGeometryChanged(this.clients[i]);
 		}
 	} catch(err) {
 		print(err, "in Tile.setGeometry");
@@ -156,7 +170,7 @@ Tile.prototype.restoreGeometry = function() {
  */
 Tile.prototype.getActiveClient = function() {
 	try {
-		var active;
+		var active = null;
 		this.clients.forEach(function(client) {
 			if (client.isCurrentTab) {
 				active = client;
@@ -191,6 +205,9 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 			return;
 		}
 		if (!client.isCurrentTab) {
+			return;
+		}
+		if (client.resizable == false) {
 			return;
 		}
 		// If the screen has changed, send an event and reset the saved geometry
