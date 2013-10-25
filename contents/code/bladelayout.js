@@ -188,33 +188,22 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 BladeLayout.prototype._createTile = function(rect) {
 	try {
 		// Update the last tile in the list
-		if (this.tiles.length > 1) {
+		if (this.tiles.length > 0) {
 			var lastTile = this.tiles[this.tiles.length - 1];
-			lastTile.neighbours[Direction.Down] = this.tiles.length;
-			lastTile.hasDirectNeighbour[Direction.Down] = true;
-		}
-		
-		if (this.tiles.length == 1) {
-			var lastTile2 = this.tiles[0];
-			lastTile2.neighbours[Direction.Right] = 1;
-			lastTile2.hasDirectNeighbour[Direction.Right] = true;
+			lastTile.neighbours[Direction.Right] = this.tiles.length;
+			lastTile.hasDirectNeighbour[Direction.Right] = true;
 		}
 		// Create a new tile and add it to the list
 		var tile = {};
 		tile.rectangle = rect;
 		tile.neighbours = [];
 		tile.hasDirectNeighbour = [];
-		tile.neighbours[Direction.Left] = 0;
+		tile.neighbours[Direction.Left] = (this.tiles.length - 1);
 		tile.hasDirectNeighbour[Direction.Left] = (this.tiles.length > 0);
-		tile.neighbours[Direction.Right] = - 1;
+		tile.neighbours[Direction.Right] = -1;
 		tile.hasDirectNeighbour[Direction.Right] = false;
-		if (this.tiles.length > 1) {
-			tile.hasDirectNeighbour[Direction.Up] = true;
-			tile.neighbours[Direction.Up] = this.tiles.length - 1;
-		} else {
-			tile.hasDirectNeighbour[Direction.Up] = false;
-			tile.neighbours[Direction.Up] = - 1;
-		}
+		tile.hasDirectNeighbour[Direction.Up] = false;
+		tile.neighbours[Direction.Up] = -1;
 		tile.neighbours[Direction.Down] = - 1;
 		tile.hasDirectNeighbour[Direction.Down] = false;
 		tile.index = this.tiles.length;
