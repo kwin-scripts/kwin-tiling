@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 function HalfLayout(screenRectangle) {
 	print("Creating HalfLayout");
     Layout.call(this, screenRectangle);
+	this.firstWidth = Math.floor(this.screenRectangle.width / 2);
     // TODO
 }
 
@@ -67,13 +68,12 @@ HalfLayout.prototype.addTile = function() {
 			// Also, javascript sucks
 			var firstRect = Qt.rect(this.tiles[0].rectangle.x,
 									this.tiles[0].rectangle.y,
-									this.tiles[0].rectangle.width,
+									this.firstWidth,
 									this.tiles[0].rectangle.height);
-			firstRect.width = Math.floor(this.screenRectangle.width / 2);
 			this.tiles[0].rectangle = firstRect;
 			var newRect = Qt.rect(firstRect.x + firstRect.width,
 								  firstRect.y,
-								  firstRect.width,
+								  this.screenRectangle.width - firstRect.width,
 								  firstRect.height)
 			this._createTile(newRect);
 			return;
@@ -207,6 +207,7 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			rectangle.x = tile.rectangle.x;
 			rectangle.y = tile.rectangle.y;
 			rectangle.height = tile.rectangle.height;
+			this.firstWidth = rectangle.width;
 			tile.rectangle = rectangle;
 			for (i = 1; i < this.tiles.length; i++) {
 				this.tiles[i].rectangle.width = this.screenRectangle.width - rectangle.width;
@@ -214,6 +215,7 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			}
 		} else {
 			this.tiles[0].rectangle.width = this.screenRectangle.width - rectangle.width;
+			this.firstWidth = this.tiles[0].rectangle.width;
 			var belows = new Array();
 			var aboves = new Array();
 			for (i = 1; i < this.tiles.length; i++) {
