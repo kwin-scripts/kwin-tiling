@@ -97,7 +97,7 @@ function TilingManager() {
     for (var i = 0; i < this.desktopCount; i++) {
         this._createDefaultLayouts(i);
     }
-    this.layouts[this._currentDesktop][this._currentScreen].activate();
+
     // Connect the tile list signals so that new tiles are added to the layouts
     this.tiles.tileAdded.connect(function(tile) {
         self._onTileAdded(tile);
@@ -297,9 +297,11 @@ TilingManager.prototype._onTileAdded = function(tile) {
 	tile.movingEnded.connect(function() {
 		self._onTileMovingEnded(tile);
 	});
+	/*
 	tile.movingStep.connect(function() {
 		self._onTileMovingStep(tile);
 	});
+	*/
 	// Add the tile to the layouts
 	var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
 	tileLayouts.forEach(function(layout) {
