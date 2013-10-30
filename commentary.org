@@ -18,9 +18,9 @@
 ** DONE Windows can sometimes resize on their own (missing signal?)
 ** TODO Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
    Waiting on kwin
-** TODO Tileindex not properly set on workspace switch
+** DONE Tileindex not properly set on workspace switch
 ** TODO Check how windows on all desktops behave
-** TODO Tabgroups
+** DONE Tabgroups
 * DONE Retile on minimize
 * DONE Avoid struts
   Never noticed because I set the panel to autohide
