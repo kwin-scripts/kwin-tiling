@@ -214,7 +214,9 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 				this.tiles[i].rectangle.x = this.screenRectangle.x + rectangle.width;
 			}
 		} else {
-			this.tiles[0].rectangle.width = this.screenRectangle.width - rectangle.width;
+			this.tiles[0].rectangle.width = rectangle.x - this.screenRectangle.x;
+			// Keep right edge at right screen edge
+			rectangle.width = (this.screenRectangle.x + this.screenRectangle.width) - rectangle.x;
 			this.firstWidth = this.tiles[0].rectangle.width;
 			var belows = new Array();
 			var aboves = new Array();
