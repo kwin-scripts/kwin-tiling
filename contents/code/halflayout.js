@@ -202,11 +202,32 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 		if (rectangle.x + rectangle.width > this.screenRectangle.x + this.screenRectangle.width) {
 			rectangle.width = this.screenRectangle.x + this.screenRectangle.width - rectangle.x;
 		}
+
+		// Don't allow resizing away from the screenedges
+		var oldRect = this.tiles[tileIndex].rectangle;
+		if (oldRect.x == this.screenRectangle.x) {
+			// The non-first clients can cover the entire screen (and let the first client be invisible)
+			// Allow moving them back
+			if (tileIndex == 0) {
+				rectangle.x = this.screenRectangle.x;
+			}
+		}
+		if (oldRect.y == this.screenRectangle.y) {
+			rectangle.y = this.screenRectangle.y;
+		}
+		if (oldRect.y + oldRect.height == this.screenRectangle.y + this.screenRectangle.height) {
+			rectangle.height = (this.screenRectangle.y + this.screenRectangle.height) - rectangle.y;
+		}
+		if (oldRect.x + oldRect.width == this.screenRectangle.x + this.screenRectangle.width) {
+			// The first client can cover the entire screen even when there are other clients present
+			// Allow moving it back
+			if (tileIndex != 0 || this.tiles.length == 1) {
+				rectangle.width = (this.screenRectangle.x + this.screenRectangle.width) - rectangle.x;
+			}
+		}
+
 		if (tileIndex == 0) {
 			// Simply adjust width on everything else, no height adjustment
-			rectangle.x = tile.rectangle.x;
-			rectangle.y = tile.rectangle.y;
-			rectangle.height = tile.rectangle.height;
 			this.firstWidth = rectangle.width;
 			tile.rectangle = rectangle;
 			for (i = 1; i < this.tiles.length; i++) {
@@ -215,8 +236,6 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			}
 		} else {
 			this.tiles[0].rectangle.width = rectangle.x - this.screenRectangle.x;
-			// Keep right edge at right screen edge
-			rectangle.width = (this.screenRectangle.x + this.screenRectangle.width) - rectangle.x;
 			this.firstWidth = this.tiles[0].rectangle.width;
 			var belows = new Array();
 			var aboves = new Array();
@@ -256,11 +275,6 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 				}
 			}
 			tile.rectangle = rectangle;
-			// No reason to set height when we have the full screen
-			if (this.tiles.length == 2) {
-				tile.rectangle.height = this.screenRectangle.height;
-				tile.rectangle.y = this.screenRectangle.y;
-			}
 		}
 	} catch(err) {
 		print(err, "in HalfLayout.resizeTile");
