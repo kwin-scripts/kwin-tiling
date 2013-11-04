@@ -51,32 +51,36 @@ function TileList() {
 }
 
 TileList.prototype.connectSignals = function(client) {
-	if (client.tiling_connected == true) {
-		return;
-	}
-
     var self = this;
 
-	// First handle fullscreen and shade as they can change and affect the tiling or floating decision
-    client.fullScreenChanged.connect(function() {
-		if (client.fullScreen == true) {
-			client.tiling_floating = true;
-			client.keepAbove = true;
-			self._onClientRemoved(client);
-		} else {
-			client.keepAbove = false;
-			self._onClientAdded(client);
-		}
-    });
-    client.shadeChanged.connect(function() {
-		if (client.shade == true) {
-			client.tiling_floating = true;
-			self._onClientRemoved(client);
-		} else {
-			self.addClient(client);
-		}
-    });
-
+	if (client.tiling_connected1 != true) {
+		// First handle fullscreen and shade as they can change and affect the tiling or floating decision
+		client.fullScreenChanged.connect(function() {
+			if (client.fullScreen == true) {
+				client.tiling_floating = true;
+				client.keepAbove = true;
+				self._onClientRemoved(client);
+			} else {
+				client.keepAbove = false;
+				self._onClientAdded(client);
+			}
+		});
+		client.shadeChanged.connect(function() {
+			if (client.shade == true) {
+				client.tiling_floating = true;
+				self._onClientRemoved(client);
+			} else {
+				self.addClient(client);
+			}
+		});
+		client.tiling_connected1 = true;
+	}
+	if (TileList._isIgnored(client)) {
+		return;
+	}
+	if (client.tiling_connected2 == true) {
+		return;
+	}
     client.tabGroupChanged.connect(function() {
         self._onClientTabGroupChanged(client);
     });
@@ -125,10 +129,6 @@ TileList.prototype.connectSignals = function(client) {
 	client.clientMinimized.connect(function(client) {
 		try {
 			self._onClientRemoved(client);
-			var tile = getTile(client);
-			if (tile != null) {
-				tile.onClientMinimizedChanged(client);
-			}
 		} catch(err) {
 			print(err, "in mimimized");
 		}
@@ -136,15 +136,11 @@ TileList.prototype.connectSignals = function(client) {
 	client.clientUnminimized.connect(function(client) {
 		try {
 			self._onClientAdded(client);
-			var tile = getTile(client);
-			if (tile != null) {
-				tile.onClientMinimizedChanged(client);
-			}
 		} catch(err) {
 			print(err, "in Unminimized");
 		}
 	});
-	client.tiling_connected = true;
+	client.tiling_connected2 = true;
 };
 	
 /**
