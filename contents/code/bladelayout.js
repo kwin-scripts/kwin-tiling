@@ -156,6 +156,12 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 		if (rectangle.x + rectangle.width > this.screenRectangle.x + this.screenRectangle.width) {
 			rectangle.width = this.screenRectangle.x + this.screenRectangle.width - rectangle.x;
 		}
+		if (tileIndex == 0) {
+			rectangle.x = this.screenRectangle.x;
+		}
+		if (tileIndex == this.tiles.length - 1) {
+			rectangle.width = (this.screenRectangle.x + this.screenRectangle.width) - rectangle.x;
+		}
 		var newRect = Qt.rect(this.screenRectangle.x,
 							  this.screenRectangle.y,
 							  Math.floor((rectangle.x - this.screenRectangle.x) / tileIndex),

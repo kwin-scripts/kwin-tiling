@@ -264,7 +264,7 @@ function TilingManager() {
 TilingManager.getTilingArea = function(desktop, screen) {
     // TODO: Should this function be moved to Layout?
 	return workspace.clientArea(KWin.PlacementArea, screen, desktop);
-    return workspace.clientArea(KWin.MaximizeArea, screen, desktop);
+    //return workspace.clientArea(KWin.MaximizeArea, screen, desktop);
 };
 
 TilingManager.prototype._createDefaultLayouts = function(desktop) {
@@ -305,7 +305,6 @@ TilingManager.prototype._onTileAdded = function(tile) {
 			layout.resizeTile(tile);
 		});
 	});
-	tile.resetGeometry();
 };
 
 TilingManager.prototype._onTileRemoved = function(tile) {

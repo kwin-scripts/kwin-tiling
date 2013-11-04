@@ -162,11 +162,6 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 			}
 			// Adjust lowest tile's height for rounding errors
 			this.tiles[lowest].rectangle.height = (this.screenRectangle.y + this.screenRectangle.height) - this.tiles[lowest].rectangle.y;
-
-			/*
-			  this.tiles[1].hasDirectNeighbour[Direction.Up] = false;
-			  this.tiles[this.tiles.length - 1].hasDirectNeighbour[Direction.Down] = false;
-			*/
 		}
 	} catch(err) {
 		print(err, "in HalfLayout.removeTile");

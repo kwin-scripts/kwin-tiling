@@ -155,7 +155,7 @@ TileList.prototype.addClient = function(client) {
 		return;
 	}
     if (TileList._isIgnored(client)) {
-		client.tileIndex = - 1;
+		client.tiling_tileIndex = -1;
         return;
     }
 
