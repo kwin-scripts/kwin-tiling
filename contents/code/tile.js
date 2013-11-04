@@ -143,29 +143,6 @@ Tile.prototype.resetGeometry = function() {
 };
 
 /**
- * Saves the current geometry so that it can later be restored using
- * restoreGeometry().
- */
-Tile.prototype.saveGeometry = function() {
-    if (this._savedGeometry != null) {
-        this._savedGeometry = this.clients[0].geometry;
-    }
-    // TODO: Inhibit geometryChanged events?
-};
-
-/**
- * Restores the previously saved geometry.
- */
-Tile.prototype.restoreGeometry = function() {
-	try {
-		this.clients[0].geometry = this._savedGeometry;
-	} catch(err) {
-		print(err, "in restoreGeometry");
-	}
-    // TODO: Inhibit geometryChanged events?
-};
-
-/**
  * Returns the currently active client in the tile.
  */
 Tile.prototype.getActiveClient = function() {
