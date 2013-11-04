@@ -127,10 +127,7 @@ Tile.prototype.setGeometry = function(geometry) {
 			this.rectangle.height = geometry.height;
 		}
 		for(i = 0; i < this.clients.length; i++) {
-			this.clients[i].geometry = Qt.rect(geometry.x,
-										   geometry.y,
-										   geometry.width,
-										   geometry.height);
+			this.clients[i].tiling_MoveResize = false;
 			this.onClientGeometryChanged(this.clients[i]);
 		}
 	} catch(err) {
@@ -181,32 +178,34 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (client == null) {
 			return;
 		}
+		if (client.tiling_MoveResize == true) {
+			client.tiling_MoveResize = false;
+			return;
+		}
 		if (!client.isCurrentTab) {
 			return;
 		}
 		if (client.resizable == false) {
 			return;
 		}
-		// If the screen has changed, send an event and reset the saved geometry
+		// If the screen has changed, send an event
 		if (client.screen != this._currentScreen) {
 			this._currentScreen = client.screen;
-			this._savedGeometry = null;
 			this.screenChanged.emit();
 		}
 		if (client.move || client.resize) {
 			return;
 		}
-		if (this._moving || this.resizing) {
+		if (this._moving || this._resizing) {
 			return;
 		}
 		if (this.rectangle != null) {
-			// Workaround an infinite signal loop by setting this in pieces
-			client.geometry.x = this.rectangle.x;
-			client.geometry.y = this.rectangle.y;
-			client.geometry.width = this.rectangle.width;
-			client.geometry.height = this.rectangle.height;
+			client.tiling_MoveResize = true;
+			client.geometry = Qt.rect(this.rectangle.x,
+									  this.rectangle.y,
+									  this.rectangle.width,
+									  this.rectangle.height);
 		}
-		// TODO: Check whether we caused the geometry change
 		this.geometryChanged.emit();
 	} catch(err) {
 		print(err, "in Tile.onClientGeometryChanged");
