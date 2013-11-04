@@ -200,11 +200,16 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 			return;
 		}
 		if (this.rectangle != null) {
-			client.tiling_MoveResize = true;
-			client.geometry = Qt.rect(this.rectangle.x,
-									  this.rectangle.y,
-									  this.rectangle.width,
-									  this.rectangle.height);
+			if (client.geometry.x != this.rectangle.x ||
+				client.geometry.y != this.rectangle.y ||
+				client.geometry.width != this.rectangle.width ||
+				client.geometry.height != this.rectangle.height) {
+				client.tiling_MoveResize = true;
+				client.geometry = Qt.rect(this.rectangle.x,
+										  this.rectangle.y,
+										  this.rectangle.width,
+										  this.rectangle.height);
+			}
 		}
 		this.geometryChanged.emit();
 	} catch(err) {
