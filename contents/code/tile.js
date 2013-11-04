@@ -239,6 +239,7 @@ Tile.prototype.onClientStepUserMovedResized = function(client) {
 		}
 		if (client.move) {
 			this.movingStep.emit();
+			this.movingEnded.emit();
 			this._moving = true;
 			return;
 		}
@@ -250,11 +251,11 @@ Tile.prototype.onClientStepUserMovedResized = function(client) {
 Tile.prototype.onClientFinishUserMovedResized = function(client) {
 	try {
 		if (this._moving) {
-			this.movingEnded.emit();
 			this._moving = false;
+			this.movingEnded.emit();
 		} else if (this._resizing) {
-			this.resizingEnded.emit();
 			this._resizing = false;
+			this.resizingEnded.emit();
 		}
 	} catch(err) {
 		print(err, "in Tile.onClientFinishUserMovedResized");

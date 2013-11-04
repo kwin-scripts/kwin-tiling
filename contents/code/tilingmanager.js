@@ -297,11 +297,6 @@ TilingManager.prototype._onTileAdded = function(tile) {
 	tile.movingEnded.connect(function() {
 		self._onTileMovingEnded(tile);
 	});
-	/*
-	tile.movingStep.connect(function() {
-		self._onTileMovingStep(tile);
-	});
-	*/
 	// Add the tile to the layouts
 	var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
 	tileLayouts.forEach(function(layout) {
@@ -425,30 +420,10 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
 				// swapTiles() works correctly even if tile == targetTile
 				layout.swapTiles(tile, targetTile);
 			}
-			workspace.hideOutline();
 		}
 	} catch(err) {
 		print(err, "in TilingManager._onTileMovingEnded");
 	}
-}
-
-TilingManager.prototype._onTileMovingStep = function(tile) {
-	var client = tile.clients[0];
-	// Calculate the rectangle in which the window is placed if it is dropped
-	var layout = this.layouts[this._currentDesktop][client.screen];
-	var windowRect = client.geometry;
-	var target = layout.getTileGeometry(windowRect.x + windowRect.width / 2,
-										windowRect.y + windowRect.height / 2);
-	var targetArea = null;
-	if (target != null) {
-		targetArea = target.rectangle;
-	} else {
-		targetArea = layout.layout.screenRectangle;
-	}
-	// Show an outline where the window would be placed
-	// TODO: This is not working yet, the window movement code already disables
-	// any active outline
-	//workspace.showOutline(targetArea);
 }
 
 TilingManager.prototype._changeTileLayouts =
