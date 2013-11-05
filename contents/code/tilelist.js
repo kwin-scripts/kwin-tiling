@@ -266,42 +266,11 @@ TileList.prototype._onClientRemoved = function(client) {
 
 TileList.prototype._onClientTabGroupChanged = function(client) {
 	try {
-		var tileIndex = client.tiling_tileIndex;
-		client.syncTabGroupFor("tiling_tileIndex", false);
-		var newTileIndex = client.tiling_tileIndex;
-		// If the tileIndex changed, it must have come from another client in the tabGroup
-		// Hence, there must be a tabgroup
-		if (newTileIndex != tileIndex) {
-			var tile = this.tiles[tileIndex];
-			var newTile = this.tiles[newTileIndex];
-			if (tile != null) {
-				// Tile is now empty and can be removed
-				if (tile.clients.length <= 1) {
-					this._removeTile(tileIndex);
-				} else {
-					// Tile still has elements, remove stale client entry
-					// TODO: This makes clients disappear
-					tile.removeClient(client);
-				}
-			}
-			if (newTile != null) {
-				newTile.addClient(client);
-			}
-		} else {
-			// This may also be called for a client that is still in the tabgroup
-			if (this.tiles[tileIndex] == null) {
-				// Nothing we can do except bail out
-				return;
-			} else if (this.tiles[tileIndex].clients.length < 1) {
-				// Tile empty, reuse it for this client
-				//this._removeTile(tileIndex);
-				this.tiles[tileIndex].addClient(client);
-			} else {
-				// Somehow, this doesn't actually moveresize the client (similar to issues on start)
-				client.tiling_tileIndex = -1;
-				this._onClientAdded(client);
-			}
-		}
+		print("Tabgroups are currently not supported", client.windowId);
+		client.tiling_floating = true;
+		this._onClientRemoved(client);
+		client.syncTabGroupFor("tiling_floating", true);
+		client.syncTabGroupFor("tiling_tileIndex", true);
 	} catch(err) {
 		print(err, "in TileList._onClientTabGroupChanged");
 	}
