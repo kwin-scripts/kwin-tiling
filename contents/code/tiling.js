@@ -108,11 +108,14 @@ Tiling.prototype.removeTile = function(tile) {
 
 Tiling.prototype.swapTiles = function(tile1, tile2) {
 	try {
+		// Cut down on updates by not doing them if tile1 is hovering over itself
 		if (tile1 != tile2) {
 			var index1 = this.tiles.indexOf(tile1);
 			var index2 = this.tiles.indexOf(tile2);
 			this.tiles[index1] = tile2;
 			this.tiles[index2] = tile1;
+			this._updateAllTiles();
+		} else if (tile1._moving == false) {
 			this._updateAllTiles();
 		}
 	} catch(err) {
