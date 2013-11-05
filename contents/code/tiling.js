@@ -113,8 +113,8 @@ Tiling.prototype.swapTiles = function(tile1, tile2) {
 			var index2 = this.tiles.indexOf(tile2);
 			this.tiles[index1] = tile2;
 			this.tiles[index2] = tile1;
+			this._updateAllTiles();
 		}
-		this._updateAllTiles();
 	} catch(err) {
 		print(err, "in Tiling.swapTiles");
 	}
