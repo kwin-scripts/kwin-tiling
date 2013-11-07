@@ -95,6 +95,18 @@ TileList.prototype.connectSignals = function(client) {
 			tile.onClientGeometryChanged(client);
 		}
     });
+	client.windowShown.connect(function() {
+		// Delay adding until the window is actually shown
+		// This prevents graphics bugs
+		// due to resizing before the pixmap is created (or something like that)
+		if (client.tiling_shown != true) {
+			client.tiling_shown = true;
+			var tile = getTile(client);
+			if (tile != null) {
+				tile.onClientGeometryChanged(client);
+			}
+		}
+	});
     client.clientStartUserMovedResized.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
@@ -284,8 +296,8 @@ TileList.prototype._removeTile = function(tileIndex) {
 };
 
 /**
- * Returns true for clients which shall not be handled by the tiling script at
- * all, e.g. the panel.
+ * Returns true for clients which shall never be handled by the tiling script,
+ * e.g. panels, dialogs or the user-defined apps
  */
 TileList._isIgnored = function(client) {
     // Application workarounds should be put here
