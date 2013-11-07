@@ -184,20 +184,6 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			print("No rect");
 			return;
 		}
-		// Cap rectangle at screenedges
-		if (rectangle.x < this.screenRectangle.x) {
-			rectangle.x = this.screenRectangle.x;
-		}
-		if (rectangle.y < this.screenRectangle.y) {
-			rectangle.y = this.screenRectangle.y;
-		}
-		if (rectangle.y + rectangle.height > this.screenRectangle.y + this.screenRectangle.height) {
-			rectangle.height = this.screenRectangle.y + this.screenRectangle.height - rectangle.y;
-		}
-		if (rectangle.x + rectangle.width > this.screenRectangle.x + this.screenRectangle.width) {
-			rectangle.width = this.screenRectangle.x + this.screenRectangle.width - rectangle.x;
-		}
-
 		// Don't allow resizing away from the screenedges
 		// except when one client has squashed others
 		var oldRect = this.tiles[tileIndex].rectangle;
@@ -214,9 +200,12 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 		}
 		if (oldRect.y == this.screenRectangle.y) {
 			// Tile 0 and 1 are at the upper edge
-			// If another tile is, it moved it around
+			// If another tile is, it squashes tile 1 (and maybe others)
 			if (tileIndex < 2) {
-				rectangle.y = this.screenRectangle.y;
+				if (rectangle.y != oldRect.y) {
+					rectangle.y = this.screenRectangle.y;
+					rectangle.height = oldRect.height;
+				}
 			}
 		}
 		if (oldRect.y + oldRect.height == this.screenRectangle.y + this.screenRectangle.height) {
