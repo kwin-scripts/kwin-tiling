@@ -285,3 +285,7 @@ Tile.prototype.addClient = function(client) {
 		print(err, "in Tile.addClient");
 	}
 }
+
+Tile.prototype.hasClient = function(client) {
+	return (this.clients.indexOf(client) > -1);
+}
