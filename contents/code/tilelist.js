@@ -313,6 +313,46 @@ TileList._isIgnored = function(client) {
 	if (client.specialWindow == true) {
 		return true;
 	}
+	if (client.desktopWindow == true) {
+		return true;
+	}
+	if (client.dock == true) {
+		return true;
+	}
+	if (client.toolbar == true) {
+		return true;
+	}
+	if (client.menu == true) {
+		return true;
+	}
+	if (client.dialog == true) {
+		return true;
+	}
+	if (client.splash == true) {
+		return true;
+	}
+	if (client.utility == true) {
+		return true;
+	}
+	if (client.dropdownMenu == true) {
+		return true;
+	}
+	if (client.popupMenu == true) {
+		return true;
+	}
+	if (client.tooltip == true) {
+		return true;
+	}
+	if (client.notification == true) {
+		return true;
+	}
+	if (client.comboBox == true) {
+		return true;
+	}
+	if (client.dndIcon == true) {
+		return true;
+	}
+
     return false;
 };
 

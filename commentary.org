@@ -1,6 +1,7 @@
 * DONE Make rules for tiling
 ** DONE HACK Ignore yakuake and menus/dialogs for tiling
 ** DONE Add useractionsmenu
+** TODO Find a way to share rules updates
 * DONE Resize tiles
   Hacked for Spirallayout, working for Halflayout
 * DONE Floating
@@ -16,11 +17,14 @@
 ** TODO Doesn't tile properly when screen disappears
 ** DONE Don't tile fullscreen windows on workspace change
 ** DONE Windows can sometimes resize on their own (missing signal?)
+   FTR: Nothing was actually done on geometryChanged
 ** TODO Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
    Waiting on kwin
 ** DONE Tileindex not properly set on workspace switch
 ** DONE Check how windows on all desktops behave
-** DONE Tabgroups
+** TODO Tabgroup
+   Seemingly not possible right now
+** TODO MinSize
 * DONE Retile on minimize
 * DONE Avoid struts
   Never noticed because I set the panel to autohide
@@ -29,9 +33,14 @@
 ** DONE Bladelayout
 * TODO Testing
 ** Weird apps (mplayer, gimp)
+   Add those to rules by default
 ** Weird configurations
-** Multi-monitor (semi-tested right now)
-** Multiple workspaces (e.g. moving windows across, in floating and tiling mode)
+** Multi-monitor
+** DONE Multiple workspaces (e.g. moving windows across, in floating and tiling mode)
+** Crashes
+** Graphic issues
+   e.g. Steam doesn't update properly after resize
+** Better release process (i.e. don't just pack up git, TEST)
 * TODO Learning
 ** How to use the tests
 ** Javascript
