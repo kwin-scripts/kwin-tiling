@@ -87,7 +87,7 @@ TileList.prototype.connectSignals = function(client) {
     // We also have to connect other client signals here instead of in Tile
     // because the tile of a client might change over time
     var getTile = function(client) {
-        return self.tiles[client.tiling_tileIndex];
+        return self.getTile(client);
     };
     client.geometryShapeChanged.connect(function() {
 		var tile = getTile(client);
@@ -95,6 +95,18 @@ TileList.prototype.connectSignals = function(client) {
 			tile.onClientGeometryChanged(client);
 		}
     });
+	client.windowShown.connect(function() {
+		// Delay adding until the window is actually shown
+		// This prevents graphics bugs
+		// due to resizing before the pixmap is created (or something like that)
+		if (client.tiling_shown != true) {
+			client.tiling_shown = true;
+			var tile = getTile(client);
+			if (tile != null) {
+				tile.onClientGeometryChanged(client);
+			}
+		}
+	});
     client.clientStartUserMovedResized.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
@@ -156,6 +168,8 @@ TileList.prototype.addClient = function(client) {
 	}
     if (TileList._isIgnored(client)) {
 		client.tiling_tileIndex = -1;
+		// WARNING: This crashes kwin!
+		//client.tiling_floating = true;
         return;
     }
 
@@ -177,34 +191,17 @@ TileList.prototype.addClient = function(client) {
 	}
 
 	// Check whether the client is part of an existing tile
-    var tileIndex = client.tiling_tileIndex;
-    if (tileIndex >= 0 && tileIndex < this.tiles.length) {
-		var notInTiles = true;
-		for (var i=0; i< this.tiles.length; i++) {
-			if (this.tiles[i] === client) {
-				notInTiles = false;
-				break;
-			}
-		}
-		if (notInTiles) {
-			this.tiles[tileIndex].addClient(client);
-		}
-    } else {
-        // If not, create a new tile
+	if (this._indexWithClient(client) == -1) {
         this._addTile(client);
-    }
+	}
 	client.tiling_floating = false;
-	assert(client.tiling_tileIndex >= 0, "Client added with invalid tileIndex");
 };
 
 TileList.prototype.retile = function() {
 	var existingClients = workspace.clientList();
 	var self = this;
 	existingClients.forEach(function(client) {
-		var tileIndex = client.tiling_tileIndex;
-		if (tileIndex >= 0 && tileIndex < self.tiles.length) {
-			self.addClient(client);
-		}
+		self.addClient(client);
 	});
 };
 
@@ -215,16 +212,14 @@ TileList.prototype.retile = function() {
  * @return Tile in which the client is located.
  */
 TileList.prototype.getTile = function(client) {
-    var tileIndex = client.tiling_tileIndex;
-    if (tileIndex >= 0 && tileIndex < this.tiles.length) {
-        return this.tiles[tileIndex];
-    } else {
-        return null;
-    }
+	var index = this._indexWithClient(client);
+	if (index > -1) {
+		return this.tiles[index];
+	}
+	return null;
 };
 
 TileList.prototype._onClientAdded = function(client) {
-    this._identifyNewTiles();
     this.addClient(client);
 };
 
@@ -237,22 +232,23 @@ TileList.prototype._onClientRemoved = function(client) {
 		}
 	}
 	try {
-		var tileIndex = client.tiling_tileIndex;
-		if (!(tileIndex >= 0 && tileIndex < this.tiles.length)) {
-			return;
-		}
 		// Unset keepBelow because we set it when tiling
 		client.keepBelow = false;
+
 		// Remove the client from its tile
+		var tileIndex = this._indexWithClient(client);
 		var tile = this.tiles[tileIndex];
-		if (tile.clients.length == 1) {
-			// Remove the tile if this was the last client in it
-			this._removeTile(tileIndex);
-		} else {
-			// Remove the client from its tile
-			tile.removeClient(client);
+		if (tile != null) {
+			if (tile.clients.length == 1) {
+				// Remove the tile if this was the last client in it
+				this._removeTile(tileIndex);
+			} else {
+				// Remove the client from its tile
+				tile.removeClient(client);
+			}
 		}
-		client.tiling_tileIndex = - 1;
+		// Don't remove tileIndex, so we can move the window to its position in case it comes back (after minimize etc)
+		//client.tiling_tileIndex = - 1;
 		if (client.tiling_floating == true) {
 			client.noBorder = false;
 			if (cactive == true) {
@@ -277,46 +273,31 @@ TileList.prototype._onClientTabGroupChanged = function(client) {
 };
 
 TileList.prototype._addTile = function(client) {
-    var newTile = new Tile(client, this.tiles.length)
+	var tileIndex = this.tiles.length;
+	if (client.tiling_tileIndex > -1) {
+		tileIndex = client.tiling_tileIndex;
+	}
+	var newTile = new Tile(client, tileIndex);
     this.tiles.push(newTile);
     this.tileAdded.emit(newTile);
 };
 
 TileList.prototype._removeTile = function(tileIndex) {
 	try {
-		// Remove the tile if this was the last client in it
+		// Don't modify tileIndex here - this is a list of _all_ tiles, while tileIndex is the index on the desktop
 		var tile = this.tiles[tileIndex];
-		if (tileIndex < this.tiles.length - 1) {
-			this.tiles[tileIndex] = this.tiles[this.tiles.length - 1];
-			this.tiles[tileIndex].tileIndex = tileIndex;
-			this.tiles[tileIndex].syncCustomProperties();
+		if (tileIndex > -1) {
+			this.tiles.splice(tileIndex, 1);
 		}
 		this.tileRemoved.emit(tile);
-		this.tiles.length--;
 	} catch(err) {
 		print(err, "in TileList._removeTile");
 	}
 };
 
 /**
- * Updates the tile index on all clients in all existing tiles by synchronizing
- * the tiling_tileIndex property of the group. Clients which do not belong to
- * any existing tile will have this property set to null afterwards, while
- * clients which belong to a tile have the correct tile index.
- *
- * This can only detect clients which are not in any tile, it does not detect
- * client tab group changes! These shall be handled by removing the client from
- * any tile in _onClientTabGroupChanged() first.
- */
-TileList.prototype._identifyNewTiles = function() {
-    this.tiles.forEach(function(tile) {
-        tile.syncCustomProperties();
-    });
-};
-
-/**
- * Returns true for clients which shall not be handled by the tiling script at
- * all, e.g. the panel.
+ * Returns true for clients which shall never be handled by the tiling script,
+ * e.g. panels, dialogs or the user-defined apps
  */
 TileList._isIgnored = function(client) {
     // Application workarounds should be put here
@@ -329,17 +310,57 @@ TileList._isIgnored = function(client) {
 		client.syncTabGroupFor("kwin_tiling_floats", true);
 		return true;
 	}
-	if (client.dialog) {
-		return true;
-	}
-	if (client.splash) {
-		return true;
-	}
-	if (client.dock) {
-		return true;
-	}
 	if (client.specialWindow == true) {
 		return true;
 	}
+	if (client.desktopWindow == true) {
+		return true;
+	}
+	if (client.dock == true) {
+		return true;
+	}
+	if (client.toolbar == true) {
+		return true;
+	}
+	if (client.menu == true) {
+		return true;
+	}
+	if (client.dialog == true) {
+		return true;
+	}
+	if (client.splash == true) {
+		return true;
+	}
+	if (client.utility == true) {
+		return true;
+	}
+	if (client.dropdownMenu == true) {
+		return true;
+	}
+	if (client.popupMenu == true) {
+		return true;
+	}
+	if (client.tooltip == true) {
+		return true;
+	}
+	if (client.notification == true) {
+		return true;
+	}
+	if (client.comboBox == true) {
+		return true;
+	}
+	if (client.dndIcon == true) {
+		return true;
+	}
+
     return false;
 };
+
+TileList.prototype._indexWithClient = function(client) {
+	for (i = 0; i < this.tiles.length; i++) {
+		if (this.tiles[i].hasClient(client)) {
+			return i;
+		}
+	}
+	return -1;
+}

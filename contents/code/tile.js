@@ -178,6 +178,12 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (client == null) {
 			return;
 		}
+		if (client.deleted == true) {
+			return;
+		}
+		if (client.managed == false) {
+			return;
+		}
 		if (client.tiling_MoveResize == true) {
 			client.tiling_MoveResize = false;
 			return;
@@ -199,16 +205,27 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (this._moving || this._resizing) {
 			return;
 		}
-		if (this.rectangle != null) {
+		if (this.rectangle != null && client.tiling_shown == true) {
 			if (client.geometry.x != this.rectangle.x ||
 				client.geometry.y != this.rectangle.y ||
 				client.geometry.width != this.rectangle.width ||
 				client.geometry.height != this.rectangle.height) {
 				client.tiling_MoveResize = true;
+				/*
+				if (client.minSize.w > this.rectangle.width) {
+					this.rectangle.width = client.minSize.w;
+				}
+				if (client.minSize.h > this.rectangle.height) {
+					this.rectangle.height = client.minSize.h;
+				}
+				*/
 				client.geometry = Qt.rect(this.rectangle.x,
 										  this.rectangle.y,
 										  this.rectangle.width,
 										  this.rectangle.height);
+				// This could take a _lot_ of processing power and battery life
+				// TEST
+				client.addRepaint(this.rectangle);
 			}
 		}
 		this.geometryChanged.emit();
@@ -284,4 +301,8 @@ Tile.prototype.addClient = function(client) {
 	} catch(err) {
 		print(err, "in Tile.addClient");
 	}
+}
+
+Tile.prototype.hasClient = function(client) {
+	return (this.clients.indexOf(client) > -1);
 }

@@ -116,6 +116,7 @@ function TilingManager() {
     var existingClients = workspace.clientList();
     existingClients.forEach(function(client) {
 		self.tiles._onClientRemoved(client);
+		client.tiling_shown = true;
 		self.tiles.addClient(client);
 		// Don't reset floating so we don't lose the value over restarts
         //client.tiling_floating = null;

@@ -85,7 +85,16 @@ Tiling.prototype.addTile = function(tile, x, y) {
 				this.tiles.splice(index, 0, tile);
 			}
 		} else {
-			this.tiles.push(tile);
+			if (tile.tileIndex > -1) {
+				this.tiles.splice(tile.tileIndex, 0, tile);
+				for (i = 0; i < this.tiles.length; i++) {
+					this.tiles[i].tileIndex = i;
+					this.tiles[i].syncCustomProperties();
+				}
+			} else {
+				tile.tileIndex = this.tiles.length;
+				this.tiles.push(tile);
+			}
 		}
 		this._updateAllTiles();
 		// TODO: Register tile callbacks
@@ -99,6 +108,11 @@ Tiling.prototype.removeTile = function(tile) {
 		var tileIndex = this.tiles.indexOf(tile);
 		this.tiles.splice(tileIndex, 1);
 		this.layout.removeTile(tileIndex);
+		// Correct tileIndex
+		for(i = 0; i < this.tiles.length; i++) {
+			this.tiles[i].tileIndex = i;
+			this.tiles[i].syncCustomProperties();
+		}
 		// TODO: Unregister tile callbacks
 		this._updateAllTiles();
 	} catch(err) {
@@ -114,6 +128,10 @@ Tiling.prototype.swapTiles = function(tile1, tile2) {
 			var index2 = this.tiles.indexOf(tile2);
 			this.tiles[index1] = tile2;
 			this.tiles[index2] = tile1;
+			this.tiles[index1].tileIndex = index1;
+			this.tiles[index2].tileIndex = index2;
+			this.tiles[index1].syncCustomProperties();
+			this.tiles[index2].syncCustomProperties();
 			this._updateAllTiles();
 		} else if (tile1._moving == false) {
 			this._updateAllTiles();
@@ -237,7 +255,7 @@ Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
 Tiling.prototype.resizeTile = function(tile){
 	try {
 		if (tile != null) {
-			var tileIndex = this.tiles.indexOf(tile);
+			var tileIndex = tile.tileIndex;
 			var client = tile.clients[0];
 			this.layout.resizeTile(tileIndex, client.geometry);
 			this._updateAllTiles();
