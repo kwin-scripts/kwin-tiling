@@ -199,19 +199,31 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 		}
 
 		// Don't allow resizing away from the screenedges
+		// except when one client has squashed others
 		var oldRect = this.tiles[tileIndex].rectangle;
 		if (oldRect.x == this.screenRectangle.x) {
 			// The non-first clients can cover the entire screen (and let the first client be invisible)
 			// Allow moving them back
 			if (tileIndex == 0) {
-				rectangle.x = this.screenRectangle.x;
+				// This assumes that the left and right window edge can't change at the same time
+				if (rectangle.x != oldRect.x) {
+					rectangle.x = this.screenRectangle.x;
+					rectangle.width = oldRect.width;
+				}
 			}
 		}
 		if (oldRect.y == this.screenRectangle.y) {
-			rectangle.y = this.screenRectangle.y;
+			// Tile 0 and 1 are at the upper edge
+			// If another tile is, it moved it around
+			if (tileIndex < 2) {
+				rectangle.y = this.screenRectangle.y;
+			}
 		}
 		if (oldRect.y + oldRect.height == this.screenRectangle.y + this.screenRectangle.height) {
-			rectangle.height = (this.screenRectangle.y + this.screenRectangle.height) - rectangle.y;
+			// First tile or bottom tile
+			if (tileIndex == this.tiles.length - 1 || tileIndex == 0) {
+				rectangle.height = (this.screenRectangle.y + this.screenRectangle.height) - rectangle.y;
+			}
 		}
 		if (oldRect.x + oldRect.width == this.screenRectangle.x + this.screenRectangle.width) {
 			// The first client can cover the entire screen even when there are other clients present
