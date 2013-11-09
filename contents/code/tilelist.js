@@ -90,9 +90,11 @@ TileList.prototype.connectSignals = function(client) {
         return self.getTile(client);
     };
     client.geometryShapeChanged.connect(function() {
-		var tile = getTile(client);
-		if (tile != null) {
-			tile.onClientGeometryChanged(client);
+		if (client.tiling_shown == true) {
+			var tile = getTile(client);
+			if (tile != null) {
+				tile.onClientGeometryChanged(client);
+			}
 		}
     });
 	client.windowShown.connect(function() {
@@ -195,14 +197,6 @@ TileList.prototype.addClient = function(client) {
         this._addTile(client);
 	}
 	client.tiling_floating = false;
-};
-
-TileList.prototype.retile = function() {
-	var existingClients = workspace.clientList();
-	var self = this;
-	existingClients.forEach(function(client) {
-		self.addClient(client);
-	});
 };
 
 /**

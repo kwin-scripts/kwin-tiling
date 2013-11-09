@@ -37,7 +37,10 @@ function Tiling(screenRectangle, layoutType, desktop, screen) {
 		 */
 		this.layout = new layoutType(screenRectangle);
 		/**
-		 * True if the layout is active.
+		 * active: True if the layout is active (i.e. on the current desktop)
+		 * useractive: True if the layout is activated by the user
+		 *             False if the user deactivated it
+		 * useractive implies active
 		 */
 		this.active = false;
 		this.userActive = true;
@@ -66,11 +69,6 @@ Tiling.prototype.setLayoutType = function(layoutType) {
 	} catch(err) {
 		print(err, "in Tiling.setLayoutType");
 	}
-}
-
-Tiling.prototype.setLayoutArea = function(area) {
-    this.layout.setLayoutArea(area);
-    this._updateAllTiles();
 }
 
 Tiling.prototype.addTile = function(tile, x, y) {
@@ -133,6 +131,7 @@ Tiling.prototype.swapTiles = function(tile1, tile2) {
 			this.tiles[index1].syncCustomProperties();
 			this.tiles[index2].syncCustomProperties();
 			this._updateAllTiles();
+			// This will only be called if tile1 just stopped moving
 		} else if (tile1._moving == false) {
 			this._updateAllTiles();
 		}
@@ -151,8 +150,6 @@ Tiling.prototype.activate = function() {
 
 Tiling.prototype.deactivate = function() {
     this.active = false;
-    // Unregister callbacks for all tiles
-    // TODO
 }
 
 Tiling.prototype.toggleActive = function() {
@@ -195,19 +192,6 @@ Tiling.prototype.getTile = function(x, y) {
 	}
 }
 
-Tiling.prototype.getTileGeometry = function(x, y) {
-	try {
-		var index = this._getTileIndex(x, y);
-		if (index != -1) {
-			return this.layout.tiles[index];
-		} else {
-			return null;
-		}
-	} catch(err) {
-		print(err, "in Tiling.getTileGeometry");
-	}
-}
-
 Tiling.prototype._getTileIndex = function(x, y) {
 	try {
 		for (var i = 0; i < this.layout.tiles.length; i++) {
@@ -223,10 +207,6 @@ Tiling.prototype._getTileIndex = function(x, y) {
 	} catch(err) {
 		print(err, "in Tiling._getTileIndex");
 	}
-}
-
-Tiling.prototype.getTiles = function() {
-    // TODO
 }
 
 Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
@@ -270,8 +250,9 @@ Tiling.prototype._updateAllTiles = function() {
 		// Set the position/size of all tiles
 		if (this.active) {
 			// FIXME: KWin hands us the wrong area if we ask for our real desktop
-			var rect = workspace.clientArea(KWin.PlacementArea, 0, this.screen);
-			this.layout.onLayoutAreaChange(rect);
+			// FIXME: Probable kwin bug: clientArea returns the _former_ area
+			var rect = workspace.clientArea(KWin.PlacementArea, this.screen, this.desktop);
+			this.layout.setLayoutArea(rect);
 			for (var i = 0; i < this.layout.tiles.length; i++) {
 				var newRect = this.layout.tiles[i].rectangle;
 				if (! newRect) {

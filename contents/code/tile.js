@@ -3,6 +3,7 @@
  This file is part of the KDE project.
 
 Copyright (C) 2012 Mathias Gottschlag <mgottschlag@gmail.com>
+Copyright (C) 2013 Fabian Homborg <fhomborg@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -205,7 +206,7 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (this._moving || this._resizing) {
 			return;
 		}
-		if (this.rectangle != null && client.tiling_shown == true) {
+		if (this.rectangle != null) {
 			if (client.geometry.x != this.rectangle.x ||
 				client.geometry.y != this.rectangle.y ||
 				client.geometry.width != this.rectangle.width ||

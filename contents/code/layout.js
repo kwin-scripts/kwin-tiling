@@ -46,17 +46,7 @@ function Layout(screenRectangle) {
 	}
 }
 
-Layout.prototype.setLayoutArea = function(area) {
-	try {
-		var oldArea = this.screenRectangle;
-		this.screenRectangle = area;
-		this.onLayoutAreaChange(oldArea, area);
-	} catch(err) {
-		print(err, "in Layout.setLayoutArea");
-	}
-}
-
-Layout.prototype.onLayoutAreaChange = function(newArea) {
+Layout.prototype.setLayoutArea = function(newArea) {
 	try {
 		var oldArea = this.screenRectangle;
 		var xscale = newArea.width / oldArea.width;
@@ -73,6 +63,6 @@ Layout.prototype.onLayoutAreaChange = function(newArea) {
 		});
 		this.screenRectangle = newArea;
 	} catch(err) {
-		print(err, "in Layout.onLayoutAreaChange");
+		print(err, "in Layout.setLayoutArea");
 	}
 }
