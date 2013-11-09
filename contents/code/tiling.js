@@ -22,8 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Class which implements tiling for a single screen.
  * @class
  */
-function Tiling(screenRectangle, layoutType, desktop, screen) {
+function Tiling(layoutType, desktop, screen) {
 	try {
+		this.desktop = desktop;
+		this.screen  = screen;
+		this.screenRectangle = Tiling.getTilingArea(this.screen, this.desktop);
 		/**
 		 * Tiles which have been added to the layout
 		 */
@@ -35,7 +38,7 @@ function Tiling(screenRectangle, layoutType, desktop, screen) {
 		/**
 		 * Layout which specifies window sizes/positions.
 		 */
-		this.layout = new layoutType(screenRectangle);
+		this.layout = new layoutType(this.screenRectangle);
 		/**
 		 * active: True if the layout is active (i.e. on the current desktop)
 		 * useractive: True if the layout is activated by the user
@@ -44,16 +47,23 @@ function Tiling(screenRectangle, layoutType, desktop, screen) {
 		 */
 		this.active = false;
 		this.userActive = true;
-
-		this.screenRectangle = screenRectangle;
-		
-		this.desktop = desktop;
-		
-		this.screen  = screen;
 	} catch(err) {
 		print(err, "in Tiling");
 	}
 }
+
+/**
+ * Utility function which returns the area on the selected screen/desktop which
+ * is filled by the layout for that screen.
+ *
+ * @param desktop Desktop for which the area shall be returned.
+ * @param screen Screen for which the area shall be returned.
+ * @return Rectangle which contains the area which shall be used by layouts.
+ */
+Tiling.getTilingArea = function(screen, desktop) {
+	print("getTilingArea");
+	return workspace.clientArea(KWin.PlacementArea, screen, desktop);
+};
 
 Tiling.prototype.setLayoutType = function(layoutType) {
 	try {
@@ -95,7 +105,6 @@ Tiling.prototype.addTile = function(tile, x, y) {
 			}
 		}
 		this._updateAllTiles();
-		// TODO: Register tile callbacks
 	} catch(err) {
 		print(err, "in Tiling.addTile");
 	}

@@ -254,25 +254,10 @@ function TilingManager() {
 	});
 }
 
-/**
- * Utility function which returns the area on the selected screen/desktop which
- * is filled by the layout for that screen.
- *
- * @param desktop Desktop for which the area shall be returned.
- * @param screen Screen for which the area shall be returned.
- * @return Rectangle which contains the area which shall be used by layouts.
- */
-TilingManager.getTilingArea = function(desktop, screen) {
-    // TODO: Should this function be moved to Layout?
-	return workspace.clientArea(KWin.PlacementArea, screen, desktop);
-    //return workspace.clientArea(KWin.MaximizeArea, screen, desktop);
-};
-
 TilingManager.prototype._createDefaultLayouts = function(desktop) {
     var screenLayouts = [];
     for (var j = 0; j < this.screenCount; j++) {
-        var area = TilingManager.getTilingArea(desktop, j);
-        screenLayouts[j] = new Tiling(area, this.defaultLayout, desktop, j);
+        screenLayouts[j] = new Tiling(this.defaultLayout, desktop, j);
     }
     this.layouts[desktop] = screenLayouts;
 };
@@ -359,8 +344,7 @@ TilingManager.prototype._onNumberScreensChanged = function() {
 	if (this.screenCount < workspace.numScreens) {
 		for (var i = 0; i < this.desktopCount; i++) {
 			for (var j = this.screenCount; j < workspace.numScreens; j++) {
-				var area = TilingManager.getTilingArea(i, j);
-				this.layouts[i][j] = new Tiling(area, this.defaultLayout, i, j);
+				this.layouts[i][j] = new Tiling(this.defaultLayout, i, j);
 				// Activate the new layout if necessary
 				if (i == workspace.currentDesktop - 1) {
 					this.layouts[i][j].activate();
