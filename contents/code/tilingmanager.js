@@ -298,13 +298,20 @@ TilingManager.prototype._onTileAdded = function(tile) {
 	tile.movingEnded.connect(function() {
 		self._onTileMovingEnded(tile);
 	});
+	tile.resizingEnded.connect(function() {
+		self._onTileResized(tile);
+	});
 	// Add the tile to the layouts
 	var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
 	tileLayouts.forEach(function(layout) {
 		layout.addTile(tile);
-		tile.resizingEnded.connect(function() {
-			layout.resizeTile(tile);
-		});
+	});
+};
+
+TilingManager.prototype._onTileResized = function(tile) {
+	var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
+	tileLayouts.forEach(function(layout) {
+		layout.resizeTile(tile);
 	});
 };
 
@@ -385,10 +392,14 @@ TilingManager.prototype._onTileScreenChanged =
 
 TilingManager.prototype._onTileDesktopChanged =
     function(tile, oldDesktop, newDesktop) {
-		var client = tile.clients[0];
-		var oldLayouts = this._getLayouts(oldDesktop, client.screen);
-		var newLayouts = this._getLayouts(newDesktop, client.screen);
-		this._changeTileLayouts(tile, oldLayouts, newLayouts);
+		try {
+			var client = tile.clients[0];
+			var oldLayouts = this._getLayouts(oldDesktop, client.screen);
+			var newLayouts = this._getLayouts(newDesktop, client.screen);
+			this._changeTileLayouts(tile, oldLayouts, newLayouts);
+		} catch(err) {
+			print(err, "in TilingManager._onTileDesktopChanged");
+		}
 	};
 
 TilingManager.prototype._onTileMovingStarted = function(tile) {
@@ -428,16 +439,16 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
 
 TilingManager.prototype._changeTileLayouts =
     function(tile, oldLayouts, newLayouts) {
-		oldLayouts.forEach(function(layout) {
-			if (newLayouts.indexOf(layout) == -1) {
+		try {
+			oldLayouts.forEach(function(layout) {
 				layout.removeTile(tile);
-			}
-		});
-		newLayouts.forEach(function(layout) {
-			if (oldLayouts.indexOf(layout) == -1) {
+			});
+			newLayouts.forEach(function(layout) {
 				layout.addTile(tile);
-			}
-		});
+			});
+		} catch(err) {
+			print(err, "in TilingManager._changeTileLayouts");
+		}
 	};
 
 TilingManager.prototype._onCurrentDesktopChanged = function() {
