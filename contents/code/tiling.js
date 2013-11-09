@@ -113,15 +113,17 @@ Tiling.prototype.addTile = function(tile, x, y) {
 Tiling.prototype.removeTile = function(tile) {
 	try {
 		var tileIndex = this.tiles.indexOf(tile);
-		this.tiles.splice(tileIndex, 1);
-		this.layout.removeTile(tileIndex);
-		// Correct tileIndex
-		for(i = 0; i < this.tiles.length; i++) {
-			this.tiles[i].tileIndex = i;
-			this.tiles[i].syncCustomProperties();
+		if (tileIndex > -1) {
+			this.tiles.splice(tileIndex, 1);
+			this.layout.removeTile(tileIndex);
+			// Correct tileIndex
+			for(i = 0; i < this.tiles.length; i++) {
+				this.tiles[i].tileIndex = i;
+				this.tiles[i].syncCustomProperties();
+			}
+			// TODO: Unregister tile callbacks
+			this._updateAllTiles();
 		}
-		// TODO: Unregister tile callbacks
-		this._updateAllTiles();
 	} catch(err) {
 		print(err, "in Tiling.removeTile");
 	}
@@ -260,7 +262,7 @@ Tiling.prototype._updateAllTiles = function() {
 		if (this.active) {
 			// FIXME: KWin hands us the wrong area if we ask for our real desktop
 			// FIXME: Probable kwin bug: clientArea returns the _former_ area
-			var rect = workspace.clientArea(KWin.PlacementArea, this.screen, this.desktop);
+			var rect = Tiling.getTilingArea(this.screen, this.desktop);
 			this.layout.setLayoutArea(rect);
 			for (var i = 0; i < this.layout.tiles.length; i++) {
 				var newRect = this.layout.tiles[i].rectangle;
