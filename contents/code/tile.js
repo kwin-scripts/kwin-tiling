@@ -297,6 +297,7 @@ Tile.prototype.addClient = function(client) {
 		if (this.clients.indexOf(client) == -1) {
 			this.clients.push(client);
 			this.syncCustomProperties();
+			this.onClientGeometryChanged(client);
 		}
 	} catch(err) {
 		print(err, "in Tile.addClient");
