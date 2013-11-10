@@ -261,6 +261,12 @@ TileList.prototype._onClientTabGroupChanged = function(client) {
 		this._onClientRemoved(client);
 		client.syncTabGroupFor("tiling_floating", true);
 		client.syncTabGroupFor("tiling_tileIndex", true);
+		// What we'd need to do here:
+		// Find the old tile, remove the client from it (and remove it if empty)
+		// Find the new tile, add the client to it
+		// HOWEVER: If the tabgroup has just been created, this is called _twice_ (once for each client)
+		// And the .tabGroup property is always undefined, so there is no way to find the other clients
+		// except for maybe handing it over to tiling and there going over all tiles, removing clients that don't have matching tileIndex
 	} catch(err) {
 		print(err, "in TileList._onClientTabGroupChanged");
 	}

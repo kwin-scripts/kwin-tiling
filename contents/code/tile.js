@@ -53,11 +53,6 @@ function Tile(firstClient, tileIndex) {
 		 */
 		this.resizingStep = new Signal();
 		/**
-		 * Signal which is triggered when the geometry of the tile changes because
-		 * of something different to a user move or resize action.
-		 */
-		this.geometryChanged = new Signal();
-		/**
 		 * Signal which is triggered whenever the tile is moved to a different
 		 * screen. Two parameters are passed to the handlers, the old and the new
 		 * screen.
@@ -228,8 +223,9 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 				// TEST
 				client.addRepaint(this.rectangle);
 			}
+		} else {
+			print("No rectangle");
 		}
-		this.geometryChanged.emit();
 	} catch(err) {
 		print(err, "in Tile.onClientGeometryChanged");
 	}

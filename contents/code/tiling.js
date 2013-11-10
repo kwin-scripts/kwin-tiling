@@ -61,7 +61,6 @@ function Tiling(layoutType, desktop, screen) {
  * @return Rectangle which contains the area which shall be used by layouts.
  */
 Tiling.getTilingArea = function(screen, desktop) {
-	print("getTilingArea");
 	return workspace.clientArea(KWin.PlacementArea, screen, desktop);
 };
 
@@ -260,7 +259,6 @@ Tiling.prototype._updateAllTiles = function() {
 	try {
 		// Set the position/size of all tiles
 		if (this.active) {
-			// FIXME: KWin hands us the wrong area if we ask for our real desktop
 			// FIXME: Probable kwin bug: clientArea returns the _former_ area
 			var rect = Tiling.getTilingArea(this.screen, this.desktop);
 			this.layout.setLayoutArea(rect);
