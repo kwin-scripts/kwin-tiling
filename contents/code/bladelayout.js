@@ -145,10 +145,12 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 		}
 		// Cap rectangle at screenedges
 		if (rectangle.x < this.screenRectangle.x) {
+			// Width can only change in reaction to the x change
+			// As we only resize width and height, we can return here
+			if (tileIndex == 0) {
+				return;
+			}
 			rectangle.x = this.screenRectangle.x;
-		}
-		if (rectangle.y < this.screenRectangle.y) {
-			rectangle.y = this.screenRectangle.y;
 		}
 		if (rectangle.y + rectangle.height > this.screenRectangle.y + this.screenRectangle.height) {
 			rectangle.height = this.screenRectangle.y + this.screenRectangle.height - rectangle.y;
@@ -156,12 +158,11 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 		if (rectangle.x + rectangle.width > this.screenRectangle.x + this.screenRectangle.width) {
 			rectangle.width = this.screenRectangle.x + this.screenRectangle.width - rectangle.x;
 		}
-		if (tileIndex == 0) {
-			rectangle.x = this.screenRectangle.x;
-		}
 		if (tileIndex == this.tiles.length - 1) {
 			rectangle.width = (this.screenRectangle.x + this.screenRectangle.width) - rectangle.x;
 		}
+		rectangle.y = this.screenRectangle.y;
+		rectangle.height = this.screenRectangle.height;
 		var newRect = Qt.rect(this.screenRectangle.x,
 							  this.screenRectangle.y,
 							  Math.floor((rectangle.x - this.screenRectangle.x) / tileIndex),
