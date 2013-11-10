@@ -159,6 +159,9 @@ Tile.prototype.getActiveClient = function() {
 Tile.prototype.syncCustomProperties = function() {
 	try {
 		var client = this.getActiveClient();
+		if (client == null) {
+			client = this.clients[0];
+		}
 		if (client != null) {
 			client.tiling_tileIndex = this.tileIndex;
 			client.syncTabGroupFor("tiling_tileIndex", true);
