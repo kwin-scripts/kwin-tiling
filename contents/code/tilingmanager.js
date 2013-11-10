@@ -111,17 +111,18 @@ function TilingManager() {
         layout.activate();
     });
 
-    // We need to reset custom client properties first because this might not be
-    // the first execution of the script
     var existingClients = workspace.clientList();
     existingClients.forEach(function(client) {
-		self.tiles._onClientRemoved(client);
-		client.tiling_shown = true;
+		client.tiling_shown = false;
 		self.tiles.addClient(client);
+		client.tiling_shown = true;
 		// Don't reset floating so we don't lose the value over restarts
         //client.tiling_floating = null;
     });
-	
+	this.layouts[this._currentDesktop].forEach(function (layout) {
+		layout._updateAllTiles();
+	});
+
     // Register global callbacks
     workspace.numberDesktopsChanged.connect(function() {
         self._onNumberDesktopsChanged();
