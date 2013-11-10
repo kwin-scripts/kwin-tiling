@@ -111,6 +111,10 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 		//FIXME: There is a crash here
 		// Remove the array entry
 		var oldrect = this.tiles[tileIndex].rectangle;
+		if (tileIndex < 0 || tileIndex >= this.tiles.length) {
+			print("Removing invalid tileindex");
+			return;
+		}
 		this.tiles.splice(tileIndex, 1);
 		// Update the other tiles
 		if (this.tiles.length == 1) {
