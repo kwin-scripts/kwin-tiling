@@ -51,6 +51,10 @@ function TileList() {
 }
 
 TileList.prototype.connectSignals = function(client) {
+	if (TileList._isIgnored(client)) {
+		return;
+	}
+
     var self = this;
 
 	if (client.tiling_connected1 != true) {
@@ -74,9 +78,6 @@ TileList.prototype.connectSignals = function(client) {
 			}
 		});
 		client.tiling_connected1 = true;
-	}
-	if (TileList._isIgnored(client)) {
-		return;
 	}
 	if (client.tiling_connected2 == true) {
 		return;
