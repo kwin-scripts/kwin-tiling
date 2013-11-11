@@ -190,9 +190,6 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (!client.isCurrentTab) {
 			return;
 		}
-		if (client.resizable == false) {
-			return;
-		}
 		// If the screen has changed, send an event
 		if (client.screen != this._currentScreen) {
 			this._currentScreen = client.screen;
@@ -204,12 +201,21 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (this._moving || this._resizing) {
 			return;
 		}
+		/*
+		if (client.resizeable != true) {
+			return;
+		}
+		if (client.moveable != true) {
+			return;
+		}
+		*/
 		if (this.rectangle != null) {
 			if (client.geometry.x != this.rectangle.x ||
 				client.geometry.y != this.rectangle.y ||
 				client.geometry.width != this.rectangle.width ||
 				client.geometry.height != this.rectangle.height) {
 				client.tiling_MoveResize = true;
+				// Clamp to minSize
 				/*
 				if (client.minSize.w > this.rectangle.width) {
 					this.rectangle.width = client.minSize.w;
@@ -217,17 +223,20 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 				if (client.minSize.h > this.rectangle.height) {
 					this.rectangle.height = client.minSize.h;
 				}
+				if (client.maxSize.h < this.rectangle.height) {
+					this.rectangle.height = client.maxSize.h;
+				}
+				if (client.maxSize.w < this.rectangle.width) {
+					this.rectangle.width = client.maxSize.w;
+				}
 				*/
 				client.geometry = Qt.rect(this.rectangle.x,
 										  this.rectangle.y,
 										  this.rectangle.width,
 										  this.rectangle.height);
-				// This could take a _lot_ of processing power and battery life
-				// TEST
-				client.addRepaint(this.rectangle);
 			}
 		} else {
-			print("No rectangle");
+			print("No rectangle", client.windowId);
 		}
 	} catch(err) {
 		print(err, "in Tile.onClientGeometryChanged");
