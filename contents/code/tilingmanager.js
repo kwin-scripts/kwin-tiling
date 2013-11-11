@@ -106,21 +106,16 @@ function TilingManager() {
         self._onTileRemoved(tile);
     });
 
-    // Activate the visible layouts
-    this.layouts[workspace.currentDesktop - 1].forEach(function(layout) {
-        layout.activate();
-    });
-
-    var existingClients = workspace.clientList();
-    existingClients.forEach(function(client) {
-		client.tiling_shown = false;
+	var existingClients = workspace.clientList();
+	existingClients.forEach(function(client) {
 		self.tiles.addClient(client);
-		client.tiling_shown = true;
 		// Don't reset floating so we don't lose the value over restarts
-        //client.tiling_floating = null;
-    });
-	this.layouts[this._currentDesktop].forEach(function (layout) {
-		layout._updateAllTiles();
+		//client.tiling_floating = null;
+	});
+	// Activate the visible layouts
+	// Do it after adding the existingClients to prevent unnecessary geometry changes
+	this.layouts[workspace.currentDesktop - 1].forEach(function(layout) {
+		layout.activate();
 	});
 
     // Register global callbacks
