@@ -6,13 +6,8 @@
   Hacked for Spirallayout, working for Halflayout
 * DONE Floating
 ** DONE Toggle floating
-   Somehow client.tiling_floating stays the same across acesses (fixed?)
 ** DONE Floating layout/disable script
-   Currently moves and resizes windows on disable
 ** DONE Make floating windows be _above_ tilers
-   Somehow accessing client.keepAbove doesn't work
-   Make configurable?
-   Curently floating windows are still handled somehow
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
 ** DONE Don't tile fullscreen windows on workspace change
@@ -25,9 +20,11 @@
 ** TODO Tabgroup
    Seemingly not possible right now
 ** TODO MinSize
-* DONE Retile on minimize
+** TODO Resolution changes
+   Almost possible, but clientArea returns the _old_ resolution
 * DONE Avoid struts
-  Never noticed because I set the panel to autohide
+  Almost finished, but doesn't directly react to changes
+  Needs an additional kwin signal
 ** DONE Halflayout
 ** DONE Spirallayout
 ** DONE Bladelayout
