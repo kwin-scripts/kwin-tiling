@@ -257,17 +257,47 @@ TileList.prototype._onClientRemoved = function(client) {
 
 TileList.prototype._onClientTabGroupChanged = function(client) {
 	try {
-		print("Tabgroups are currently not supported", client.windowId);
-		client.tiling_floating = true;
-		this._onClientRemoved(client);
-		client.syncTabGroupFor("tiling_floating", true);
-		client.syncTabGroupFor("tiling_tileIndex", true);
-		// What we'd need to do here:
-		// Find the old tile, remove the client from it (and remove it if empty)
-		// Find the new tile, add the client to it
-		// HOWEVER: If the tabgroup has just been created, this is called _twice_ (once for each client)
-		// And the .tabGroup property is always undefined, so there is no way to find the other clients
-		// except for maybe handing it over to tiling and there going over all tiles, removing clients that don't have matching tileIndex
+		// FIXME: This is a huge kludge as kwin doesn't actually export the tabgroup
+		// For starters, this only works because we ignore geometryChanged for clients that aren't the current tab
+		var index = this._indexWithClient(client);
+		if (client.isCurrentTab == false) {
+			var tabGroup = null;
+			for (i = 0; i < this.tiles.length; i++) {
+				// We don't set geometry if the client isn't currentTab, so find its tabgroup by place
+				var rect  = this.tiles[i].rectangle;
+				if (rect != null && rect.x == client.geometry.x &&
+					rect.y == client.geometry.y &&
+					rect.width == client.geometry.width &&
+					rect.height == client.geometry.height) {
+					// TODO: Is this necessary or is desktopChanged always called before tabgroupchanged?
+					if (this.tiles[i]._currentDesktop == client.desktop || client.desktop == -1) {
+						tabGroup = this.tiles[i];
+						break;
+					}
+				}
+			}
+			if (index > -1) {
+				this.tiles[index].removeClient(client);
+				if (this.tiles[index].clients.length < 1) {
+					this._removeTile(index);
+				}
+			}
+			if (tabGroup != this.tiles[index]) {
+				tabGroup.addClient(client);
+			} else {
+				tabGroup.removeClient(client);
+				if (tabGroup.clients.length < 1) {
+					this._removeTile(this.tiles.indexOf(tabGroup));
+				}
+			}
+		} else {
+			if (index > -1) {
+				if (this.tiles[index].clients.length > 1) {
+					this.tiles[index].removeClient(client);
+					this.addClient(client);
+				}
+			}
+		}
 	} catch(err) {
 		print(err, "in TileList._onClientTabGroupChanged");
 	}
