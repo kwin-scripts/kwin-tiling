@@ -171,6 +171,7 @@ TileList.prototype.addClient = function(client) {
 	}
     if (TileList._isIgnored(client)) {
 		client.tiling_tileIndex = -1;
+		client.keepBelow = false;
 		// WARNING: This crashes kwin!
 		//client.tiling_floating = true;
         return;
