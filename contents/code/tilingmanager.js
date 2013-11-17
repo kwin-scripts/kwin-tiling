@@ -125,6 +125,13 @@ function TilingManager() {
     workspace.numberScreensChanged.connect(function() {
         self._onNumberScreensChanged();
     });
+	workspace.screenResized.connect(function(screen) {
+		try {
+			self._onScreenResized(screen);
+		} catch(err) {
+			print(err);
+		}
+	});
     workspace.currentDesktopChanged.connect(function() {
         self._onCurrentDesktopChanged();
     });
@@ -374,6 +381,14 @@ TilingManager.prototype._onNumberScreensChanged = function() {
 		}
 	}
 	this.screenCount = workspace.numScreens;
+};
+
+TilingManager.prototype._onScreenResized = function(screen) {
+	if (screen < this.screenCount) {
+		for (var i = 0; i < this.desktopCount; i++) {
+			this.layouts[i][screen].activate();
+		}
+	}
 };
 
 TilingManager.prototype._onTileScreenChanged =
