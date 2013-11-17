@@ -176,6 +176,11 @@ TileList.prototype.addClient = function(client) {
         return;
     }
 
+	var noBorder = readConfig("noBorder", false);
+	if (noBorder == true) {
+		client.noBorder = true;
+	}
+
 	this.connectSignals(client);
 
 	// shade can't be activated without borders, so it's okay to handle it here
@@ -187,11 +192,6 @@ TileList.prototype.addClient = function(client) {
 
 	client.keepAbove = false;
 	client.keepBelow = true;
-
-	var noBorder = readConfig("noBorder", false);
-	if (noBorder == true) {
-		client.noBorder = true;
-	}
 
 	// Check whether the client is part of an existing tile
 	if (this._indexWithClient(client) == -1) {
