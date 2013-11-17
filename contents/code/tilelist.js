@@ -43,7 +43,12 @@ function TileList() {
     // new/deleted tiles
     var self = this;
     workspace.clientAdded.connect(function(client) {
-		self._onClientAdded(client);
+		// Delay adding until the window is actually shown
+		// This prevents graphics bugs
+		// due to resizing before the pixmap is created (or something like that)
+		client.windowShown.connect(function() {
+			self._onClientAdded(client);
+		});
     });
     workspace.clientRemoved.connect(function(client) {
 		self._onClientRemoved(client);
@@ -91,25 +96,11 @@ TileList.prototype.connectSignals = function(client) {
         return self.getTile(client);
     };
     client.geometryShapeChanged.connect(function() {
-		if (client.tiling_shown == true) {
-			var tile = getTile(client);
-			if (tile != null) {
-				tile.onClientGeometryChanged(client);
-			}
+		var tile = getTile(client);
+		if (tile != null) {
+			tile.onClientGeometryChanged(client);
 		}
     });
-	client.windowShown.connect(function() {
-		// Delay adding until the window is actually shown
-		// This prevents graphics bugs
-		// due to resizing before the pixmap is created (or something like that)
-		if (client.tiling_shown != true) {
-			client.tiling_shown = true;
-			var tile = getTile(client);
-			if (tile != null) {
-				tile.onClientGeometryChanged(client);
-			}
-		}
-	});
     client.clientStartUserMovedResized.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
