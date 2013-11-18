@@ -228,11 +228,14 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 
 		if (tileIndex == 0) {
 			// Simply adjust width on everything else, no height adjustment
-			this.firstWidth = rectangle.width;
-			tile.rectangle = rectangle;
-			for (i = 1; i < this.tiles.length; i++) {
-				this.tiles[i].rectangle.width = this.screenRectangle.width - rectangle.width;
-				this.tiles[i].rectangle.x = this.screenRectangle.x + rectangle.width;
+			// Only adjust when it's different (otherwise firstWidth gets clobbered)
+			if (rectangle.width != tile.rectangle.width) {
+				this.firstWidth = rectangle.width;
+				tile.rectangle = rectangle;
+				for (i = 1; i < this.tiles.length; i++) {
+					this.tiles[i].rectangle.width = this.screenRectangle.width - rectangle.width;
+					this.tiles[i].rectangle.x = this.screenRectangle.x + rectangle.width;
+				}
 			}
 		} else {
 			this.tiles[0].rectangle.width = rectangle.x - this.screenRectangle.x;
