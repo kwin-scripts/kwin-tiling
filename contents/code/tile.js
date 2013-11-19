@@ -313,6 +313,42 @@ Tile.prototype.addClient = function(client) {
 	}
 }
 
+Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
+	try {
+		var screenRect = workspace.clientArea(KWin.PlacementArea, this._currentScreen, this._currentDesktop);
+		var newRect = Qt.rect(this.rectangle.x,
+							  this.rectangle.y,
+							  this.rectangle.width,
+							  this.rectangle.height);
+		if (h) {
+			newRect.x = screenRect.x;
+			newRect.width = screenRect.width;
+		} else {
+			if (this.oldRect != null) {
+				newRect.x = this.oldRect.x;
+				newRect.width = this.oldRect.width;
+			}
+		}
+		if (v) {
+			newRect.y = screenRect.y;
+			newRect.height = screenRect.height;
+		} else {
+			if (this.oldRect != null) {
+				newRect.y = this.oldRect.y;
+				newRect.height = this.oldRect.height;
+			}
+		}
+		this.oldRect = Qt.rect(this.rectangle.x,
+							  this.rectangle.y,
+							  this.rectangle.width,
+							  this.rectangle.height);
+		this.setGeometry(newRect);
+	} catch(err) {
+		print(err, "in tile.onClientMaximizedStateChanged");
+	}
+}
+
 Tile.prototype.hasClient = function(client) {
 	return (this.clients.indexOf(client) > -1);
 }
+
