@@ -43,8 +43,15 @@ function TileList() {
     // new/deleted tiles
     var self = this;
     workspace.clientAdded.connect(function(client) {
+		// Don't connect signal if the client is ignored
+		if (TileList._isIgnored(client)) {
+			client.tiling_tileIndex = -1;
+			client.keepBelow = false;
+			return;
+		}
+		
 		// Delay adding until the window is actually shown
-		// This prevents graphics bugs
+		// This prevents (some, but not all) graphics bugs
 		// due to resizing before the pixmap is created (or something like that)
 		client.windowShown.connect(function() {
 			self._onClientAdded(client);
@@ -95,7 +102,7 @@ TileList.prototype.connectSignals = function(client) {
     var getTile = function(client) {
         return self.getTile(client);
     };
-    client.geometryShapeChanged.connect(function() {
+    client.geometryChanged.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
 			tile.onClientGeometryChanged(client);
@@ -323,6 +330,7 @@ TileList.prototype._removeTile = function(tileIndex) {
  * e.g. panels, dialogs or the user-defined apps
  */
 TileList._isIgnored = function(client) {
+	// TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
     // Application workarounds should be put here
 	// Qt gives us a method-less QVariant(QStringList) if we ask for an array
 	// Ask for a string instead (which can and should still be a StringList for the UI)
@@ -331,6 +339,11 @@ TileList._isIgnored = function(client) {
 	var floaters = String(readConfig("floaters", fl)).replace(/ /g,"").split(",");
 	if (floaters.indexOf(client.resourceClass.toString()) > -1) {
 		client.syncTabGroupFor("kwin_tiling_floats", true);
+		return true;
+	}
+	// HACK: Steam doesn't set the windowtype properly
+	// Everything that isn't captioned "Steam" should be a dialog - these resize worse thant the main window does
+	if (client.resourceClass.toString() == "steam" && client.caption != "Steam") {
 		return true;
 	}
 	if (client.specialWindow == true) {
