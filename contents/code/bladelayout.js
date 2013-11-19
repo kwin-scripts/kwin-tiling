@@ -144,6 +144,7 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			return;
 		}
 		// Cap rectangle at screenedges
+		var oldRect = tile.rectangle;
 		if (rectangle.x < this.screenRectangle.x) {
 			// Width can only change in reaction to the x change
 			// As we only resize width and height, we can return here
@@ -151,6 +152,12 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 				return;
 			}
 			rectangle.x = this.screenRectangle.x;
+		}
+		// First tile should not move away from left edge
+		if (oldRect.x == this.screenRectangle.x && rectangle.x != oldRect.x) {
+			if (tileIndex == 0) {
+				return;
+			}
 		}
 		if (rectangle.y + rectangle.height > this.screenRectangle.y + this.screenRectangle.height) {
 			rectangle.height = this.screenRectangle.y + this.screenRectangle.height - rectangle.y;
@@ -180,7 +187,7 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 								   / (this.tiles.length - (tileIndex + 1));
 		for(i = tileIndex + 1; i < this.tiles.length; i++){
 			var rect = this.tiles[i].rectangle;
-			rect.x = (rectangle.x + rectangle.width) + Math.floor(newRect.width * (i - 2));
+			rect.x = (rectangle.x + rectangle.width) + (i - tileIndex - 1) * newRect.width;
 			rect.width = newRect.width;
 			this.tiles[i].rectangle = rect;
 		}
