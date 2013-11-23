@@ -3,7 +3,7 @@
 ** DONE Add useractionsmenu
 ** TODO Find a way to share rules updates
 * DONE Resize tiles
-** TODO Buggy for bladelayout
+** DONE Buggy for bladelayout
 ** DONE Halflayout
 ** TODO Hacked/partial for Spirallayout
 * DONE Floating
