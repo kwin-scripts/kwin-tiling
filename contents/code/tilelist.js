@@ -75,9 +75,11 @@ TileList.prototype.connectSignals = function(client) {
 			if (client.fullScreen == true) {
 				client.tiling_floating = true;
 				client.keepAbove = true;
+				client.keepBelow = false;
 				self._onClientRemoved(client);
 			} else {
 				client.keepAbove = false;
+				client.keepBelow = true;
 				self._onClientAdded(client);
 			}
 		});
