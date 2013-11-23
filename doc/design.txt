@@ -6,29 +6,36 @@ design decisions and a coarse description of the design.
 Goals:
  * A functional tiling window management extension for kwin
  * Automatic layouts should be supported:
-   * Spiral layout
-   * Two columns/rows
+   * Spiral layout (SpiralLayout)
+   * Two columns/rows (HalfLayout)
+   * Rows only (BladeLayout)
    * Regular grid?
    * ...
  * Different layouts for different desktops/screens
  * A number of different layouts as well as a possibility to disable tiling for
    a certain screen/desktop combination
  * The possibility to make some windows floating (remove them from the layout)
+   Both with a keybinding and a menu entry
  * Tab groups should be handled correctly (a complete tab group forms one tile)
  * Individual windows should be resizable and the whole layout should be updated
    accordingly
  * Windows should be selected and moved/resized in the layout and between
    screens and desktops using the keyboard or the mouse
  * Tiled windows should always be drawn below floating ones
- * Window borders should maybe be reduced (like with maximized windows) when
-   being tiled, or should be completely hidden with a shortcut to show the
-   title bar of the active window (possibly configurable?)
+   and fullscreen windows should always be on top
+ * Window borders can be disabled when being tiled, 
+   and can be reactivated per-window with a shortcut
  * Some windows cannot be tiled properly (dialogs, non resizable windows, etc.),
    those should automatically be made floating.
+   This can be configured (by window-class currently), and there is one app-specific workaround for steam
+   as it doesn't set the window-class or type (dialog etc) properly
  ** Also keep a configurable list with sensible defaults (nobody wants yakuake to float)
+ * Multiscreen setups should work correctly
+ * Activities are a distant TODO
 
 Design decisions:
- * TODO
+ * tiled windows at the bottom, floating windows over that, fullscreen or maximized windows on top (may add options on request)
+ * floating or fullscreen windows aren't kept track of in the script
 
 Design description:
  * TileList: KWin doesn't give us any information about tab groups, so we have
@@ -36,6 +43,7 @@ Design description:
    all clients in a tab. This information needs to be kept up-to-date on tab
    group changes as well. The code related to this is in tilelist.js which
    contains a class which keeps track of all tab groups in the system.
+   This is where newly opened windows are first added.
  * Tile: Various window signals (resizing, moving, maximizing etc.) have to be
    reacted to, this class binds handlers to these signals and filters them as
    necessary (e.g. intermediate steps in a resize operation are not interesting
@@ -46,7 +54,16 @@ Design description:
    a different tile. The different kinds of layouts are classes derived from
    this class.
    Floating windows are _not_ handled in layouts or tiles.
- * Tiling: The main class which contains a list of the current layouts (one per
+ * TilingManager: The main class which contains a list of the current layouts (one per
    screen/desktop combination) and which registers global keyboard shortcuts and
    some global events (e.g. screen count changes).
- * The layout switcher is implemented in QML.
+ * Tiling (also referenced as "Layout" in TilingManager): This is essentially one desktop per screen and makes changing layouts at runtime possible
+ * There is currently no layout switcher (but it could be implemented in QML).
+
+ The class relationship as cool ASCII-Art:
+
+ 	 	   			TilingManager
+					/			\
+				Tiling			TileList
+				/	  \		   /
+			Layout       Tile
