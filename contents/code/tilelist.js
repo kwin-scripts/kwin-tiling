@@ -305,7 +305,7 @@ TileList.prototype._onClientTabGroupChanged = function(client) {
 };
 
 TileList.prototype._addTile = function(client) {
-	var tileIndex = this.tiles.length;
+	var tileIndex = -1;
 	if (client.tiling_tileIndex > -1) {
 		tileIndex = client.tiling_tileIndex;
 	}

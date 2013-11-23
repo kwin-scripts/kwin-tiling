@@ -99,8 +99,17 @@ Tiling.prototype.addTile = function(tile, x, y) {
 					this.tiles[i].syncCustomProperties();
 				}
 			} else {
-				tile.tileIndex = this.tiles.length;
-				this.tiles.push(tile);
+				if (readConfig("startAsMaster", false) == true) {
+					tile.tileIndex = 0;
+					this.tiles.splice(tile.tileIndex, 0, tile);
+					for (i = 0; i < this.tiles.length; i++) {
+						this.tiles[i].tileIndex = i;
+						this.tiles[i].syncCustomProperties();
+					}
+				} else {
+					tile.tileIndex = this.tiles.length;
+					this.tiles.push(tile);
+				}
 			}
 		}
 		this._updateAllTiles();
