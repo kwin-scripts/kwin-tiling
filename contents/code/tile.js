@@ -177,14 +177,13 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (client == null) {
 			return;
 		}
+		if (client.desktop != workspace.currentDesktop && client.desktop > -1) {
+			return;
+		}
 		if (client.deleted == true) {
 			return;
 		}
 		if (client.managed == false) {
-			return;
-		}
-		if (client.tiling_MoveResize == true) {
-			client.tiling_MoveResize = false;
 			return;
 		}
 		if (!client.isCurrentTab) {
@@ -199,44 +198,39 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 			return;
 		}
 		if (this._moving || this._resizing) {
+			this.rectangle.x = client.geometry.x;
+			this.rectangle.y = client.geometry.y;
+			this.rectangle.width = client.geometry.width;
+			this.rectangle.height = client.geometry.height;
 			return;
 		}
-		/*
 		if (client.resizeable != true) {
+			print("Client", client.resourceClass.toString(), "not resizeable");
 			return;
 		}
 		if (client.moveable != true) {
+			print("Client", client.resourceClass.toString(), "not moveable");
 			return;
 		}
-		*/
+		if (client.tiling_resize == true) {
+			return;
+		}
 		if (this.rectangle != null) {
 			if (client.geometry.x != this.rectangle.x ||
 				client.geometry.y != this.rectangle.y ||
 				client.geometry.width != this.rectangle.width ||
 				client.geometry.height != this.rectangle.height) {
-				client.tiling_MoveResize = true;
-				// Clamp to minSize
-				/*
-				if (client.minSize.w > this.rectangle.width) {
-					this.rectangle.width = client.minSize.w;
-				}
-				if (client.minSize.h > this.rectangle.height) {
-					this.rectangle.height = client.minSize.h;
-				}
-				if (client.maxSize.h < this.rectangle.height) {
-					this.rectangle.height = client.maxSize.h;
-				}
-				if (client.maxSize.w < this.rectangle.width) {
-					this.rectangle.width = client.maxSize.w;
-				}
-				*/
+				client.tiling_resize = true;
+				// HACK: Resize the client to zero - this makes kwin recreate the pixmap
+				client.geometry = Qt.rect(0,0,0,0);
 				client.geometry = Qt.rect(this.rectangle.x,
 										  this.rectangle.y,
 										  this.rectangle.width,
 										  this.rectangle.height);
+				client.tiling_resize = false;
 			}
 		} else {
-			print("No rectangle", client.windowId);
+			print("No rectangle", client.resourceClass.toString(), client.windowId);
 		}
 	} catch(err) {
 		print(err, "in Tile.onClientGeometryChanged");
