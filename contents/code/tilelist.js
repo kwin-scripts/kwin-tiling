@@ -39,8 +39,10 @@ function TileList() {
     this.tileRemoved = new Signal();
 
     // We connect to the global workspace callbacks which are triggered when
-    // clients are added/removed in order to be able to keep track of the
-    // new/deleted tiles
+    // clients are added in order to be able to keep track of the
+    // new tiles
+	// Do not connect to clientRemoved as that is called after FFM selects a new active client
+	// Instead, connect to client.windowClosed
     var self = this;
     workspace.clientAdded.connect(function(client) {
 		// Don't connect signal if the client is ignored
@@ -56,9 +58,6 @@ function TileList() {
 		client.windowShown.connect(function() {
 			self._onClientAdded(client);
 		});
-    });
-    workspace.clientRemoved.connect(function(client) {
-		self._onClientRemoved(client);
     });
 }
 
@@ -110,6 +109,9 @@ TileList.prototype.connectSignals = function(client) {
 			tile.onClientGeometryChanged(client);
 		}
     });
+	client.windowClosed.connect(function(cl, deleted) {
+		self._onClientRemoved(client);
+	});
     client.clientStartUserMovedResized.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
