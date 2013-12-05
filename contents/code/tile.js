@@ -180,6 +180,7 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (client.desktop != workspace.currentDesktop && client.desktop > -1) {
 			return;
 		}
+		// These two should never be reached
 		if (client.deleted == true) {
 			return;
 		}

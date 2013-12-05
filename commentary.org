@@ -3,25 +3,18 @@
 ** DONE Add useractionsmenu
 ** TODO Find a way to share rules updates
 * DONE Resize tiles
-** DONE Buggy for bladelayout
-** DONE Halflayout
 ** TODO Hacked/partial for Spirallayout
-* DONE Floating
-** DONE Toggle floating
-** DONE Floating layout/disable script
-** DONE Make floating windows be _above_ tilers
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
-** DONE Don't tile fullscreen windows on workspace change
 ** DONE Windows can sometimes resize on their own (missing signal?)
    FTR: Nothing was actually done on geometryChanged
-** TODO Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
+** WAITING Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
    Waiting on kwin
-** DONE Tileindex not properly set on workspace switch
-** DONE Check how windows on all desktops behave
-** TODO Tabgroup
+   Worked around by using windowClosed instead of clientRemoved
+** DONE Tabgroup
    Seems mostly working
-** TODO MinSize
+** DONE MinSize
+   This leads to graphics bugs
 ** TODO Resolution changes
    Almost possible, but clientArea returns the _old_ resolution
 * DONE Avoid struts
@@ -46,13 +39,16 @@
 * TODO Optimization
 ** TODO Refactor layouts to share more code
 * TODO Crazy stuff
-** DONE Animate all windows on move
-   Hacked by simply _doing_ the move
 ** Layout switcher
 ** Indicate layout/state (tiling on/off) somehow
 ** Per-activity settings
    Huge complexity increase (one additional layer on top of desktops/screens)
    Investigate how the actual relationship between activities and desktops/clients is
-** DONE Minimize stack
-   Maybe something for a different script (or just unminimize last minimized window)
-   Made it a different script
+* TODO Report
+** Bugs
+*** ClientArea doesn't update
+*** Pixmap issue
+*** no tabGroup
+** Documentation
+*** ClientArea options
+*** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)
