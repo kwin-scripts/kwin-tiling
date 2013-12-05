@@ -222,13 +222,6 @@ TileList.prototype._onClientAdded = function(client) {
 };
 
 TileList.prototype._onClientRemoved = function(client) {
-	// HACK: Set this client to active even if it floats, as it can only be set floating when it is active (with FFM)
-	var cactive = false;
-	if (options.focusPolicy < 2) {
-		if (workspace.activeClient == client) {
-			cactive = true;
-		}
-	}
 	try {
 		// Unset keepBelow because we set it when tiling
 		client.keepBelow = false;
@@ -249,9 +242,6 @@ TileList.prototype._onClientRemoved = function(client) {
 		//client.tiling_tileIndex = - 1;
 		if (client.tiling_floating == true) {
 			client.noBorder = false;
-			if (cactive == true) {
-				workspace.activeClient = client;
-			}
 		}
 	} catch(err) {
 		print(err, "in onClientRemoved with", client.resourceClass.toString());
