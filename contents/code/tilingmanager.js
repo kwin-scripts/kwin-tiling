@@ -410,6 +410,10 @@ TilingManager.prototype._onTileDesktopChanged =
 			var client = tile.clients[0];
 			var oldLayouts = this._getLayouts(oldDesktop, client.screen);
 			var newLayouts = this._getLayouts(newDesktop, client.screen);
+			if (oldDesktop == -1) {
+				oldLayouts.splice(newDesktop - 1, 1);
+				newLayouts.splice(newDesktop - 1, 1);
+			}
 			this._changeTileLayouts(tile, oldLayouts, newLayouts);
 		} catch(err) {
 			print(err, "in TilingManager._onTileDesktopChanged");
