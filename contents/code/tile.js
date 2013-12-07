@@ -177,6 +177,12 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (client == null) {
 			return;
 		}
+		if (client.tiling_tileIndex != this.tileIndex) {
+			print("Wrong tile called");
+			return;
+		}
+		// Don't resize when client isn't on current desktop
+		// Prevents a couple unnecessary resizes
 		if (client.desktop != workspace.currentDesktop && client.desktop > -1) {
 			return;
 		}
