@@ -282,5 +282,4 @@ Tiling.prototype._updateAllTiles = function() {
 	} catch(err) {
 		print(err, "in Tiling._updateAllTiles");
 	}
-
 }

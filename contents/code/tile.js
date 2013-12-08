@@ -229,7 +229,7 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 				client.geometry.height != this.rectangle.height) {
 				client.tiling_resize = true;
 				// HACK: Resize the client to zero if we violate min or maxSize - this makes kwin recreate the pixmap
-				// Don't do it always because this doubles the resizes
+				// Don't do it always because this doubles the number of resizes
 				if (client.minSize.w > this.rectangle.width ||
 					client.minSize.h > this.rectangle.height ||
 					client.maxSize.w < this.rectangle.width ||
