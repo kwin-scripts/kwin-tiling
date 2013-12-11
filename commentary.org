@@ -8,7 +8,7 @@
 ** TODO Doesn't tile properly when screen disappears
 ** DONE Windows can sometimes resize on their own (missing signal?)
    FTR: Nothing was actually done on geometryChanged
-** WAITING Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
+** DONE Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
    Waiting on kwin
    Worked around by using windowClosed instead of clientRemoved
 ** DONE Tabgroup
@@ -30,7 +30,7 @@
 ** Multi-monitor
 ** DONE Multiple workspaces (e.g. moving windows across, in floating and tiling mode)
 ** Crashes
-** Graphic issues
+** DONE Graphic issues
    e.g. Steam doesn't update properly after resize
 ** Better release process (i.e. don't just pack up git, TEST)
 * TODO Learning
