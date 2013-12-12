@@ -336,8 +336,11 @@ TileList._isIgnored = function(client) {
 		return true;
 	}
 	// HACK: Steam doesn't set the windowtype properly
-	// Everything that isn't captioned "Steam" should be a dialog - these resize worse thant the main window does
+	// Everything that isn't captioned "Steam" should be a dialog - these resize worse than the main window does
+	// With the exception of course of the class-less update/start dialog with the caption "Steam" (*Sigh*)
 	if (client.resourceClass.toString() == "steam" && client.caption != "Steam") {
+		return true;
+	} else if (client.resourceClass.toString() != "steam" && client.caption == "Steam") {
 		return true;
 	}
 	if (client.specialWindow == true) {
