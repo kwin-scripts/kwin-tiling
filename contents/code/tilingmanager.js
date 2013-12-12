@@ -446,6 +446,10 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
 				var layout = this.layouts[this._currentDesktop][client.screen];
 				var targetTile = layout.getTile(windowRect.x + windowRect.width / 2,
 												windowRect.y + windowRect.height / 2);
+				// In case no tile is found (e.g. middle of the window is offscreen), move the client back
+				if (targetTile == null) {
+					targetTile = tile;
+				}
 				// swapTiles() works correctly even if tile == targetTile
 				layout.swapTiles(tile, targetTile);
 			}
