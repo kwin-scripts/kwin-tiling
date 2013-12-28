@@ -17,6 +17,8 @@
    This leads to graphics bugs
 ** TODO Resolution changes
    Almost possible, but clientArea returns the _old_ resolution
+** TODO FFM bug when unminimizing
+   Possibly related to keepAbove/keepBelow
 * DONE Avoid struts
   Almost finished, but doesn't directly react to changes
   Needs an additional kwin signal
@@ -48,6 +50,9 @@
    Each client belongs to multiple activities, but is on the same desktop on each
    There can only be one activity at the same time
 *** Needs changes in tilingmanager (large) and maybe tile and tilelist
+** Switch to BSP/BinaryTree-based tiling
+   This requires a rather large change, but should add flawless resizing without special code in the layouts
+   and should make layouts much simpler to write
 * TODO Report
 ** Bugs
 *** ClientArea doesn't update
