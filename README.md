@@ -24,10 +24,16 @@ Features:
 
 - Many bugfixes
 
+Installation:
+-------------
+
+    git clone https://github.com/faho/kwin-tiling.git
+    cd kwin-tiling/
+    plasmapkg --type kwinscript -i .
+
 Things that are not working properly yet:
 -------
 
 - Activities aren't handled at all
 
 - BUUUGS
-
