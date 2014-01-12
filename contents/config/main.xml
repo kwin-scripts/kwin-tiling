@@ -17,5 +17,9 @@
 		  <label>Put new windows in the master position</label>
 		  <default>false</default>
 		</entry>
+		<entry name="layouts" type="String">
+		  <label>The layout configuration in "desktop:layoutname" format, separated with commas. Negative desktop denotes disabled tiling by default</label>
+		  <default></default>
+		</entry>
     </group>
 </kcfg>

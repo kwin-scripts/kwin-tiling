@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
-    <height>285</height>
+    <width>443</width>
+    <height>293</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -30,6 +30,9 @@
       <set>KEditListBox::Add|KEditListBox::Remove</set>
      </property>
     </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="kcfg_layouts"/>
    </item>
    <item>
     <widget class="QCheckBox" name="kcfg_noBorder">

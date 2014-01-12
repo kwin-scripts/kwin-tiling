@@ -92,12 +92,48 @@ function TilingManager() {
      */
     this._movingStartScreen = 0;
 	
-    var self = this;
+	// Read layout configuration
+	// Format: desktop:layoutname[,...]
+	// Negative desktop number deactivates tiling
+	this.layoutConfig = [];
+	var lC = String(readConfig("layouts", "")).replace(/ /g,"").split(",");
+	for (i = 0; i < lC.length; i++) {
+		var layout = lC[i].split(":");
+		try {
+			var desktop = parseInt(layout[0]);
+		} catch (err) {
+			continue;
+		}
+		var l = this.defaultLayout;
+		for (j = 0; j < this.availableLayouts.length; j++) {
+			if (this.availableLayouts[j].name == layout[1]) {
+				l = this.availableLayouts[j];
+			}
+		}
+		if (desktop < 0) {
+			var tiling = false;
+			desktop = desktop * -1;
+		} else {
+			var tiling = true;
+		}
+		if (desktop == 0) {
+			this.defaultLayout = l;
+		}
+		// Subtract 1 because the config is in user-indexed format
+		desktop = desktop - 1;
+		var desktoplayout = {};
+		desktoplayout.desktop = desktop;
+		desktoplayout.layout = l;
+		desktoplayout.tiling = tiling;
+		this.layoutConfig.push(desktoplayout);
+	}
+
     // Create the various layouts, one for every desktop
     for (var i = 0; i < this.desktopCount; i++) {
         this._createDefaultLayouts(i);
     }
 
+    var self = this;
     // Connect the tile list signals so that new tiles are added to the layouts
     this.tiles.tileAdded.connect(function(tile) {
         self._onTileAdded(tile);
@@ -278,8 +314,18 @@ function TilingManager() {
 
 TilingManager.prototype._createDefaultLayouts = function(desktop) {
     var screenLayouts = [];
+	var layout = this.defaultLayout;
+	var tiling = true;
+	for (var i = 0; i < this.layoutConfig.length; i++) {
+		if (this.layoutConfig[i].desktop == desktop) {
+			layout = this.layoutConfig[i].layout;
+			tiling = this.layoutConfig[i].tiling;
+			this.layoutConfig.splice(i,1);
+		}
+	}
     for (var j = 0; j < this.screenCount; j++) {
-        screenLayouts[j] = new Tiling(this.defaultLayout, desktop, j);
+        screenLayouts[j] = new Tiling(layout, desktop, j);
+		screenLayouts[j].userActive = tiling;
     }
     this.layouts[desktop] = screenLayouts;
 };
