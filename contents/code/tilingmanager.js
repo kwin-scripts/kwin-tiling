@@ -222,6 +222,12 @@ function TilingManager() {
 						 }
 						 client.noBorder = ! client.noBorder;
 					 });
+	registerShortcut("Toggle Border for all",
+					 "Toggle Border for all",
+					 "Meta+Shift+U",
+					 function() {
+						 self.tiles.toggleNoBorder()
+					 });
     registerShortcut("Switch Focus Left",
                      "Switch Focus Left",
                      "Meta+H",

@@ -38,6 +38,12 @@ function TileList() {
      */
     this.tileRemoved = new Signal();
 
+	try {
+		this.noBorder = readConfig("noBorder", false);
+	} catch(err) {
+		print(err, "in TileList");
+	}
+
     // We connect to the global workspace callbacks which are triggered when
     // clients are added in order to be able to keep track of the
     // new tiles
@@ -179,8 +185,7 @@ TileList.prototype.addClient = function(client) {
         return;
     }
 
-	var noBorder = readConfig("noBorder", false);
-	if (noBorder == true) {
+	if (this.noBorder == true) {
 		client.noBorder = true;
 	}
 
@@ -396,4 +401,27 @@ TileList.prototype._indexWithClient = function(client) {
 		}
 	}
 	return -1;
-}
+};
+
+/*
+ * Set the border for all non-floating managed clients
+ * This is "noBorder" (i.e. inverted boolean) since that's what kwin uses
+*/
+TileList.prototype.setNoBorder = function(nB) {
+	this.noBorder = nB;
+	this.tiles.forEach(function (t) {
+		for (i = 0; i < t.clients.length; i++) {
+			if (t.clients[i].tiling_floating != true) {
+				t.clients[i].noBorder = nB;
+			}
+		}
+	});
+};
+
+TileList.prototype.toggleNoBorder = function() {
+	try {
+		this.setNoBorder(!this.noBorder);
+	} catch (err) {
+		print(err, "in TileList.toggleNoBorder");
+	}
+};
