@@ -87,7 +87,7 @@ HalfLayout.prototype.addTile = function() {
 								  Math.floor(lastRect.height / (this.tiles.length)));
 			newRect.y = newRect.y + newRect.height * (this.tiles.length - 1);
 			// FIXME: Try to keep ratio
-			for (i = 1; i < this.tiles.length; i++) {
+			for (var i = 1; i < this.tiles.length; i++) {
 				var rect = this.tiles[i].rectangle;
 				rect.x = newRect.x;
 				var offset = newRect.height * (i - 1);
@@ -140,7 +140,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 								  lastRect.width,
 								  Math.floor(lastRect.height / tileCount));
 			var lowest = 1;
-			for (i = 1; i < this.tiles.length; i++) {
+			for (var i = 1; i < this.tiles.length; i++) {
 				var rect = this.tiles[i].rectangle;
 				rect.y = newRect.y + newRect.height * (i - 1);
 				rect.height = newRect.height;
@@ -232,7 +232,7 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			if (rectangle.width != tile.rectangle.width) {
 				this.firstWidth = rectangle.width;
 				tile.rectangle = rectangle;
-				for (i = 1; i < this.tiles.length; i++) {
+				for (var i = 1; i < this.tiles.length; i++) {
 					this.tiles[i].rectangle.width = this.screenRectangle.width - rectangle.width;
 					this.tiles[i].rectangle.x = this.screenRectangle.x + rectangle.width;
 				}
@@ -242,7 +242,7 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			this.firstWidth = this.tiles[0].rectangle.width;
 			var belows = new Array();
 			var aboves = new Array();
-			for (i = 1; i < this.tiles.length; i++) {
+			for (var i = 1; i < this.tiles.length; i++) {
 				if (this.tiles[i].rectangle.y < tile.rectangle.y){
 					aboves.push(i);
 				}
@@ -262,7 +262,7 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 				var newHeightBelow = Math.floor((this.screenRectangle.height - rectangle.height) / belows.length);
 			}
 			if (belows.length > 0) {
-				for (i = 0; i < belows.length; i++) {
+				for (var i = 0; i < belows.length; i++) {
 					this.tiles[belows[i]].rectangle.width = rectangle.width;
 					this.tiles[belows[i]].rectangle.x = rectangle.x;
 					this.tiles[belows[i]].rectangle.y = rectangle.y + rectangle.height + newHeightBelow * i;
@@ -270,7 +270,7 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 				}
 			}
 			if (aboves.length > 0) {
-				for (i = 0; i < aboves.length; i++) {
+				for (var i = 0; i < aboves.length; i++) {
 					this.tiles[aboves[i]].rectangle.width = rectangle.width;
 					this.tiles[aboves[i]].rectangle.x = rectangle.x;
 					this.tiles[aboves[i]].rectangle.y = this.screenRectangle.y + newHeightAbove * i;

@@ -73,7 +73,7 @@ BladeLayout.prototype.addTile = function() {
 								  Math.floor((this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1)), 
 								  this.screenRectangle.height);
 			// FIXME: Try to keep ratio
-			for (i = 0; i < this.tiles.length; i++) { 
+			for (var i = 0; i < this.tiles.length; i++) { 
 				var rect = this.tiles[i].rectangle;
 				rect.x = newRect.x + newRect.width * i;
 				rect.width = newRect.width;
@@ -109,7 +109,7 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
 								  Math.floor(this.screenRectangle.width / tileCount),
 								  this.screenRectangle.height);
 			var lowest = 1;
-			for (i = 0; i < this.tiles.length; i++) {
+			for (var i = 0; i < this.tiles.length; i++) {
 				var rect = this.tiles[i].rectangle;
 				rect.x = newRect.x + newRect.width * i;
 				rect.width = newRect.width;

@@ -103,7 +103,7 @@ Tiling.prototype.addTile = function(tile, x, y) {
 					this.tiles.push(tile);
 				}
 			}
-			for (i = 0; i < this.tiles.length; i++) {
+			for (var i = 0; i < this.tiles.length; i++) {
 				this.tiles[i].tileIndex = i;
 				this.tiles[i].syncCustomProperties();
 			}

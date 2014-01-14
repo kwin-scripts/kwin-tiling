@@ -97,7 +97,7 @@ function TilingManager() {
 	// Negative desktop number deactivates tiling
 	this.layoutConfig = [];
 	var lC = String(readConfig("layouts", "")).replace(/ /g,"").split(",");
-	for (i = 0; i < lC.length; i++) {
+	for (var i = 0; i < lC.length; i++) {
 		var layout = lC[i].split(":");
 		try {
 			var desktop = parseInt(layout[0]);
@@ -105,7 +105,7 @@ function TilingManager() {
 			continue;
 		}
 		var l = this.defaultLayout;
-		for (j = 0; j < this.availableLayouts.length; j++) {
+		for (var j = 0; j < this.availableLayouts.length; j++) {
 			if (this.availableLayouts[j].name == layout[1]) {
 				l = this.availableLayouts[j];
 			}

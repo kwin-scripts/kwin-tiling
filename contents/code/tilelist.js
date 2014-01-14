@@ -260,7 +260,7 @@ TileList.prototype._onClientTabGroupChanged = function(client) {
 		var index = this._indexWithClient(client);
 		if (client.isCurrentTab == false) {
 			var tabGroup = null;
-			for (i = 0; i < this.tiles.length; i++) {
+			for (var i = 0; i < this.tiles.length; i++) {
 				// We don't set geometry if the client isn't currentTab, so find its tabgroup by place
 				var rect  = this.tiles[i].rectangle;
 				if (rect != null && rect.x == client.geometry.x &&
@@ -395,7 +395,7 @@ TileList._isIgnored = function(client) {
 };
 
 TileList.prototype._indexWithClient = function(client) {
-	for (i = 0; i < this.tiles.length; i++) {
+	for (var i = 0; i < this.tiles.length; i++) {
 		if (this.tiles[i].hasClient(client)) {
 			return i;
 		}
@@ -410,7 +410,7 @@ TileList.prototype._indexWithClient = function(client) {
 TileList.prototype.setNoBorder = function(nB) {
 	this.noBorder = nB;
 	this.tiles.forEach(function (t) {
-		for (i = 0; i < t.clients.length; i++) {
+		for (var i = 0; i < t.clients.length; i++) {
 			if (t.clients[i].tiling_floating != true) {
 				t.clients[i].noBorder = nB;
 			}
