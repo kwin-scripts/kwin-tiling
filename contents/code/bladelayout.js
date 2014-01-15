@@ -32,6 +32,7 @@ function BladeLayout(screenRectangle) {
 	} catch(err) {
 		print(err, "in BladeLayout");
 	}
+	this.master = 0;
 }
 
 BladeLayout.name = "Blade";

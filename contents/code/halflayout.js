@@ -29,7 +29,7 @@ function HalfLayout(screenRectangle) {
 	print("Creating HalfLayout");
     Layout.call(this, screenRectangle);
 	this.firstWidth = Math.floor(this.screenRectangle.width / 2);
-    // TODO
+	this.master = 0;
 }
 
 HalfLayout.name = "Half";
@@ -175,7 +175,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 	try {
 		// TODO: Mark tile as resized so it can keep its size on tileadd/remove
-		if (tileIndex < 0 || tileIndex > this.tiles.length) {
+		if (tileIndex < 0 || tileIndex > (this.tiles.length - 1)) {
 			print("Tileindex invalid", tileIndex, "/", this.tiles.length);
 			return;
 		}

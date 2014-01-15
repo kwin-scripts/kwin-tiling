@@ -303,6 +303,73 @@ function TilingManager() {
 							 print(err, "in swap-window-with-master");
 						 }
 					 });
+	registerShortcut("Resize Active Window To The Left",
+					 "Resize Active Window To The Left",
+					 "Meta+Alt+H",
+					 function() {
+						 try {
+							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
+							 // Qt.rect automatically clamps negative values to zero
+							 geom = Qt.rect(tile.rectangle.x - 10,
+											tile.rectangle.y,
+											tile.rectangle.width - 10,
+											tile.rectangle.height);
+							 if (geom.x < 0) {
+								 geom.x = 0;
+							 }
+							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
+						 } catch(err) {
+							 print(err, "in resize-window-to-the-left");
+						 }
+					 });
+	registerShortcut("Resize Active Window To The Right",
+					 "Resize Active Window To The Right",
+					 "Meta+Alt+L",
+					 function() {
+						 try {
+							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
+							 // Qt.rect automatically clamps negative values to zero
+							 geom = Qt.rect(tile.rectangle.x,
+											tile.rectangle.y,
+											tile.rectangle.width + 10,
+											tile.rectangle.height);
+							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
+						 } catch(err) {
+							 print(err, "in resize-window-to-the-left");
+						 }
+					 });
+	registerShortcut("Resize Active Window To The Top",
+					 "Resize Active Window To The Top",
+					 "Meta+Alt+K",
+					 function() {
+						 try {
+							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
+							 // Qt.rect automatically clamps negative values to zero
+							 geom = Qt.rect(tile.rectangle.x,
+											tile.rectangle.y - 10,
+											tile.rectangle.width,
+											tile.rectangle.height + 10);
+							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
+						 } catch(err) {
+							 print(err, "in resize-window-to-the-left");
+						 }
+					 });
+	registerShortcut("Resize Active Window To The Bottom",
+					 "Resize Active Window To The Bottom",
+					 "Meta+Alt+J",
+					 function() {
+						 try {
+							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
+							 // Qt.rect automatically clamps negative values to zero
+							 geom = Qt.rect(tile.rectangle.x,
+											tile.rectangle.y,
+											tile.rectangle.width,
+											tile.rectangle.height - 10);
+							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
+						 } catch(err) {
+							 print(err, "in resize-window-to-the-left");
+						 }
+					 });
 	registerUserActionsMenu(function(client) {
 		return {
 			text : "Toggle floating",
@@ -373,6 +440,14 @@ TilingManager.prototype._onTileResized = function(tile) {
 		layout.resizeTile(tile);
 	});
 };
+
+TilingManager.prototype._getMaster = function(screen, desktop) {
+	try {
+		return this.layouts[desktop][screen].getMaster();
+	} catch(err) {
+		print(err, "in _getMaster");
+	}
+}
 
 TilingManager.prototype._onTileRemoved = function(tile) {
 	try {

@@ -8,9 +8,6 @@
 ** TODO Doesn't tile properly when screen disappears
 ** DONE Windows can sometimes resize on their own (missing signal?)
    FTR: Nothing was actually done on geometryChanged
-** DONE Focus-follows-mouse doesn't properly refocus on window kill (kwin bug or timing mishap?)
-   Waiting on kwin
-   Worked around by using windowClosed instead of clientRemoved
 ** DONE Tabgroup
    Seems mostly working
 ** DONE MinSize
@@ -35,9 +32,6 @@
 ** DONE Graphic issues
    e.g. Steam doesn't update properly after resize
 ** Better release process (i.e. don't just pack up git, TEST)
-* TODO Learning
-** How to use the tests
-** Javascript
 * TODO Optimization
 ** TODO Refactor layouts to share more code
 * TODO Crazy stuff
@@ -53,6 +47,8 @@
 ** Switch to BSP/BinaryTree-based tiling
    This requires a rather large change, but should add flawless resizing without special code in the layouts
    and should make layouts much simpler to write
+** Add option to add some gaps between windows
+   This could just be another layout
 * TODO Report
 ** Bugs
 *** ClientArea doesn't update
@@ -64,3 +60,8 @@
 *** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)
 ** Wishes
 *** Integration with rules
+*** Some way to draw small window borders
+	Outline doesn't work as it darkens the window and consumes mouse input
+* TODO Document
+** TODO A usage section
+** TODO A goals section
