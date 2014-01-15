@@ -282,14 +282,11 @@ Tiling.prototype._updateAllTiles = function() {
 Tiling.prototype.resizeMaster = function(geometry) {
 	try {
 		if (this.layout.master > -1) {
-			print("resizeMaster", geometry.x, geometry.y, geometry.width, geometry.height);
 			this.layout.resizeTile(this.layout.master, geometry);
 			this._updateAllTiles();
-			print("New width:", this.tiles[this.layout.master].rectangle.width);
-		} else {
-			print("No master");
 		}
 	} catch(err) {
+		print(err, "in resizeMaster");
 	}
 }
 
