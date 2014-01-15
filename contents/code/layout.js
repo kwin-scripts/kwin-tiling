@@ -55,10 +55,30 @@ Layout.prototype.setLayoutArea = function(newArea) {
 		var yoffset = newArea.y - oldArea.y;
 		this.tiles.forEach(function(tile) {
 			var lastrect = tile.rectangle;
-			var newrect = Qt.rect(lastrect.x + xoffset,
-								  lastrect.y + yoffset,
-								  lastrect.width * xscale,
-								  lastrect.height * yscale);
+			var newrect = Qt.rect(Math.floor((lastrect.x + xoffset) * xscale),
+								  Math.floor((lastrect.y + yoffset) * yscale),
+								  Math.floor(lastrect.width * xscale),
+								  Math.floor(lastrect.height * yscale));
+			// Stay at the screenedges
+			// It's better to have roundingerrors in the middle than at the edges
+			// left screenedge, keep right windowedge (i.e. adjust width)
+			if (lastrect.x == oldArea.x) {
+				newrect.width = newrect.width + (newrect.x - newArea.x);
+				newrect.x = newArea.x;
+			}
+			// Top screenedge, keep bottom windowedge (i.e. adjust height)
+			if (lastrect.y == oldArea.y) {
+				newrect.height = newrect.height + (newrect.y - newArea.y);
+				newrect.y = newArea.y;
+			}
+			// Right screenedge, keep left windowedge (i.e. don't adjust x)
+			if (lastrect.x + lastrect.width == oldArea.x + oldArea.width) {
+				newrect.width = (newArea.width + newArea.x) - newrect.x;
+			}
+			// Bottom screenedge, keep top windowedge (i.e. don't adjust y)
+			if (lastrect.y + lastrect.height == oldArea.y + oldArea.height) {
+				newrect.height = (newArea.height + newArea.y) - newrect.y;
+			}
 			tile.rectangle = newrect;
 		});
 		this.screenRectangle = newArea;

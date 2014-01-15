@@ -61,7 +61,8 @@ function Tiling(layoutType, desktop, screen) {
  * @return Rectangle which contains the area which shall be used by layouts.
  */
 Tiling.getTilingArea = function(screen, desktop) {
-	return workspace.clientArea(KWin.PlacementArea, screen, desktop);
+	var cA = workspace.clientArea(KWin.PlacementArea, screen, desktop);
+	return Qt.rect(cA.x, cA.y, cA.width, cA.height);
 };
 
 Tiling.prototype.setLayoutType = function(layoutType) {
@@ -263,10 +264,8 @@ Tiling.prototype.resizeTile = function(tile){
 Tiling.prototype._updateAllTiles = function() {
 	try {
 		// Set the position/size of all tiles
-		if (this.active) {
-			// FIXME: Probable kwin bug: clientArea returns the _former_ area
-			var rect = Tiling.getTilingArea(this.screen, this.desktop);
-			this.layout.setLayoutArea(rect);
+		if (this.active == true) {
+			this.resizeScreen();
 			for (var i = 0; i < this.layout.tiles.length; i++) {
 				var newRect = this.layout.tiles[i].rectangle;
 				if (! newRect) {
@@ -277,5 +276,21 @@ Tiling.prototype._updateAllTiles = function() {
 		}
 	} catch(err) {
 		print(err, "in Tiling._updateAllTiles");
+	}
+}
+
+Tiling.prototype.resizeScreen = function() {
+	// FIXME: Probable kwin bug: clientArea returns the _former_ area
+	var rect = Tiling.getTilingArea(this.screen, this.desktop);
+	if (rect.x != this.screenRectangle.x ||
+		rect.y != this.screenRectangle.y ||
+		rect.width != this.screenRectangle.width ||
+		rect.height != this.screenRectangle.height) {
+		this.layout.screenRectangle.x = this.screenRectangle.x;
+		this.layout.screenRectangle.y = this.screenRectangle.y;
+		this.layout.screenRectangle.width = this.screenRectangle.width;
+		this.layout.screenRectangle.height = this.screenRectangle.height;
+		this.layout.setLayoutArea(rect);
+		this.screenRectangle = rect;
 	}
 }
