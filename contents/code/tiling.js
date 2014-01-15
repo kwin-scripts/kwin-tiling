@@ -279,6 +279,28 @@ Tiling.prototype._updateAllTiles = function() {
 	}
 }
 
+Tiling.prototype.resizeMaster = function(geometry) {
+	try {
+		if (this.layout.master > -1) {
+			print("resizeMaster", geometry.x, geometry.y, geometry.width, geometry.height);
+			this.layout.resizeTile(this.layout.master, geometry);
+			this._updateAllTiles();
+			print("New width:", this.tiles[this.layout.master].rectangle.width);
+		} else {
+			print("No master");
+		}
+	} catch(err) {
+	}
+}
+
+Tiling.prototype.getMaster = function() {
+	if (this.layout.master > -1) {
+		return this.tiles[this.layout.master];
+	} else {
+		return null;
+	}
+}
+
 Tiling.prototype.resizeScreen = function() {
 	// FIXME: Probable kwin bug: clientArea returns the _former_ area
 	var rect = Tiling.getTilingArea(this.screen, this.desktop);
