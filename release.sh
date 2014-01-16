@@ -1,2 +1,2 @@
 #!/bin/sh
-zip -r ./tiling.kwinscript . -x ".git/*" "*.org" "*.kwinscript" "*.sh"
+git archive --format=zip -o tiling.kwinscript ${1:-master}
