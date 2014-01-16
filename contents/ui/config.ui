@@ -55,6 +55,9 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="QSpinBox" name="kcfg_gapSize"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>

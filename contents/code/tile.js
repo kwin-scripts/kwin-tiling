@@ -95,6 +95,8 @@ function Tile(firstClient, tileIndex) {
 		this.rectangle = null;
 
 		this.syncCustomProperties();
+
+		this.gapSize = readConfig("gapSize", 0);
 	} catch(err) {
 		print(err, "in Tile");
 	}
@@ -223,17 +225,17 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 			return;
 		}
 		if (this.rectangle != null) {
-			if (client.geometry.x != this.rectangle.x ||
-				client.geometry.y != this.rectangle.y ||
-				client.geometry.width != this.rectangle.width ||
-				client.geometry.height != this.rectangle.height) {
+			if (client.geometry.x != (this.rectangle.x - this.gapSize) ||
+				client.geometry.y != (this.rectangle.y - this.gapSize) ||
+				client.geometry.width != (this.rectangle.width - 2*this.gapSize) ||
+				client.geometry.height != (this.rectangle.height - 2*this.gapSize) ) {
 				client.tiling_resize = true;
 				// HACK: Resize the client to null - this makes kwin recreate the pixmap
 				client.geometry = null;
-				client.geometry = Qt.rect(this.rectangle.x,
-										  this.rectangle.y,
-										  this.rectangle.width,
-										  this.rectangle.height);
+				client.geometry = Qt.rect(this.rectangle.x + this.gapSize,
+										  this.rectangle.y + this.gapSize,
+										  this.rectangle.width - (this.gapSize * 2),
+										  this.rectangle.height - (this.gapSize * 2));
 				client.tiling_resize = false;
 			}
 		} else {
