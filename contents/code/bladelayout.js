@@ -98,7 +98,10 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
 		this.tiles.splice(tileIndex, 1);
 		// Update the other tiles
 		if (this.tiles.length == 1) {
-			this.tiles[0].rectangle = this.screenRectangle;
+			this.tiles[0].rectangle = Qt.rect(this.screenRectangle.x,
+											  this.screenRectangle.y,
+											  this.screenRectangle.width,
+											  this.screenRectangle.height);
 			this.tiles[0].hasDirectNeighbour[Direction.Left] = false;
 			this.tiles[0].hasDirectNeighbour[Direction.Right] = false;
 		}
