@@ -21,5 +21,9 @@
 		  <label>The layout configuration in "desktop:layoutname" format, separated with commas. Negative desktop denotes disabled tiling by default</label>
 		  <default></default>
 		</entry>
+		<entry name="userActive" type="bool">
+		  <label>Whether tiling is active by default</label>
+		  <default>true</default>
+		</entry>
     </group>
 </kcfg>

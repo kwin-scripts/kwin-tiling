@@ -91,6 +91,11 @@ function TilingManager() {
      * The screen where the current window move operation started.
      */
     this._movingStartScreen = 0;
+	/**
+	 * Whether tiling is active on all desktops
+	 * This is overridden by per-desktop settings
+	 */
+	this.userActive = readConfig("userActive", true);
 	
 	// Read layout configuration
 	// Format: desktop:layoutname[,...]
@@ -388,17 +393,21 @@ function TilingManager() {
 TilingManager.prototype._createDefaultLayouts = function(desktop) {
     var screenLayouts = [];
 	var layout = this.defaultLayout;
-	var tiling = true;
+	var tiling = false;
+	var userConfig = false;
 	for (var i = 0; i < this.layoutConfig.length; i++) {
 		if (this.layoutConfig[i].desktop == desktop) {
+			userConfig = true;
 			layout = this.layoutConfig[i].layout;
-			tiling = this.layoutConfig[i].tiling;
+			var tiling = this.layoutConfig[i].tiling;
 			this.layoutConfig.splice(i,1);
 		}
 	}
     for (var j = 0; j < this.screenCount; j++) {
         screenLayouts[j] = new Tiling(layout, desktop, j);
-		screenLayouts[j].userActive = tiling;
+		// Either the default is to tile and the desktop hasn't been configured,
+		// or the desktop has been set to tile (in which case the default is irrelevant)
+		screenLayouts[j].userActive = (this.userActive == true && userConfig == false) || (tiling == true);
     }
     this.layouts[desktop] = screenLayouts;
 };

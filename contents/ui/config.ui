@@ -35,6 +35,13 @@
     <widget class="QLineEdit" name="kcfg_layouts"/>
    </item>
    <item>
+    <widget class="QCheckBox" name="kcfg_userActive">
+     <property name="text">
+      <string>Tiling Enabled</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="kcfg_noBorder">
      <property name="text">
       <string>No Borders</string>
