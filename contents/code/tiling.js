@@ -47,6 +47,8 @@ function Tiling(layoutType, desktop, screen) {
 		 */
 		this.active = false;
 		this.userActive = true;
+
+		this.gapSize = readConfig("gapSize", 0);
 	} catch(err) {
 		print(err, "in Tiling");
 	}
@@ -271,7 +273,27 @@ Tiling.prototype._updateAllTiles = function() {
 				if (! newRect) {
 					return;
 				}
-				this.tiles[i].setGeometry(newRect);
+				var geometry = Qt.rect(newRect.x + this.gapSize,
+									   newRect.y + this.gapSize,
+									   newRect.width - (this.gapSize * 2),
+									   newRect.height - (this.gapSize * 2));
+				if (geometry.x < this.screenRectangle.x || 
+					geometry.x == this.screenRectangle.x + this.gapSize) {
+					geometry.x = this.screenRectangle.x;
+					geometry.width = geometry.width + this.gapSize;
+				}
+				if (geometry.x + geometry.width + this.gapSize * 2 >= this.screenRectangle.x + this.screenRectangle.width) {
+					geometry.width = this.screenRectangle.x + this.screenRectangle.width - geometry.x;
+				}
+				if (geometry.y < this.screenRectangle.y 
+					|| geometry.y == this.screenRectangle.y + this.gapSize) {
+					geometry.y = this.screenRectangle.y;
+					geometry.height = geometry.height + this.gapSize;
+				}
+				if (geometry.y + geometry.height + this.gapSize * 2 >= this.screenRectangle.y + this.screenRectangle.height) {
+					geometry.height = this.screenRectangle.y + this.screenRectangle.height - geometry.y;
+				}
+				this.tiles[i].setGeometry(geometry);
 			}
 		}
 	} catch(err) {

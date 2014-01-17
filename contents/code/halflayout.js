@@ -198,10 +198,7 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 				// This assumes that the left and right window edge can't change at the same time
 				if (rectangle.x != oldRect.x) {
 					rectangle.x = this.screenRectangle.x;
-					// HACK: To support resizing in gapped mode,
-					// we hereby introduce weird (but not stupid) behavior
-					// when resizing master from the left
-					//rectangle.width = oldRect.width;
+					rectangle.width = oldRect.width;
 				}
 			}
 		}
