@@ -51,10 +51,13 @@
    This could just be another layout
 * TODO Report
 ** Bugs
-*** ClientArea doesn't update
+*** INPROGRESS ClientArea doesn't update
+	https://bugs.kde.org/show_bug.cgi?id=330099
 *** Pixmap issue
 *** no tabGroup
+	https://bugs.kde.org/show_bug.cgi?id=330100
 *** windowClosed's "deleted" not properly converted
+	https://bugs.kde.org/show_bug.cgi?id=330102
 ** Documentation
 *** ClientArea options
 *** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)
