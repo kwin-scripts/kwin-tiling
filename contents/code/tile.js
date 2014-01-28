@@ -112,15 +112,9 @@ Tile.prototype.setGeometry = function(geometry) {
 			return;
 		}
 		if (this.rectangle == null) {
-			this.rectangle = Qt.rect(geometry.x,
-									 geometry.y,
-									 geometry.width,
-									 geometry.height);
+			this.rectangle = util.copyRect(geometry);
 		} else {
-			this.rectangle.x = geometry.x;
-			this.rectangle.y = geometry.y;
-			this.rectangle.width = geometry.width;
-			this.rectangle.height = geometry.height;
+			util.setRect(this.rectangle, geometry);
 		}
 		for(i = 0; i < this.clients.length; i++) {
 			this.clients[i].tiling_MoveResize = false;
@@ -205,10 +199,7 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 			return;
 		}
 		if (this._moving || this._resizing) {
-			this.rectangle.x = client.geometry.x;
-			this.rectangle.y = client.geometry.y;
-			this.rectangle.width = client.geometry.width;
-			this.rectangle.height = client.geometry.height;
+			util.setRect(this.rectangle, client.geometry);
 			return;
 		}
 		if (client.resizeable != true) {
@@ -223,17 +214,11 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 			return;
 		}
 		if (this.rectangle != null) {
-			if (client.geometry.x != this.rectangle.x ||
-				client.geometry.y != this.rectangle.y ||
-				client.geometry.width != this.rectangle.width ||
-				client.geometry.height != this.rectangle.height) {
+			if (util.compareRect(this.rectangle, client.geometry) == false) {
 				client.tiling_resize = true;
 				// HACK: Resize the client to null - this makes kwin recreate the pixmap
 				client.geometry = null;
-				client.geometry = Qt.rect(this.rectangle.x,
-										  this.rectangle.y,
-										  this.rectangle.width,
-										  this.rectangle.height);
+				client.geometry = util.copyRect(this.rectangle);
 
 				client.tiling_resize = false;
 			}
@@ -318,10 +303,7 @@ Tile.prototype.addClient = function(client) {
 Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 	try {
 		var screenRect = workspace.clientArea(KWin.PlacementArea, this._currentScreen, this._currentDesktop);
-		var newRect = Qt.rect(this.rectangle.x,
-							  this.rectangle.y,
-							  this.rectangle.width,
-							  this.rectangle.height);
+		var newRect = util.copyRect(this.rectangle);
 		if (h) {
 			newRect.x = screenRect.x;
 			newRect.width = screenRect.width;
@@ -340,10 +322,7 @@ Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 				newRect.height = this.oldRect.height;
 			}
 		}
-		this.oldRect = Qt.rect(this.rectangle.x,
-							  this.rectangle.y,
-							  this.rectangle.width,
-							  this.rectangle.height);
+		this.oldRect = util.copyRect(this.rectangle);
 		this.setGeometry(newRect);
 	} catch(err) {
 		print(err, "in tile.onClientMaximizedStateChanged");

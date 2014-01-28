@@ -56,10 +56,7 @@ HalfLayout.prototype.addTile = function() {
 	try {
 		if (this.tiles.length == 0) {
 			// The first tile fills the whole screen
-			var rect = Qt.rect(this.screenRectangle.x,
-							   this.screenRectangle.y,
-							   this.screenRectangle.width,
-							   this.screenRectangle.height);
+			var rect = util.copyRect(this.screenRectangle);
 			this._createTile(rect);
 			return;
 		} 

@@ -27,6 +27,7 @@ Qt.include("halflayout.js");
 Qt.include("bladelayout.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
+Qt.include("util.js");
 
 
 /**

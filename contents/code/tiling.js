@@ -64,7 +64,7 @@ function Tiling(layoutType, desktop, screen) {
  */
 Tiling.getTilingArea = function(screen, desktop) {
 	var cA = workspace.clientArea(KWin.PlacementArea, screen, desktop);
-	return Qt.rect(cA.x, cA.y, cA.width, cA.height);
+	return util.copyRect(cA);
 };
 
 Tiling.prototype.setLayoutType = function(layoutType) {
@@ -323,10 +323,7 @@ Tiling.prototype.getMaster = function() {
 Tiling.prototype.resizeScreen = function() {
 	// FIXME: Probable kwin bug: clientArea returns the _former_ area
 	var rect = Tiling.getTilingArea(this.screen, this.desktop);
-	if (rect.x != this.screenRectangle.x ||
-		rect.y != this.screenRectangle.y ||
-		rect.width != this.screenRectangle.width ||
-		rect.height != this.screenRectangle.height) {
+	if (util.compareRect(rect,this.screenRectangle) == false) {
 		this.layout.screenRectangle.x = this.screenRectangle.x;
 		this.layout.screenRectangle.y = this.screenRectangle.y;
 		this.layout.screenRectangle.width = this.screenRectangle.width;
