@@ -68,7 +68,7 @@ BladeLayout.prototype.addTile = function() {
 			var lastRect = this.tiles[0].rectangle;
 			var newRect = Qt.rect(this.screenRectangle.x,
 								  lastRect.y,
-								  Math.floor((this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1)), 
+								  (this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1), 
 								  this.screenRectangle.height);
 			// FIXME: Try to keep ratio
 			for (var i = 0; i < this.tiles.length; i++) { 
@@ -104,7 +104,7 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
 			var lastRect = this.tiles[0].rectangle;
 			var newRect = Qt.rect(this.screenRectangle.x,
 								  this.screenRectangle.y,
-								  Math.floor(this.screenRectangle.width / tileCount),
+								  this.screenRectangle.width / tileCount,
 								  this.screenRectangle.height);
 			var lowest = 1;
 			for (var i = 0; i < this.tiles.length; i++) {
@@ -170,7 +170,7 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 		rectangle.height = this.screenRectangle.height;
 		var newRect = Qt.rect(this.screenRectangle.x,
 							  this.screenRectangle.y,
-							  Math.floor((rectangle.x - this.screenRectangle.x) / tileIndex),
+							  (rectangle.x - this.screenRectangle.x) / tileIndex,
 							  this.screenRectangle.height);
 		for(i = 0; i < tileIndex; i++) {
 			var rect = this.tiles[i].rectangle;

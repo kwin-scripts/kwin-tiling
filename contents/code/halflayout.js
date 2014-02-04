@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 function HalfLayout(screenRectangle) {
 	print("Creating HalfLayout");
     Layout.call(this, screenRectangle);
-	this.firstWidth = Math.floor(this.screenRectangle.width / 2);
+	this.firstWidth = this.screenRectangle.width / 2;
 	this.master = 0;
 }
 
@@ -63,10 +63,8 @@ HalfLayout.prototype.addTile = function() {
 		if (this.tiles.length == 1) {
 			// The second tile fills the right half of the screen
 			// Also, javascript sucks
-			var firstRect = Qt.rect(this.tiles[0].rectangle.x,
-									this.tiles[0].rectangle.y,
-									this.firstWidth,
-									this.tiles[0].rectangle.height);
+			var firstRect = util.copyRect(this.tiles[0].rectangle);
+			firstRect.width = this.firstWidth;
 			this.tiles[0].rectangle = firstRect;
 			var newRect = Qt.rect(firstRect.x + firstRect.width,
 								  firstRect.y,
@@ -81,7 +79,7 @@ HalfLayout.prototype.addTile = function() {
 			var newRect = Qt.rect(lastRect.x + lastRect.width,
 								  lastRect.y,
 								  this.screenRectangle.width - lastRect.width,
-								  Math.floor(lastRect.height / (this.tiles.length)));
+								  lastRect.height / (this.tiles.length));
 			newRect.y = newRect.y + newRect.height * (this.tiles.length - 1);
 			// FIXME: Try to keep ratio
 			for (var i = 1; i < this.tiles.length; i++) {
@@ -135,7 +133,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 			var newRect = Qt.rect(lastRect.width,
 								  lastRect.y,
 								  lastRect.width,
-								  Math.floor(lastRect.height / tileCount));
+								  lastRect.height / tileCount);
 			var lowest = 1;
 			for (var i = 1; i < this.tiles.length; i++) {
 				var rect = this.tiles[i].rectangle;
@@ -251,12 +249,12 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 			if (aboves.length == 0) {
 				var newHeightAbove = 0;
 			} else {
-				var newHeightAbove = Math.floor((rectangle.y - this.screenRectangle.y) / aboves.length);
+				var newHeightAbove = (rectangle.y - this.screenRectangle.y) / aboves.length;
 			}
 			if (belows.length == 0) {
 				var newHeightBelow = 0;
 			} else {
-				var newHeightBelow = Math.floor((this.screenRectangle.height - rectangle.height) / belows.length);
+				var newHeightBelow = (this.screenRectangle.height - rectangle.height) / belows.length;
 			}
 			if (belows.length > 0) {
 				for (var i = 0; i < belows.length; i++) {

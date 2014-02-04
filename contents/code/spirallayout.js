@@ -60,8 +60,8 @@ SpiralLayout.prototype.addTile = function() {
                               lastRect.width,
                               lastRect.height);
         var direction = this.tiles.length % 4;
-        var splitX = Math.floor(lastRect.width / 2);
-        var splitY = Math.floor(lastRect.height / 2);
+        var splitX = lastRect.width / 2;
+        var splitY = lastRect.height / 2;
         switch (direction) {
         case 0:
             lastRect.y = lastRect.y + splitY;
