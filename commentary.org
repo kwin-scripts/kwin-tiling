@@ -1,21 +1,9 @@
-* DONE Make rules for tiling
-** DONE HACK Ignore yakuake and menus/dialogs for tiling
-** DONE Add useractionsmenu
-** TODO Find a way to share rules updates
 * DONE Resize tiles
 ** TODO Hacked/partial for Spirallayout
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
-** DONE Windows can sometimes resize on their own (missing signal?)
-   FTR: Nothing was actually done on geometryChanged
-** DONE Tabgroup
-   Seems mostly working
-** DONE MinSize
-   This leads to graphics bugs
 ** TODO Resolution changes
    Almost possible, but clientArea returns the _old_ resolution
-** TODO FFM bug when unminimizing
-   Possibly related to keepAbove/keepBelow
 * DONE Avoid struts
   Almost finished, but doesn't directly react to changes
   Needs an additional kwin signal
@@ -32,8 +20,12 @@
 ** DONE Graphic issues
    e.g. Steam doesn't update properly after resize
 ** Better release process (i.e. don't just pack up git, TEST)
-* TODO Optimization
+* TODO Layouts
 ** TODO Refactor layouts to share more code
+   See [[https://github.com/copycat-killer/vain-again][vain]]
+   This uses a simple "arrange" function as the layout function
+** TODO More/better layouts
+** TODO Remove or improve SpiralLayout
 * TODO Crazy stuff
 ** Layout switcher
 ** Indicate layout/state (tiling on/off) somehow
@@ -47,17 +39,20 @@
 ** Switch to BSP/BinaryTree-based tiling
    This requires a rather large change, but should add flawless resizing without special code in the layouts
    and should make layouts much simpler to write
-** Add option to add some gaps between windows
+** DONE Add option to add some gaps between windows
    This could just be another layout
+** React on configuration change
+   Right now kwin restarts are needed every time the configuration is changed
 * TODO Report
 ** Bugs
 *** INPROGRESS ClientArea doesn't update
 	https://bugs.kde.org/show_bug.cgi?id=330099
 *** Pixmap issue
-*** no tabGroup
+*** INPROGRESS no tabGroup
 	https://bugs.kde.org/show_bug.cgi?id=330100
-*** windowClosed's "deleted" not properly converted
+*** INPROGRESS windowClosed's "deleted" not properly converted
 	https://bugs.kde.org/show_bug.cgi?id=330102
+*** Borders aren't raised properly
 ** Documentation
 *** ClientArea options
 *** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)
@@ -65,6 +60,7 @@
 *** Integration with rules
 *** Some way to draw small window borders
 	Outline doesn't work as it darkens the window and consumes mouse input
+	Effect?
 * TODO Document
 ** TODO A usage section
 ** TODO A goals section
