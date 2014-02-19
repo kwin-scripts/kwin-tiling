@@ -216,10 +216,7 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (this.rectangle != null) {
 			if (util.compareRect(this.rectangle, client.geometry) == false) {
 				client.tiling_resize = true;
-				// HACK: Resize the client to null - this makes kwin recreate the pixmap
-				client.geometry = null;
 				client.geometry = util.copyRect(this.rectangle);
-
 				client.tiling_resize = false;
 			}
 		} else {
