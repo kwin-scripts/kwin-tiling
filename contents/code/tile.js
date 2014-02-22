@@ -216,10 +216,17 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (this.rectangle != null) {
 			if (util.compareRect(this.rectangle, client.geometry) == false) {
 				client.tiling_resize = true;
-				// HACK: Resize the client to null - this makes kwin recreate the pixmap
-				client.geometry = null;
+				// HACK: Pixmaps may become corrupted if we violate min/maxSize twice in a row
+				if (client.minSize.w > this.rectangle.width ||
+					client.minSize.h > this.rectangle.height ||
+					client.maxSize.w < this.rectangle.width ||
+					client.maxSize.h < this.rectangle.height) {
+					client.geometry = Qt.rect(client.geometry.x,
+											  client.geometry.y,
+											  client.minSize.w,
+											  client.minSize.h);
+				}
 				client.geometry = util.copyRect(this.rectangle);
-
 				client.tiling_resize = false;
 			}
 		} else {
