@@ -16,6 +16,9 @@ util.setRect = function(rect1,rect2) {
 
 // Returns true if rects are equal, false if not
 util.compareRect = function(rect1,rect2) {
+	if (rect1 == null || rect2 == null) {
+		return rect1 == rect2;
+	}
 	return rect1.x == rect2.x &&
 		rect1.y == rect2.y    &&
 		rect1.width == rect2.width &&
