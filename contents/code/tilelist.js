@@ -3,6 +3,7 @@
  This file is part of the KDE project.
 
 Copyright (C) 2012 Mathias Gottschlag <mgottschlag@gmail.com>
+Copyright (C) 2013-2014 Fabian Homborg <FHomborg@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -47,7 +48,7 @@ function TileList() {
     // We connect to the global workspace callbacks which are triggered when
     // clients are added in order to be able to keep track of the
     // new tiles
-	// Do not connect to clientRemoved as that is called after FFM selects a new active client
+	// Do not use clientRemoved as it is called after FFM selects a new active client
 	// Instead, connect to client.windowClosed
     var self = this;
     workspace.clientAdded.connect(function(client) {
@@ -67,6 +68,9 @@ function TileList() {
     });
 }
 
+/*
+ * Connect all signals for a client we need
+ */
 TileList.prototype.connectSignals = function(client) {
 	if (TileList._isIgnored(client)) {
 		return;

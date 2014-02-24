@@ -3,7 +3,7 @@
  This file is part of the KDE project.
 
 Copyright (C) 2012 Mathias Gottschlag <mgottschlag@gmail.com>
-Copyright (C) 2013 Fabian Homborg <fhomborg@gmail.com>
+Copyright (C) 2013-2014 Fabian Homborg <FHomborg@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
