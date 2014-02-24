@@ -203,11 +203,9 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 			return;
 		}
 		if (client.resizeable != true) {
-			print("Client", client.resourceClass.toString(), "not resizeable");
 			return;
 		}
 		if (client.moveable != true) {
-			print("Client", client.resourceClass.toString(), "not moveable");
 			return;
 		}
 		if (client.tiling_resize == true) {

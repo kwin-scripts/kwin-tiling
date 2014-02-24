@@ -328,7 +328,7 @@ TileList.prototype._removeTile = function(tileIndex) {
 TileList._isIgnored = function(client) {
 	// TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
     // Application workarounds should be put here
-	// Qt gives us a method-less QVariant(QStringList) if we ask for an array
+	// HACK: Qt gives us a method-less QVariant(QStringList) if we ask for an array
 	// Ask for a string instead (which can and should still be a StringList for the UI)
 	var fl = "yakuake,krunner,Plasma,Plasma-desktop,plasma-desktop,Plugin-container,plugin-container,Wine";
 	// TODO: This could break if an entry contains whitespace or a comma - it needs to be validated on the qt side

@@ -19,7 +19,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
-// FIXME: Crash on moving client to another desktop
 /**
  * Class which arranges the windows in a spiral with the largest window filling
  * the left half of the screen.
@@ -64,7 +63,6 @@ BladeLayout.prototype.addTile = function() {
 			return;
 		} else {
 			// Divide the screen width evenly between full-height tiles
-			// FIXME: Screenrectangle for struts is weird
 			var lastRect = this.tiles[0].rectangle;
 			var newRect = Qt.rect(this.screenRectangle.x,
 								  lastRect.y,
