@@ -28,7 +28,7 @@
 
    plasmapkg --type kwinscript -i .
 
-** Things that are not working properly yet:
+** Known Issues:
    Activities aren't handled at all
 
    BUUUGS
