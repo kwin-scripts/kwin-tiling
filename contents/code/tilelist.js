@@ -203,7 +203,22 @@ TileList.prototype.addClient = function(client) {
 
 	// Check whether the client is part of an existing tile
 	if (this._indexWithClient(client) == -1) {
-        this._addTile(client);
+		// If the client isn't the current tab, it's added to a tabgroup
+		// (because of autogrouping)
+		// HACK: Find it by comparing rectangles (yes, really)
+		if (client.isCurrentTab == false) {
+			for (var i = 0; i < this.tiles.length; i++) {
+				if (util.compareRect(this.tiles[i].rectangle, client.geometry) == true) {
+					if (this.tiles[i]._currentDesktop == client.desktop &&
+						this.tiles[i]._currentScreen  == client.screen) {
+						this.tiles[i].addClient(client);
+						break;
+					}
+				}
+			}
+		} else {
+			this._addTile(client);
+		}
 	}
 	client.tiling_floating = false;
 };
