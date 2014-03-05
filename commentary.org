@@ -53,6 +53,8 @@
 *** INPROGRESS windowClosed's "deleted" not properly converted
 	https://bugs.kde.org/show_bug.cgi?id=330102
 *** Borders aren't raised properly
+*** KWin maximizes windows automatically on certain conditions
+	What are those?
 ** Documentation
 *** ClientArea options
 *** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)
@@ -61,6 +63,7 @@
 *** Some way to draw small window borders
 	Outline doesn't work as it darkens the window and consumes mouse input
 	Effect?
+*** Handle maximize like minimize in the scripting API
 * TODO Document
 ** TODO A usage section
 ** TODO A goals section
