@@ -285,16 +285,16 @@ Tile.prototype.onClientStartUserMovedResized = function(client) {
 Tile.prototype.onClientStepUserMovedResized = function(client) {
 	try {
 		if (client.resize) {
+			this._resizing = true;
 			this.resizingStep.emit();
 			// This means it gets animated
 			this.resizingEnded.emit();
-			this._resizing = true;
 			return;
 		}
 		if (client.move) {
+			this._moving = true;
 			this.movingStep.emit();
 			this.movingEnded.emit();
-			this._moving = true;
 			return;
 		}
 	} catch(err) {
