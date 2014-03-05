@@ -65,6 +65,12 @@ function TileList() {
 			self._onClientAdded(client);
 		});
     });
+    workspace.clientMaximizeSet.connect(function(client, h, v) {
+		var tile = self.getTile(client);
+		if (tile != null) {
+			tile.onClientMaximizedStateChanged(client, h, v);
+		}
+	});
 }
 
 TileList.prototype.connectSignals = function(client) {
@@ -136,13 +142,6 @@ TileList.prototype.connectSignals = function(client) {
 			tile.onClientFinishUserMovedResized(client);
 		}
     });
-    client['clientMaximizedStateChanged(KWin::Client*,bool,bool)'].connect(
-        function(client, h, v) {
-			var tile = getTile(client);
-			if (tile != null) {
-				tile.onClientMaximizedStateChanged(client, h, v);
-			}
-		});
     client.desktopChanged.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
