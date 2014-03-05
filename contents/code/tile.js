@@ -214,17 +214,46 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 		if (this.rectangle != null) {
 			if (util.compareRect(this.rectangle, client.geometry) == false) {
 				client.tiling_resize = true;
-				// HACK: Pixmaps may become corrupted if we violate min/maxSize twice in a row
-				if (client.minSize.w > this.rectangle.width ||
-					client.minSize.h > this.rectangle.height ||
-					client.maxSize.w < this.rectangle.width ||
-					client.maxSize.h < this.rectangle.height) {
-					client.geometry = Qt.rect(client.geometry.x,
-											  client.geometry.y,
-											  client.minSize.w,
-											  client.minSize.h);
+				// Respects min/maxSize
+				var changedRect = false;
+				// Small layering violation for the greater good (for now)
+				var screenRect = workspace.clientArea(KWin.PlacementArea, this._currentScreen, this._currentDesktop);
+				if (client.minSize.w > this.rectangle.width) {
+					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
+						this.rectangle.x = (screenRect.x + screenRect.width) - client.minSize.w;
+					}
+					this.rectangle.width = client.minSize.w;
+					changedRect = true;
+				}
+				if (client.minSize.h > this.rectangle.height) {
+					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
+						this.rectangle.y = (screenRect.y + screenRect.height) - client.minSize.h;
+					}
+					this.rectangle.height = client.minSize.h;
+					changedRect = true;
+				}
+				if (client.maxSize.w < this.rectangle.width) {
+					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
+						this.rectangle.x = (screenRect.x + screenRect.width) - client.maxSize.w;
+					}
+					this.rectangle.width = client.maxSize.w;
+					changedRect = true;
+				}
+				if (client.maxSize.h < this.rectangle.height) {
+					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
+						this.rectangle.y = (screenRect.y + screenRect.height) - client.maxSize.h;
+					}
+					this.rectangle.height = client.maxSize.h;
+					changedRect = true;
 				}
 				client.geometry = util.copyRect(this.rectangle);
+
+				if (changedRect == true) {
+					this._resizing = true;
+					this.resizingEnded.emit();
+					this._resizing = false;
+				}
+
 				client.tiling_resize = false;
 			}
 		} else {
@@ -254,16 +283,16 @@ Tile.prototype.onClientStartUserMovedResized = function(client) {
 Tile.prototype.onClientStepUserMovedResized = function(client) {
 	try {
 		if (client.resize) {
+			this._resizing = true;
 			this.resizingStep.emit();
 			// This means it gets animated
 			this.resizingEnded.emit();
-			this._resizing = true;
 			return;
 		}
 		if (client.move) {
+			this._moving = true;
 			this.movingStep.emit();
 			this.movingEnded.emit();
-			this._moving = true;
 			return;
 		}
 	} catch(err) {

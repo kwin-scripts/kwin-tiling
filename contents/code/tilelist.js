@@ -66,6 +66,12 @@ function TileList() {
 			self._onClientAdded(client);
 		});
     });
+    workspace.clientMaximizeSet.connect(function(client, h, v) {
+		var tile = self.getTile(client);
+		if (tile != null) {
+			tile.onClientMaximizedStateChanged(client, h, v);
+		}
+	});
 }
 
 /*
@@ -140,13 +146,6 @@ TileList.prototype.connectSignals = function(client) {
 			tile.onClientFinishUserMovedResized(client);
 		}
     });
-    client['clientMaximizedStateChanged(KWin::Client*,bool,bool)'].connect(
-        function(client, h, v) {
-			var tile = getTile(client);
-			if (tile != null) {
-				tile.onClientMaximizedStateChanged(client, h, v);
-			}
-		});
     client.desktopChanged.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
@@ -207,7 +206,22 @@ TileList.prototype.addClient = function(client) {
 
 	// Check whether the client is part of an existing tile
 	if (this._indexWithClient(client) == -1) {
-        this._addTile(client);
+		// If the client isn't the current tab, it's added to a tabgroup
+		// (because of autogrouping)
+		// HACK: Find it by comparing rectangles (yes, really)
+		if (client.isCurrentTab == false) {
+			for (var i = 0; i < this.tiles.length; i++) {
+				if (util.compareRect(this.tiles[i].rectangle, client.geometry) == true) {
+					if (this.tiles[i]._currentDesktop == client.desktop &&
+						this.tiles[i]._currentScreen  == client.screen) {
+						this.tiles[i].addClient(client);
+						break;
+					}
+				}
+			}
+		} else {
+			this._addTile(client);
+		}
 	}
 	client.tiling_floating = false;
 };
@@ -267,7 +281,7 @@ TileList.prototype._onClientTabGroupChanged = function(client) {
 			for (var i = 0; i < this.tiles.length; i++) {
 				// We don't set geometry if the client isn't currentTab, so find its tabgroup by place
 				var rect  = this.tiles[i].rectangle;
-				if (util.compareRect(rect, client.geometry) == false) {
+				if (util.compareRect(rect, client.geometry) == true) {
 					// TODO: Is this necessary or is desktopChanged always called before tabgroupchanged?
 					if (this.tiles[i]._currentDesktop == client.desktop || client.desktop == -1) {
 						tabGroup = this.tiles[i];
