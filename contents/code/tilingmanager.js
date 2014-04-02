@@ -317,10 +317,10 @@ function TilingManager() {
 						 try {
 							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
 							 // Qt.rect automatically clamps negative values to zero
-							 geom = Qt.rect(tile.rectangle.x - 10,
-											tile.rectangle.y,
-											tile.rectangle.width - 10,
-											tile.rectangle.height);
+							 geom = new Qt.rect(tile.rectangle.x - 10,
+												tile.rectangle.y,
+												tile.rectangle.width - 10,
+												tile.rectangle.height);
 							 if (geom.x < 0) {
 								 geom.x = 0;
 							 }
@@ -336,10 +336,10 @@ function TilingManager() {
 						 try {
 							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
 							 // Qt.rect automatically clamps negative values to zero
-							 geom = Qt.rect(tile.rectangle.x,
-											tile.rectangle.y,
-											tile.rectangle.width + 10,
-											tile.rectangle.height);
+							 geom = new Qt.rect(tile.rectangle.x,
+												tile.rectangle.y,
+												tile.rectangle.width + 10,
+												tile.rectangle.height);
 							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");
@@ -352,10 +352,10 @@ function TilingManager() {
 						 try {
 							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
 							 // Qt.rect automatically clamps negative values to zero
-							 geom = Qt.rect(tile.rectangle.x,
-											tile.rectangle.y - 10,
-											tile.rectangle.width,
-											tile.rectangle.height + 10);
+							 geom = new Qt.rect(tile.rectangle.x,
+												tile.rectangle.y - 10,
+												tile.rectangle.width,
+												tile.rectangle.height + 10);
 							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");
@@ -368,10 +368,10 @@ function TilingManager() {
 						 try {
 							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
 							 // Qt.rect automatically clamps negative values to zero
-							 geom = Qt.rect(tile.rectangle.x,
-											tile.rectangle.y,
-											tile.rectangle.width,
-											tile.rectangle.height - 10);
+							 geom = new Qt.rect(tile.rectangle.x,
+												tile.rectangle.y,
+												tile.rectangle.width,
+												tile.rectangle.height - 10);
 							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");

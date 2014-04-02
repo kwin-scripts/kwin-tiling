@@ -64,7 +64,7 @@ HalfLayout.prototype.addTile = function() {
 			var firstRect = util.copyRect(this.tiles[0].rectangle);
 			firstRect.width = this.firstWidth;
 			this.tiles[0].rectangle = firstRect;
-			var newRect = Qt.rect(firstRect.x + firstRect.width,
+			var newRect = new Qt.rect(firstRect.x + firstRect.width,
 								  firstRect.y,
 								  this.screenRectangle.width - firstRect.width,
 								  firstRect.height)
@@ -74,7 +74,7 @@ HalfLayout.prototype.addTile = function() {
 		if (this.tiles.length > 1) {
 			// Every other tile separates the right half
 			var lastRect = this.tiles[0].rectangle;
-			var newRect = Qt.rect(lastRect.x + lastRect.width,
+			var newRect = new Qt.rect(lastRect.x + lastRect.width,
 								  lastRect.y,
 								  this.screenRectangle.width - lastRect.width,
 								  lastRect.height / (this.tiles.length));
@@ -128,7 +128,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 			}
 			var tileCount = this.tiles.length - 1;
 			var lastRect = this.tiles[0].rectangle;
-			var newRect = Qt.rect(lastRect.width,
+			var newRect = new Qt.rect(lastRect.width,
 								  lastRect.y,
 								  lastRect.width,
 								  lastRect.height / tileCount);

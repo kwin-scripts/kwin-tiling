@@ -20,10 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 var util = {};
 util.copyRect = function(rect) {
-	return Qt.rect(rect.x,
-				   rect.y,
-				   rect.width,
-				   rect.height);
+	return new Qt.rect(rect.x,
+					   rect.y,
+					   rect.width,
+					   rect.height);
 }
 
 // Sets rect1 to rect2 by value
@@ -52,7 +52,7 @@ util.intersectRect = function(rect1, rect2) {
 		rect2.y + rect2.height < rect1.y) {
 		return null; // No intersection
 	}
-	var newRect = Qt.rect(0,0,0,0);
+	var newRect = new Qt.rect(0,0,0,0);
 	newRect.x = Math.max(rect1.x, rect2.x);
 	newRect.y = Math.max(rect1.y, rect2.y);
 	newRect.width = (Math.min(rect1.x + rect1.width, rect2.x + rect2.width) - newRect.x);
