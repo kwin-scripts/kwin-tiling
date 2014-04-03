@@ -116,7 +116,7 @@ Tile.prototype.setGeometry = function(geometry) {
 		} else {
 			util.setRect(this.rectangle, geometry);
 		}
-		for(i = 0; i < this.clients.length; i++) {
+		for (var i = 0; i < this.clients.length; i++) {
 			this.clients[i].tiling_MoveResize = false;
 			this.onClientGeometryChanged(this.clients[i]);
 		}

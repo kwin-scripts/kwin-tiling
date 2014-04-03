@@ -170,7 +170,7 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 							  this.screenRectangle.y,
 							  (rectangle.x - this.screenRectangle.x) / tileIndex,
 							  this.screenRectangle.height);
-		for(i = 0; i < tileIndex; i++) {
+		for (var i = 0; i < tileIndex; i++) {
 			var rect = this.tiles[i].rectangle;
 			rect.x = newRect.x + newRect.width * i;
 			rect.width = newRect.width;
@@ -181,7 +181,7 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 		newRect.width = ((this.screenRectangle.width + this.screenRectangle.x)
 									- (rectangle.x + rectangle.width)) 
 								   / (this.tiles.length - (tileIndex + 1));
-		for(i = tileIndex + 1; i < this.tiles.length; i++){
+		for (var i = tileIndex + 1; i < this.tiles.length; i++){
 			var rect = this.tiles[i].rectangle;
 			rect.x = (rectangle.x + rectangle.width) + (i - tileIndex - 1) * newRect.width;
 			rect.width = newRect.width;

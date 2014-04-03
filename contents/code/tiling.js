@@ -71,7 +71,7 @@ Tiling.getTilingArea = function(screen, desktop) {
 Tiling.prototype.setLayoutType = function(layoutType) {
 	try {
 		var newLayout = new layoutType(this.layout.screenRectangle);
-		for(i = 0; i < this.layout.tiles.length; i++) {
+		for (var i = 0; i < this.layout.tiles.length; i++) {
 			newLayout.addTile();
 			this.layout.tiles[i].tileIndex = i;
 		}
@@ -125,7 +125,7 @@ Tiling.prototype.removeTile = function(tile) {
 			this.tiles.splice(tileIndex, 1);
 			this.layout.removeTile(tileIndex);
 			// Correct tileIndex
-			for(i = 0; i < this.tiles.length; i++) {
+			for (var i = 0; i < this.tiles.length; i++) {
 				this.tiles[i].tileIndex = i;
 				this.tiles[i].syncCustomProperties();
 			}
