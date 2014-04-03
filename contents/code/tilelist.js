@@ -59,12 +59,16 @@ function TileList() {
 			return;
 		}
 		
-		// Delay adding until the window is actually shown
+		// Delay adding until the window is actually shown when compositing
 		// This prevents (some, but not all) graphics bugs
 		// due to resizing before the pixmap is created (or something like that)
-		client.windowShown.connect(function() {
+		if (KWin.useCompositing == true) {
+			client.windowShown.connect(function() {
+				self._onClientAdded(client);
+			});
+		} else {
 			self._onClientAdded(client);
-		});
+		}
     });
     workspace.clientMaximizeSet.connect(function(client, h, v) {
 		var tile = self.getTile(client);
