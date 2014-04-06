@@ -277,7 +277,7 @@ Tiling.prototype.resizeTile = function(tile){
 Tiling.prototype._updateAllTiles = function() {
 	try {
 		// Set the position/size of all tiles
-		if (this.active == true) {
+		if (this.active == true && this.userActive == true) {
 			this.resizeScreen();
 			for (var i = 0; i < this.layout.tiles.length; i++) {
 				var newRect = this.layout.tiles[i].rectangle;
