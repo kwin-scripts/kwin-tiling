@@ -291,6 +291,14 @@ function TilingManager() {
 						 var currentDesktop = workspace.currentDesktop - 1;
 						 self.layouts[currentDesktop][currentScreen].toggleUserActive();
 					 });
+	registerShortcut("Tile now",
+					 "Tile now",
+					 "Meta+t",
+					 function() {
+						 var currentScreen = workspace.activeScreen;
+						 var currentDesktop = workspace.currentDesktop - 1;
+						 self.layouts[currentDesktop][currentScreen].tile();
+					 });
 	registerShortcut("Swap Window With Master",
 					 "Swap Window With Master",
 					 "Meta+Shift+M",

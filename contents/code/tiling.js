@@ -334,3 +334,9 @@ Tiling.prototype.resizeScreen = function() {
 		this.screenRectangle = rect;
 	}
 }
+
+Tiling.prototype.tile = function() {
+	this.tiles.forEach(function(tile) {
+		tile.setAllClientGeometries();
+	});
+}
