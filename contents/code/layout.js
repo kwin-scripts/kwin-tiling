@@ -45,7 +45,7 @@ function Layout(screenRectangle) {
 	} catch(err) {
 		print(err, "in Layout");
 	}
-}
+};
 
 Layout.prototype.setLayoutArea = function(newArea) {
 	try {
@@ -86,4 +86,4 @@ Layout.prototype.setLayoutArea = function(newArea) {
 	} catch(err) {
 		print(err, "in Layout.setLayoutArea");
 	}
-}
+};

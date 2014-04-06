@@ -98,7 +98,7 @@ function Tile(firstClient, tileIndex) {
 	} catch(err) {
 		print(err, "in Tile");
 	}
-}
+};
 
 /**
  * Sets the geometry of the tile. geometryChanged events caused by this function
@@ -170,14 +170,14 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 	if (readConfig("manualMode", false) == false) {
 		this.setClientGeometry(client);
 	}
-}
+};
 
 Tile.prototype.setAllClientGeometries = function() {
 	var self = this;
 	this.clients.forEach(function(client) {
 		self.setClientGeometry(client);
 	});
-}
+};
 
 Tile.prototype.setClientGeometry = function(client) {
 	try {
@@ -333,7 +333,7 @@ Tile.prototype.removeClient = function(client) {
 	} catch(err) {
 		print(err, "in Tile.removeClient");
 	}
-}
+};
 
 Tile.prototype.addClient = function(client) {
 	try {
@@ -345,7 +345,7 @@ Tile.prototype.addClient = function(client) {
 	} catch(err) {
 		print(err, "in Tile.addClient");
 	}
-}
+};
 
 Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 	try {
@@ -374,9 +374,9 @@ Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 	} catch(err) {
 		print(err, "in tile.onClientMaximizedStateChanged");
 	}
-}
+};
 
 Tile.prototype.hasClient = function(client) {
 	return (this.clients.indexOf(client) > -1);
-}
+};
 

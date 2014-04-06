@@ -76,7 +76,7 @@ function TileList() {
 			tile.onClientMaximizedStateChanged(client, h, v);
 		}
 	});
-}
+};
 
 /*
  * Connect all signals for a client we need

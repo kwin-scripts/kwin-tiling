@@ -32,7 +32,7 @@ function BladeLayout(screenRectangle) {
 		print(err, "in BladeLayout");
 	}
 	this.master = 0;
-}
+};
 
 BladeLayout.name = "Blade";
 // TODO: Add an image for the layout switcher
@@ -52,7 +52,7 @@ BladeLayout.prototype.resetTileSizes = function() {
 	} catch(err) {
 		print(err, "in BladeLayout.resetTileSizes");
 	}
-}
+};
 
 BladeLayout.prototype.addTile = function() {
 	try {
@@ -84,7 +84,7 @@ BladeLayout.prototype.addTile = function() {
 	} catch(err) {
 		print(err, "in BladeLayout.addTile");
 	}
-}
+};
 
 BladeLayout.prototype.removeTile = function(tileIndex) {
 	try {
@@ -121,7 +121,7 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
 	} catch(err) {
 		print(err, "in BladeLayout.removeTile");
 	}
-}
+};
 
 BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 	try {
@@ -193,7 +193,7 @@ BladeLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 	} catch(err) {
 		print(err, "in BladeLayout.resizeTile");
 	}
-}
+};
 
 BladeLayout.prototype._createTile = function(rect) {
 	try {
@@ -221,4 +221,4 @@ BladeLayout.prototype._createTile = function(rect) {
 	} catch(err) {
 		print(err, "in BladeLayout._createTile");
 	}
-}
+};

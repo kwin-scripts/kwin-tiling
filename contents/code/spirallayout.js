@@ -27,7 +27,7 @@ function SpiralLayout(screenRectangle) {
     Layout.call(this, screenRectangle);
     // TODO
 	print("Creating SpiralLayout");
-}
+};
 
 SpiralLayout.name = "Spiral";
 // TODO: Add an image for the layout switcher
@@ -43,7 +43,7 @@ SpiralLayout.prototype.resetTileSizes = function() {
     for (var i = 0; i < tileCount; i++) {
         this.addTile();
     }
-}
+};
 
 SpiralLayout.prototype.addTile = function() {
     if (this.tiles.length == 0) {
@@ -89,7 +89,7 @@ SpiralLayout.prototype.addTile = function() {
         this._createTile(newRect);
     }
     //var lastRect = this.tiles[this.tiles.length - 1].rectangle;
-}
+};
 
 SpiralLayout.prototype.removeTile = function(tileIndex) {
     // Increase the size of the last tile
@@ -117,7 +117,7 @@ SpiralLayout.prototype.removeTile = function(tileIndex) {
         lastTile.neighbours[Direction.Down] = 0;
         lastTile.hasDirectNeighbour[Direction.Down] = false;
     }
-}
+};
 
 SpiralLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 	if (tileIndex < 0 || tileIndex > this.tiles.length) {
@@ -168,7 +168,7 @@ SpiralLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 	} else {
 		// FIXME: This is _hard_.
 	}
-}
+};
 
 SpiralLayout.prototype._createTile = function(rect) {
     // Update the last tile in the list
@@ -194,4 +194,4 @@ SpiralLayout.prototype._createTile = function(rect) {
     // Update the first tile
     this.tiles[0].neighbours[Direction.Up] = this.tiles.length - 1;
     this.tiles[0].hasDirectNeighbour[Direction.Up] = false;
-}
+};

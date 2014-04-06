@@ -53,7 +53,7 @@ function Tiling(layoutType, desktop, screen) {
 	} catch(err) {
 		print(err, "in Tiling");
 	}
-}
+};
 
 /**
  * Utility function which returns the area on the selected screen/desktop which
@@ -82,7 +82,7 @@ Tiling.prototype.setLayoutType = function(layoutType) {
 	} catch(err) {
 		print(err, "in Tiling.setLayoutType");
 	}
-}
+};
 
 Tiling.prototype.addTile = function(tile, x, y) {
 	try {
@@ -116,7 +116,7 @@ Tiling.prototype.addTile = function(tile, x, y) {
 	} catch(err) {
 		print(err, "in Tiling.addTile");
 	}
-}
+};
 
 Tiling.prototype.removeTile = function(tile) {
 	try {
@@ -135,7 +135,7 @@ Tiling.prototype.removeTile = function(tile) {
 	} catch(err) {
 		print(err, "in Tiling.removeTile");
 	}
-}
+};
 
 Tiling.prototype.swapTiles = function(tile1, tile2) {
 	try {
@@ -157,7 +157,7 @@ Tiling.prototype.swapTiles = function(tile1, tile2) {
 	} catch(err) {
 		print(err, "in Tiling.swapTiles");
 	}
-}
+};
 
 Tiling.prototype.activate = function() {
 	if (this.userActive == true) {
@@ -165,11 +165,11 @@ Tiling.prototype.activate = function() {
 		// Resize the tiles like specified by the layout
 		this._updateAllTiles();
 	}
-}
+};
 
 Tiling.prototype.deactivate = function() {
     this.active = false;
-}
+};
 
 Tiling.prototype.toggleActive = function() {
 	if (this.active) {
@@ -177,7 +177,7 @@ Tiling.prototype.toggleActive = function() {
 	} else {
 		this.activate();
 	}
-}
+};
 
 Tiling.prototype.toggleUserActive = function() {
 	if (this.userActive == true) {
@@ -187,7 +187,7 @@ Tiling.prototype.toggleUserActive = function() {
 		this.userActive = true;
 		this.activate();
 	}
-}
+};
 
 /**
  * Resets tile sizes to their initial size (in case they were resized by the
@@ -196,7 +196,7 @@ Tiling.prototype.toggleUserActive = function() {
 Tiling.prototype.resetTileSizes = function() {
     this.layout.resetTileSizes();
     this._updateAllTiles();
-}
+};
 
 Tiling.prototype.getTile = function(x, y) {
 	try {
@@ -209,7 +209,7 @@ Tiling.prototype.getTile = function(x, y) {
 	} catch(err) {
 		print(err, "in Tiling.getTile");
 	}
-}
+};
 
 Tiling.prototype._getTileIndex = function(x, y) {
 	try {
@@ -226,7 +226,7 @@ Tiling.prototype._getTileIndex = function(x, y) {
 	} catch(err) {
 		print(err, "in Tiling._getTileIndex");
 	}
-}
+};
 
 Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
 	// If there is no tile, we can't select a thing
@@ -249,7 +249,7 @@ Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
     } else {
         return this.tiles[nextIndex];
     }
-}
+};
 
 Tiling.prototype.resizeTile = function(tile){
 	try {
@@ -272,7 +272,7 @@ Tiling.prototype.resizeTile = function(tile){
 	} catch(err) {
 		print(err, "in Tiling.resizeTile");
 	}
-}
+};
 
 Tiling.prototype._updateAllTiles = function() {
 	try {
@@ -310,7 +310,7 @@ Tiling.prototype._updateAllTiles = function() {
 	} catch(err) {
 		print(err, "in Tiling._updateAllTiles");
 	}
-}
+};
 
 Tiling.prototype.resizeMaster = function(geometry) {
 	try {
@@ -321,7 +321,7 @@ Tiling.prototype.resizeMaster = function(geometry) {
 	} catch(err) {
 		print(err, "in resizeMaster");
 	}
-}
+};
 
 Tiling.prototype.getMaster = function() {
 	if (this.layout.master > -1) {
@@ -329,7 +329,7 @@ Tiling.prototype.getMaster = function() {
 	} else {
 		return null;
 	}
-}
+};
 
 Tiling.prototype.resizeScreen = function() {
 	// FIXME: KWin bug: clientArea returns the _former_ area
@@ -343,10 +343,10 @@ Tiling.prototype.resizeScreen = function() {
 		this.layout.setLayoutArea(rect);
 		this.screenRectangle = rect;
 	}
-}
+};
 
 Tiling.prototype.tile = function() {
 	this.tiles.forEach(function(tile) {
 		tile.setAllClientGeometries();
 	});
-}
+};

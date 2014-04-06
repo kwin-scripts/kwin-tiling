@@ -28,7 +28,7 @@ function HalfLayout(screenRectangle) {
     Layout.call(this, screenRectangle);
 	this.firstWidth = this.screenRectangle.width / 2;
 	this.master = 0;
-}
+};
 
 HalfLayout.name = "Half";
 // TODO: Add an image for the layout switcher
@@ -48,7 +48,7 @@ HalfLayout.prototype.resetTileSizes = function() {
 	} catch(err) {
 		print(err, "in HalfLayout.resetTileSizes");
 	}
-}
+};
 
 HalfLayout.prototype.addTile = function() {
 	try {
@@ -97,7 +97,7 @@ HalfLayout.prototype.addTile = function() {
 	} catch(err) {
 		print(err, "in HalfLayout.addTile");
 	}
-}
+};
 
 HalfLayout.prototype.removeTile = function(tileIndex) {
 	try {
@@ -163,7 +163,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 	} catch(err) {
 		print(err, "in HalfLayout.removeTile");
 	}
-}
+};
 
 HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 	try {
@@ -275,7 +275,7 @@ HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 	} catch(err) {
 		print(err, "in HalfLayout.resizeTile");
 	}
-}
+};
 
 HalfLayout.prototype._createTile = function(rect) {
 	try {
@@ -316,4 +316,4 @@ HalfLayout.prototype._createTile = function(rect) {
 	} catch(err) {
 		print(err, "in HalfLayout._createTile");
 	}
-}
+};

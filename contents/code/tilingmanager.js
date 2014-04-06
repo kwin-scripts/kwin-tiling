@@ -398,7 +398,7 @@ function TilingManager() {
 			}
 		};
 	});
-}
+};
 
 TilingManager.prototype._createDefaultLayouts = function(desktop) {
     var screenLayouts = [];
@@ -466,7 +466,7 @@ TilingManager.prototype._getMaster = function(screen, desktop) {
 	} catch(err) {
 		print(err, "in _getMaster");
 	}
-}
+};
 
 TilingManager.prototype._onTileRemoved = function(tile) {
 	try {
@@ -570,7 +570,7 @@ TilingManager.prototype._onTileMovingStarted = function(tile) {
 	// NOTE: This supports only one moving window, breaks with multitouch input
 	this._moving = true;
 	this._movingStartScreen = tile.clients[0].screen;
-}
+};
 
 TilingManager.prototype._onTileMovingEnded = function(tile) {
 	try {
@@ -603,7 +603,7 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
 	} catch(err) {
 		print(err, "in TilingManager._onTileMovingEnded");
 	}
-}
+};
 
 TilingManager.prototype._changeTileLayouts =
     function(tile, oldLayouts, newLayouts) {
@@ -684,4 +684,4 @@ TilingManager.prototype._getLayouts = function(desktop, screen) {
 		}
 		return result;
 	}
-}
+};

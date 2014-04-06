@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 function Signal() {
     this.connected = [];
-}
+};
 
 /**
  * Method which connects another handler to the signal.

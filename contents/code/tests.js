@@ -31,7 +31,7 @@ testSignal.connect(function(a, b, c) {
 });
 var testSlot2 = function(a, b, c) {
     success2 = a == 1 && b == 2 && c == "test";
-}
+};
 testSignal.connect(testSlot2);
 testSignal.emit(1, 2, "test");
 print("Signal test 1: " + (success1 && success2 ? "SUCCESS" : "FAILURE"));
@@ -51,7 +51,7 @@ var isConfig = function(name, defaultValue) {
 	} else {
 		print("Configuration option", name, ": ", c);
 	}
-}
+};
 
 print("Testing configuration");
 isConfig("floaters", "");
