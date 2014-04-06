@@ -221,7 +221,7 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (client.moveable != true) {
 			return;
 		}
-		if (client.tiling_resize == true) {
+		if (client.tiling_resize == true || this._resizing == true) {
 			return;
 		}
 		if (this.rectangle != null) {
