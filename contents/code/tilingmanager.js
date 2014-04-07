@@ -297,7 +297,8 @@ function TilingManager() {
 					 function() {
 						 var currentScreen = workspace.activeScreen;
 						 var currentDesktop = workspace.currentDesktop - 1;
-						 self.layouts[currentDesktop][currentScreen].tile();
+						 self.layouts[currentDesktop][currentScreen].toggleUserActive();
+						 self.layouts[currentDesktop][currentScreen].toggleUserActive();
 					 });
 	registerShortcut("Swap Window With Master",
 					 "Swap Window With Master",

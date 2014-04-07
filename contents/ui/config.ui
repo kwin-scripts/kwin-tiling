@@ -56,13 +56,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="kcfg_manualMode">
-     <property name="text">
-      <string>Manual Tiling Only</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QSpinBox" name="kcfg_gapSize"/>
    </item>
   </layout>

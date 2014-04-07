@@ -167,9 +167,7 @@ Tile.prototype.syncCustomProperties = function() {
 };
 
 Tile.prototype.onClientGeometryChanged = function(client) {
-	if (readConfig("manualMode", false) == false) {
 		this.setClientGeometry(client);
-	}
 };
 
 Tile.prototype.setAllClientGeometries = function() {
