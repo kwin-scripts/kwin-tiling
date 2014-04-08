@@ -119,57 +119,6 @@ SpiralLayout.prototype.removeTile = function(tileIndex) {
     }
 };
 
-SpiralLayout.prototype.resizeTile = function(tileIndex, rectangle) {
-	if (tileIndex < 0 || tileIndex > this.tiles.length) {
-		print("Tileindex invalid", tileIndex, "/", this.tiles.length);
-		return;
-	}
-	var tile = this.tiles[tileIndex];
-	if (tile == null) {
-		print("No tile");
-		return;
-	}
-	if (rectangle == null){
-		print("No rect");
-		return;
-	}
-	// Cap rectangle at screenedges
-	if (rectangle.x < this.screenRectangle.x) {
-		rectangle.x = this.screenRectangle.x;
-	}
-	if (rectangle.y < this.screenRectangle.y) {
-		rectangle.y = this.screenRectangle.y;
-	}
-	if (rectangle.y + rectangle.height > this.screenRectangle.y + this.screenRectangle.height) {
-		rectangle.height = this.screenRectangle.y + this.screenRectangle.height - rectangle.y;
-	}
-	if (rectangle.x + rectangle.width > this.screenRectangle.x + this.screenRectangle.width) {
-		rectangle.width = this.screenRectangle.x + this.screenRectangle.width - rectangle.x;
-	}
-
-	// HACK: The only case I know how to do
-	var oldrect = tile.rectangle;
-	if (this.tiles.length == 2) {
-		rectangle.height = oldrect.height;
-		rectangle.y = oldrect.y;
-		if (tileIndex == 0) {
-			var other = this.tiles[1];
-			var otherrect = other.rectangle;
-			otherrect.x = rectangle.x + rectangle.width;
-			otherrect.width = this.screenRectangle.x + this.screenRectangle.width - otherrect.x;
-			other.rectangle = otherrect;
-		} else {
-			var other = this.tiles[0];
-			var otherrect = other.rectangle;
-			otherrect.width = (rectangle.x - otherrect.x);
-			other.rectangle = otherrect;
-		}
-		tile.rectangle = rectangle;
-	} else {
-		// FIXME: This is _hard_.
-	}
-};
-
 SpiralLayout.prototype._createTile = function(rect) {
     // Update the last tile in the list
     if (this.tiles.length != 0) {

@@ -63,3 +63,32 @@ util.intersectRect = function(rect1, rect2) {
 Math.floor = function(a) {
 	return a;
 };
+
+util.setX = function(geom, value) {
+	geom.width = (geom.width + geom.x) - value;
+	geom.x = value;
+};
+util.getX = function(geom) {
+	return geom.x;
+};
+util.setY = function(geom, value) {
+	geom.height = (geom.height + geom.y) - value;
+	geom.y = value;
+};
+util.getY = function(geom) {
+	return geom.y;
+};
+util.setR = function(geom, value) {
+	geom.width = value - geom.x;
+};
+// Return right edge
+util.getR = function(geom) {
+	return (geom.x + geom.width);
+};
+util.setB = function(geom, value) {
+	geom.height = value - geom.y;
+};
+// Return bottom edge
+util.getB = function(geom) {
+	return (geom.y + geom.height);
+};

@@ -1,5 +1,5 @@
 * DONE Resize tiles
-** TODO Hacked/partial for Spirallayout
+** DONE Hacked/partial for Spirallayout
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
 ** TODO Resolution changes
@@ -21,11 +21,11 @@
    e.g. Steam doesn't update properly after resize
 ** Better release process (i.e. don't just pack up git, TEST)
 * TODO Layouts
-** TODO Refactor layouts to share more code
+** DONE Refactor layouts to share more code
    See [[https://github.com/copycat-killer/vain-again][vain]]
    This uses a simple "arrange" function as the layout function
 ** TODO More/better layouts
-** TODO Remove or improve SpiralLayout
+** DONE Remove or improve SpiralLayout
 * TODO Crazy stuff
 ** Layout switcher
 ** Indicate layout/state (tiling on/off) somehow

@@ -19,6 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+Qt.include("util.js");
 var Direction = {
     Up : 0,
     Down : 1,
@@ -85,5 +86,77 @@ Layout.prototype.setLayoutArea = function(newArea) {
 		this.screenRectangle = newArea;
 	} catch(err) {
 		print(err, "in Layout.setLayoutArea");
+	}
+};
+
+Layout.prototype.resizeTile = function(tileIndex, rectangle) {
+	try {
+		// Sanitize
+		if (tileIndex < 0 || tileIndex > (this.tiles.length - 1)) {
+			print("Tileindex invalid", tileIndex, "/", this.tiles.length);
+			return;
+		}
+		var tile = this.tiles[tileIndex];
+		if (tile == null) {
+			print("No tile");
+			return;
+		}
+		if (rectangle == null){
+			print("No rect");
+			return;
+		}
+		this.doResize(tileIndex, rectangle, util.setX, util.getX, util.setR, util.getR);
+		this.doResize(tileIndex, rectangle, util.setY, util.getY, util.setB, util.getB);
+		this.doResize(tileIndex, rectangle, util.setR, util.getR, util.setX, util.getX);
+		this.doResize(tileIndex, rectangle, util.setB, util.getB, util.setY, util.getY);
+		this.tiles[tileIndex].rectangle = util.copyRect(rectangle);
+	} catch(err) {
+		print(err, "in Layout.resizeTile");
+	}
+};
+
+/*
+ * Resize all rectangles for one edge
+ * Params:
+ * set, get: a set/get function for one edge
+ * setOther, getOther: a set/get function for the opposite edge
+ */
+Layout.prototype.doResize = function(tileIndex, rectangle, set, get, setOther, getOther) {
+	var oldD = get(this.tiles[tileIndex].rectangle);
+	var newD = get(rectangle);
+	if (oldD == newD) {
+		return;
+	}
+	if (oldD == get(this.screenRectangle)) {
+		set(rectangle, oldD);
+		return;
+	}
+	if (newD == get(this.screenRectangle)) {
+		set(rectangle, oldD);
+		return;
+	}
+	var oldDOther = getOther(this.tiles[tileIndex].rectangle);
+	if (oldDOther == getOther(this.screenRectangle)) {
+		setOther(rectangle, oldDOther);
+	}
+	/*
+	 * A tile needs to be changed if it
+	 * a) Had the same value as the oldRect
+	 * b) Had the same other edge value as oldRect
+	 */
+	for (i = 0; i < this.tiles.length; i++) {
+		if (i == tileIndex) {
+			continue;
+		}
+		var dOther = getOther(this.tiles[i].rectangle);
+		var d = get(this.tiles[i].rectangle);
+		if (d == oldD) {
+			set(this.tiles[i].rectangle, newD);
+			continue;
+		}
+		if (dOther == oldD) {
+			setOther(this.tiles[i].rectangle, newD);
+			continue;
+		}
 	}
 };
