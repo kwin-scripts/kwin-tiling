@@ -92,3 +92,16 @@ util.setB = function(geom, value) {
 util.getB = function(geom) {
 	return (geom.y + geom.height);
 };
+
+/**
+ * Utility function which returns the area on the selected screen/desktop which
+ * is filled by the layout for that screen.
+ *
+ * @param desktop Desktop for which the area shall be returned.
+ * @param screen Screen for which the area shall be returned.
+ * @return Rectangle which contains the area which shall be used by layouts.
+ */
+util.getTilingArea = function(screen, desktop) {
+	var cA = workspace.clientArea(KWin.PlacementArea, screen, desktop);
+	return util.copyRect(cA);
+};

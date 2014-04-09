@@ -27,7 +27,7 @@ function Tiling(layoutType, desktop, screen) {
 	try {
 		this.desktop = desktop;
 		this.screen  = screen;
-		this.screenRectangle = Tiling.getTilingArea(this.screen, this.desktop);
+		this.screenRectangle = util.getTilingArea(this.screen, this.desktop);
 		/**
 		 * Tiles which have been added to the layout
 		 */
@@ -53,19 +53,6 @@ function Tiling(layoutType, desktop, screen) {
 	} catch(err) {
 		print(err, "in Tiling");
 	}
-};
-
-/**
- * Utility function which returns the area on the selected screen/desktop which
- * is filled by the layout for that screen.
- *
- * @param desktop Desktop for which the area shall be returned.
- * @param screen Screen for which the area shall be returned.
- * @return Rectangle which contains the area which shall be used by layouts.
- */
-Tiling.getTilingArea = function(screen, desktop) {
-	var cA = workspace.clientArea(KWin.PlacementArea, screen, desktop);
-	return util.copyRect(cA);
 };
 
 Tiling.prototype.setLayoutType = function(layoutType) {
@@ -334,7 +321,7 @@ Tiling.prototype.getMaster = function() {
 Tiling.prototype.resizeScreen = function() {
 	// FIXME: KWin bug: clientArea returns the _former_ area
 	// See https://bugs.kde.org/show_bug.cgi?id=330099
-	var rect = Tiling.getTilingArea(this.screen, this.desktop);
+	var rect = util.getTilingArea(this.screen, this.desktop);
 	if (util.compareRect(rect,this.screenRectangle) == false) {
 		this.layout.screenRectangle.x = this.screenRectangle.x;
 		this.layout.screenRectangle.y = this.screenRectangle.y;
