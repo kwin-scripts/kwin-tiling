@@ -243,16 +243,6 @@ Tiling.prototype.resizeTile = function(tile){
 		if (tile != null) {
 			var tileIndex = tile.tileIndex;
 			var client = tile.clients[0];
-			// HACK: Prevent endless loops
-			var resizeCount = 0;
-			for (var i = 0; i < this.tiles.length; i++) {
-				if (this.tiles[i]._resizing == true) {
-					resizeCount++;
-				}
-			}
-			if (resizeCount > 2) {
-				return;
-			}
 			this.layout.resizeTile(tileIndex, client.geometry);
 			this._updateAllTiles();
 		}
