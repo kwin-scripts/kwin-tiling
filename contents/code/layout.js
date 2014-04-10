@@ -96,8 +96,7 @@ Layout.prototype.resizeTile = function(tileIndex, rectangle) {
 			print("Tileindex invalid", tileIndex, "/", this.tiles.length);
 			return;
 		}
-		var tile = this.tiles[tileIndex];
-		if (tile == null) {
+		if (this.tiles[tileIndex] == null) {
 			print("No tile");
 			return;
 		}
@@ -127,24 +126,23 @@ Layout.prototype.doResize = function(tileIndex, rectangle, set, get, setOther, g
 	if (oldD == newD) {
 		return;
 	}
+	// Disallow moving away from screenedges
 	if (oldD == get(this.screenRectangle)) {
 		set(rectangle, oldD);
 		return;
 	}
+	// Disallow moving to screenedges
+	// - otherwise we need to check when moving away if this is supposed to be there
 	if (newD == get(this.screenRectangle)) {
 		set(rectangle, oldD);
 		return;
-	}
-	var oldDOther = getOther(this.tiles[tileIndex].rectangle);
-	if (oldDOther == getOther(this.screenRectangle)) {
-		setOther(rectangle, oldDOther);
 	}
 	/*
 	 * A tile needs to be changed if it
 	 * a) Had the same value as the oldRect
 	 * b) Had the same other edge value as oldRect
 	 */
-	for (i = 0; i < this.tiles.length; i++) {
+	for (var i = 0; i < this.tiles.length; i++) {
 		if (i == tileIndex) {
 			continue;
 		}
