@@ -11,7 +11,7 @@
 
    Three layouts (the default being properly tested)
 
-   Mouse resizing for two of the layouts
+   Mouse resizing
 
    Useractionsmenu and keybinding (Meta+f) for toggling tiling/floating
 
@@ -31,4 +31,9 @@
 ** Known Issues:
    Activities aren't handled at all
 
+   Clients with min/maxSize may not tile properly
+
+   Multimonitor is untested
+
    BUUUGS
+   
