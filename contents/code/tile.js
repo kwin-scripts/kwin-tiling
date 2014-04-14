@@ -245,14 +245,14 @@ Tile.prototype.setClientGeometry = function(client) {
 					this.rectangle.height = client.geometry.height;
 					changedRect = true;
 				}
-				if (client.maxSize.w < this.rectangle.width) {
+				if (client.maxSize.w < this.rectangle.width && client.maxSize.w > 0) {
 					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
 						this.rectangle.x = (screenRect.x + screenRect.width) - client.maxSize.w;
 					}
 					this.rectangle.width = client.maxSize.w;
 					changedRect = true;
 				}
-				if (client.maxSize.h < this.rectangle.height) {
+				if (client.maxSize.h < this.rectangle.height && client.maxSize.h > 0) {
 					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
 						this.rectangle.y = (screenRect.y + screenRect.height) - client.maxSize.h;
 					}
