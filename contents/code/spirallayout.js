@@ -24,9 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * the left half of the screen.
  */
 function SpiralLayout(screenRectangle) {
-    Layout.call(this, screenRectangle);
-    // TODO
 	print("Creating SpiralLayout");
+    Layout.call(this, screenRectangle);
+	this.master = 0;
 };
 
 SpiralLayout.name = "Spiral";
