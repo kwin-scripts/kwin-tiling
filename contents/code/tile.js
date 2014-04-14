@@ -225,36 +225,38 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (this.rectangle != null) {
 			if (util.compareRect(this.rectangle, client.geometry) == false) {
 				client.tiling_resize = true;
-				// Respects min/maxSize
+				// Respect min/maxSize
+				// FIXME: client.geometry includes the border but client.minSize does not, so
+				// in the common case (noBorder = false) we can't rely on client.minSize.w being a proper size
+				// So keep the client's own geometry
 				var changedRect = false;
-				// Small layering violation for the greater good (for now)
-				var screenRect = workspace.clientArea(KWin.PlacementArea, this._currentScreen, this._currentDesktop);
+				var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
 				if (client.minSize.w > this.rectangle.width) {
 					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
-						this.rectangle.x = (screenRect.x + screenRect.width) - client.minSize.w;
+						this.rectangle.x = (screenRect.x + screenRect.width) - client.geometry.width;
 					}
-					this.rectangle.width = client.minSize.w;
+					this.rectangle.width = client.geometry.width;
 					changedRect = true;
 				}
 				if (client.minSize.h > this.rectangle.height) {
 					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
-						this.rectangle.y = (screenRect.y + screenRect.height) - client.minSize.h;
+						this.rectangle.y = (screenRect.y + screenRect.height) - client.geometry.height;
 					}
-					this.rectangle.height = client.minSize.h;
+					this.rectangle.height = client.geometry.height;
 					changedRect = true;
 				}
 				if (client.maxSize.w < this.rectangle.width) {
 					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
-						this.rectangle.x = (screenRect.x + screenRect.width) - client.maxSize.w;
+						this.rectangle.x = (screenRect.x + screenRect.width) - client.geometry.width;
 					}
-					this.rectangle.width = client.maxSize.w;
+					this.rectangle.width = client.geometry.width;
 					changedRect = true;
 				}
 				if (client.maxSize.h < this.rectangle.height) {
 					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
-						this.rectangle.y = (screenRect.y + screenRect.height) - client.maxSize.h;
+						this.rectangle.y = (screenRect.y + screenRect.height) - client.geometry.height;
 					}
-					this.rectangle.height = client.maxSize.h;
+					this.rectangle.height = client.geometry.height;
 					changedRect = true;
 				}
 				client.geometry = util.copyRect(this.rectangle);

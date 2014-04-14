@@ -55,6 +55,8 @@
 *** Borders aren't raised properly
 *** KWin maximizes windows automatically on certain conditions
 	What are those?
+*** geometry doesn't include border
+	This leads to the wrong minSize being provided
 ** Documentation
 *** ClientArea options
 *** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)
