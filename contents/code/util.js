@@ -105,3 +105,7 @@ util.getTilingArea = function(screen, desktop) {
 	var cA = workspace.clientArea(KWin.PlacementArea, screen, desktop);
 	return util.copyRect(cA);
 };
+
+util.rectToString = function(rect) {
+	return "x" + rect.x + "y" + rect.y + "w" + rect.width + "h" + rect.height;
+}
