@@ -123,7 +123,9 @@ TileList.prototype.connectSignals = function(client) {
     var getTile = function(client) {
         return self.getTile(client);
     };
-    client.geometryChanged.connect(function() {
+	// geometryChanged fires also on maximizedStateChanged and stepUserMovedResized
+	// so use geometryShapeChanged
+    client.geometryShapeChanged.connect(function() {
 		var tile = getTile(client);
 		if (tile != null) {
 			tile.onClientGeometryChanged(client);
