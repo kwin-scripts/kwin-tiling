@@ -63,4 +63,4 @@
    
 
 ** Screenshots
-   https://[[faho.github.com/faho.github.io/img/kwin-tiling01.png]]
+   [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling01.png]]
