@@ -222,6 +222,9 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (client.tiling_resize == true || this._resizing == true) {
 			return;
 		}
+		if (client.minSize.w == client.maxSize.w && client.minSize.h == client.maxSize.w) {
+			return;
+		}
 		if (this.rectangle != null) {
 			if (util.compareRect(this.rectangle, client.geometry) == false) {
 				client.tiling_resize = true;
