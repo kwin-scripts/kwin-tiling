@@ -386,6 +386,26 @@ function TilingManager() {
 							 print(err, "in resize-window-to-the-left");
 						 }
 					 });
+	registerShortcut("Increase Number Of Masters",
+					 "Increase Number Of Masters",
+					 "Meta+*",
+					 function() {
+						 try {
+							 self.layouts[self._currentDesktop][self._currentScreen].increaseMaster();
+						 } catch(err) {
+							 print(err, "in Increase-Number-Of-Masters");
+						 }
+					 });
+	registerShortcut("Decrease Number Of Masters",
+					 "Decrease Number Of Masters",
+					 "Meta+_",
+					 function() {
+						 try {
+							 self.layouts[self._currentDesktop][self._currentScreen].decrementMaster();
+						 } catch(err) {
+							 print(err, "in Decrease-Number-Of-Masters");
+						 }
+					 });
 	registerUserActionsMenu(function(client) {
 		return {
 			text : "Toggle floating",

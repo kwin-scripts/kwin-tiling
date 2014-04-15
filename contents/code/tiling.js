@@ -324,6 +324,20 @@ Tiling.prototype.resizeScreen = function() {
 
 Tiling.prototype.tile = function() {
 	this.tiles.forEach(function(tile) {
-		tile.setAllClientGeometries();
+		tile.setGeometry(tile.rectangle);
 	});
+};
+
+Tiling.prototype.increaseMaster = function() {
+	if (this.layout.increaseMaster != null) {
+		this.layout.increaseMaster();
+		this._updateAllTiles();
+	}
+};
+
+Tiling.prototype.decrementMaster = function() {
+	if (this.layout.decrementMaster != null) {
+		this.layout.decrementMaster();
+		this._updateAllTiles();
+	}
 };
