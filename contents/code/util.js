@@ -109,3 +109,10 @@ util.getTilingArea = function(screen, desktop) {
 util.rectToString = function(rect) {
 	return "x" + rect.x + "y" + rect.y + "w" + rect.width + "h" + rect.height;
 }
+
+util.assertRectInScreen = function(rect, screenRectangle) {
+	assertTrue(rect.x >= screenRectangle.x &&
+			   rect.y >= screenRectangle.y &&
+			   rect.width <= screenRectangle.width &&
+			   rect.height <= screenRectangle.height, "Rectangle not in screen");
+};
