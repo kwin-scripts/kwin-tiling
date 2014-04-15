@@ -236,9 +236,9 @@ Tile.prototype.setClientGeometry = function(client) {
 				var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
 				if (client.minSize.w > this.rectangle.width) {
 					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
-						this.rectangle.x = (screenRect.x + screenRect.width) - client.minSize.w;
+						this.rectangle.x = (screenRect.x + screenRect.width) - client.geometry.width;
 					}
-					this.rectangle.width = client.minSize.w;
+					this.rectangle.width = client.geometry.width;
 					changedRect = true;
 				}
 				if (client.minSize.h > this.rectangle.height) {

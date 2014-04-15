@@ -104,6 +104,7 @@ Layout.prototype.resizeTile = function(tileIndex, rectangle) {
 			print("No rect");
 			return;
 		}
+		// TODO: Remove overlap
 		this.doResize(tileIndex, rectangle, util.setX, util.getX, util.setR, util.getR);
 		this.doResize(tileIndex, rectangle, util.setY, util.getY, util.setB, util.getB);
 		this.doResize(tileIndex, rectangle, util.setR, util.getR, util.setX, util.getX);
