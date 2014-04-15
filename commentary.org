@@ -25,7 +25,8 @@
    See [[https://github.com/copycat-killer/vain-again][vain]]
    This uses a simple "arrange" function as the layout function
 ** TODO More/better layouts
-** DONE Remove or improve SpiralLayout
+** Implement BladeLayout as HalfLayout with masterCount == tiles.length
+** Multi-master in spirallayout
 * TODO Crazy stuff
 ** Layout switcher
 ** Indicate layout/state (tiling on/off) somehow
@@ -54,12 +55,13 @@
 	https://bugs.kde.org/show_bug.cgi?id=330102
 *** Borders aren't raised properly
 *** KWin maximizes windows automatically on certain conditions
-	What are those?
-*** geometry doesn't include border
-	This leads to the wrong minSize being provided
+	Possibly caused by electricBorderMaximize
+*** minSize isn't a valid size
+*** QML doesn't draw stuff
 ** Documentation
 *** ClientArea options
 *** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)
+*** Difference between geometryChanged and geometryShapeChanged
 ** Wishes
 *** Integration with rules
 *** Some way to draw small window borders
