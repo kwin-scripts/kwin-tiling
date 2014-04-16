@@ -90,7 +90,7 @@ HalfLayout.prototype.addTile = function() {
 			var newRect = new Qt.rect(lastRect.x,
 									  lastRect.y,
 									  this.screenRectangle.x + this.screenRectangle.width - this.getMasterWidth(),
-									  lastRect.height / (slaveCount + 1));
+									  this.screenRectangle.height / (slaveCount + 1));
 			newRect.y = newRect.y + newRect.height * slaveCount;
 			// FIXME: Try to keep ratio
 			for (var i = this.master + this.masterCount; i < this.tiles.length; i++) {
@@ -102,8 +102,7 @@ HalfLayout.prototype.addTile = function() {
 				rect.height = newRect.height;
 				this.tiles[i].rectangle = rect;
 			}
-			// Adjust lowest tile's height for rounding errors
-			//newRect.y = newRect.y + newRect.width * (this.tiles.length - 1);
+			// Adjust new tile's height for rounding errors
 			newRect.height = (this.screenRectangle.y + this.screenRectangle.height) - newRect.y;
 			util.assertRectInScreen(newRect, this.screenRectangle);
 			this._createTile(newRect);
