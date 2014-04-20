@@ -59,10 +59,11 @@ function TileList() {
 			return;
 		}
 		
-		// Delay adding until the window is actually shown when compositing
+		// Delay adding until the window is actually shown
 		// This prevents (some, but not all) graphics bugs
 		// due to resizing before the pixmap is created (or something like that)
-		if (KWin.useCompositing == true) {
+		// Unfortunately, this signal is only emitted when compositing
+		if (options.useCompositing == true) {
 			client.windowShown.connect(function() {
 				self._onClientAdded(client);
 			});

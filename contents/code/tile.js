@@ -263,10 +263,10 @@ Tile.prototype.setClientGeometry = function(client) {
 					changedRect = true;
 				}
 				// Don't accidentally maximize windows
-				var eBM = KWin.electricBorderMaximize;
-				KWin.electricBorderMaximize = false;
+				var eBM = options.electricBorderMaximize;
+				options.electricBorderMaximize = false;
 				client.geometry = util.copyRect(this.rectangle);
-				KWin.electricBorderMaximize = eBM;
+				options.electricBorderMaximize = eBM;
 
 				if (changedRect == true) {
 					this._resizing = true;
