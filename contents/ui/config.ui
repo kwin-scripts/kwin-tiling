@@ -56,6 +56,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="kcfg_respectMinMax">
+     <property name="text">
+      <string>Respect minimum/maximum Size</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QSpinBox" name="kcfg_gapSize"/>
    </item>
   </layout>

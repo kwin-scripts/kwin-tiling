@@ -227,33 +227,35 @@ Tile.prototype.setClientGeometry = function(client) {
 				// Respect min/maxSize
 				var changedRect = false;
 				var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
-				if (client.minSize.w > this.rectangle.width) {
-					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
-						this.rectangle.x = (screenRect.x + screenRect.width) - client.minSize.w;
+				if (readConfig("respectMinMax", false) == true) {
+					if (client.minSize.w > this.rectangle.width) {
+						if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
+							this.rectangle.x = (screenRect.x + screenRect.width) - client.minSize.w;
+						}
+						this.rectangle.width = client.minSize.w;
+						changedRect = true;
 					}
-					this.rectangle.width = client.minSize.w;
-					changedRect = true;
-				}
-				if (client.minSize.h > this.rectangle.height) {
-					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
-						this.rectangle.y = (screenRect.y + screenRect.height) - client.minSize.h;
+					if (client.minSize.h > this.rectangle.height) {
+						if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
+							this.rectangle.y = (screenRect.y + screenRect.height) - client.minSize.h;
+						}
+						this.rectangle.height = client.minSize.h;
+						changedRect = true;
 					}
-					this.rectangle.height = client.minSize.h;
-					changedRect = true;
-				}
-				if (client.maxSize.w < this.rectangle.width && client.maxSize.w > 0) {
-					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
-						this.rectangle.x = (screenRect.x + screenRect.width) - client.maxSize.w;
+					if (client.maxSize.w < this.rectangle.width && client.maxSize.w > 0) {
+						if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
+							this.rectangle.x = (screenRect.x + screenRect.width) - client.maxSize.w;
+						}
+						this.rectangle.width = client.maxSize.w;
+						changedRect = true;
 					}
-					this.rectangle.width = client.maxSize.w;
-					changedRect = true;
-				}
-				if (client.maxSize.h < this.rectangle.height && client.maxSize.h > 0) {
-					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
-						this.rectangle.y = (screenRect.y + screenRect.height) - client.maxSize.h;
+					if (client.maxSize.h < this.rectangle.height && client.maxSize.h > 0) {
+						if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
+							this.rectangle.y = (screenRect.y + screenRect.height) - client.maxSize.h;
+						}
+						this.rectangle.height = client.maxSize.h;
+						changedRect = true;
 					}
-					this.rectangle.height = client.maxSize.h;
-					changedRect = true;
 				}
 				// Don't accidentally maximize windows
 				var eBM = options.electricBorderMaximize;

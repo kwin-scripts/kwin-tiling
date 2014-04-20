@@ -29,5 +29,9 @@
 		  <label>The size in pixels of the gap between windows</label>
 		  <default>0</default>
 		</entry>
+		<entry name="respectMinMax" type="bool">
+		  <label>Should minimum/maximum Size be respected</label>
+		  <default>false</default>
+		</entry>
     </group>
 </kcfg>
