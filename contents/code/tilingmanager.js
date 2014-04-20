@@ -218,17 +218,6 @@ function TilingManager() {
 							 self.tiles.addClient(client);
 						 }
 					 });
-    registerShortcut("Toggle Border",
-                     "Toggle Border",
-                     "Meta+U",
-                     function() {
-						 var client = workspace.activeClient;
-						 if (client == null) {
-							 print("No active client");
-							 return;
-						 }
-						 client.noBorder = ! client.noBorder;
-					 });
 	registerShortcut("Toggle Border for all",
 					 "Toggle Border for all",
 					 "Meta+Shift+U",
