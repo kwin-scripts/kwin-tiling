@@ -225,23 +225,20 @@ Tile.prototype.setClientGeometry = function(client) {
 			if (util.compareRect(this.rectangle, client.geometry) == false) {
 				client.tiling_resize = true;
 				// Respect min/maxSize
-				// FIXME: client.geometry includes the border but client.minSize does not, so
-				// in the common case (noBorder = false) we can't rely on client.minSize.w being a proper size
-				// So keep the client's own geometry
 				var changedRect = false;
 				var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
 				if (client.minSize.w > this.rectangle.width) {
 					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width) {
-						this.rectangle.x = (screenRect.x + screenRect.width) - client.geometry.width;
+						this.rectangle.x = (screenRect.x + screenRect.width) - client.minSize.w;
 					}
-					this.rectangle.width = client.geometry.width;
+					this.rectangle.width = client.minSize.w;
 					changedRect = true;
 				}
 				if (client.minSize.h > this.rectangle.height) {
 					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height) {
-						this.rectangle.y = (screenRect.y + screenRect.height) - client.geometry.height;
+						this.rectangle.y = (screenRect.y + screenRect.height) - client.minSize.h;
 					}
-					this.rectangle.height = client.geometry.height;
+					this.rectangle.height = client.minSize.h;
 					changedRect = true;
 				}
 				if (client.maxSize.w < this.rectangle.width && client.maxSize.w > 0) {
