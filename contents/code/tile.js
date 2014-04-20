@@ -210,7 +210,6 @@ Tile.prototype.setClientGeometry = function(client) {
 			return;
 		}
 		if (this._moving || this._resizing) {
-			util.setRect(this.rectangle, client.geometry);
 			return;
 		}
 		if (client.resizeable != true) {
