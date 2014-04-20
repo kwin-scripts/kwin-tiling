@@ -219,9 +219,6 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (client.moveable != true) {
 			return;
 		}
-		if (client.tiling_resize == true || this._resizing == true) {
-			return;
-		}
 		if (client.minSize.w == client.maxSize.w && client.minSize.h == client.maxSize.w) {
 			return;
 		}
