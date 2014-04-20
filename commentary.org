@@ -56,8 +56,9 @@
 *** Borders aren't raised properly
 *** KWin maximizes windows automatically on certain conditions
 	Possibly caused by electricBorderMaximize
-*** minSize isn't a valid size
 *** QML doesn't draw stuff
+*** options.useCompositing/compositingMode doesn't keep up
+	It does not change to false when disabling compositing
 ** Documentation
 *** ClientArea options
 *** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)
