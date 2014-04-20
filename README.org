@@ -63,4 +63,9 @@
    
 
 ** Screenshots
+   Standard layout with two master windows
    [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling01.png]]
+   Standard layout with one master
+   [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling02.png]]
+   Contrived example with four always-shown panels
+   [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling03.png]]
