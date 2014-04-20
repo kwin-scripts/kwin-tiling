@@ -19,16 +19,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
 import QtQuick 1.1;
-import org.kde.plasma.core 0.1 as PlasmaCore;
-import org.kde.plasma.components 0.1 as Plasma;
 import org.kde.qtextracomponents 0.1 as QtExtra;
-import org.kde.kwin 0.1;
 import "../code/tilingmanager.js" as Tiling
 
 Item {
+    /* property variant tiling */
     Component.onCompleted: {
+        console.log("Starting tiling");
         // Initialize tiling
         tiling = new Tiling.TilingManager();
     }
-
 }
