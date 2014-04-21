@@ -625,22 +625,6 @@ TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {
     this.layouts[desktop][screen].setLayoutType(layoutType);
 };
 
-TilingManager.prototype._switchFocus = function(direction) {
-	var client = workspace.activeClient;
-	if (client == null) {
-		return;
-	}
-	var activeTile = this.tiles.getTile(client);
-	if (activeTile == null) {
-		return;
-	}
-	var layout = this.layouts[client.desktop - 1][this._currentScreen];
-	var nextTile = layout.getAdjacentTile(activeTile, direction, false);
-	if (nextTile != null && nextTile != activeTile) {
-		workspace.activeClient = nextTile.getActiveClient();
-	}
-};
-
 TilingManager.prototype._moveTile = function(direction) {
 	var client = workspace.activeClient;
 	if (client == null) {
@@ -651,8 +635,24 @@ TilingManager.prototype._moveTile = function(direction) {
 		print("Tile is floating");
 		return;
 	}
+	if (direction == Direction.Left) {
+		var x = activeTile.rectangle.x - 1;
+		var y = activeTile.rectangle.y + 1;
+	}
+	if (direction == Direction.Right) {
+		var x = activeTile.rectangle.x + activeTile.rectangle.width + 1;
+		var y = activeTile.rectangle.y + 1;
+	}
+	if (direction == Direction.Up) {
+		var x = activeTile.rectangle.x + 1;
+		var y = activeTile.rectangle.y - 1;
+	}
+	if (direction == Direction.Down) {
+		var x = activeTile.rectangle.x + 1;
+		var y = activeTile.rectangle.y + activeTile.rectangle.height + 1;
+	}
 	var layout = this.layouts[client.desktop - 1][this._currentScreen];
-	var nextTile = layout.getAdjacentTile(activeTile, direction, true);
+	var nextTile = layout.getTile(x, y);
 	if (nextTile != null && nextTile != activeTile) {
 		layout.swapTiles(activeTile, nextTile);
 	}
