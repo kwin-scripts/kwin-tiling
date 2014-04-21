@@ -1,5 +1,3 @@
-* DONE Resize tiles
-** DONE Hacked/partial for Spirallayout
 * TODO EDGECASES, EDGECASES, EDGECASES!
 ** TODO Doesn't tile properly when screen disappears
 ** TODO Resolution changes
@@ -37,9 +35,6 @@
    Each client belongs to multiple activities, but is on the same desktop on each
    There can only be one activity at the same time
 *** Needs changes in tilingmanager (large) and maybe tile and tilelist
-** Switch to BSP/BinaryTree-based tiling
-   This requires a rather large change, but should add flawless resizing without special code in the layouts
-   and should make layouts much simpler to write
 ** DONE Add option to add some gaps between windows
    This could just be another layout
 ** React on configuration change
@@ -48,11 +43,12 @@
 ** Bugs
 *** INPROGRESS ClientArea doesn't update
 	https://bugs.kde.org/show_bug.cgi?id=330099
-*** Pixmap issue
 *** INPROGRESS no tabGroup
 	https://bugs.kde.org/show_bug.cgi?id=330100
 *** INPROGRESS windowClosed's "deleted" not properly converted
 	https://bugs.kde.org/show_bug.cgi?id=330102
+*** Pixmap issue
+	Seems it corrupts when clients are resized before windowShown (when compositing)
 *** Borders aren't raised properly
 *** KWin maximizes windows automatically on certain conditions
 	Possibly caused by electricBorderMaximize
@@ -69,6 +65,7 @@
 	Outline doesn't work as it darkens the window and consumes mouse input
 	Effect?
 *** Handle maximize like minimize in the scripting API
-* TODO Document
-** TODO A usage section
-** TODO A goals section
+* INPROGRESS Document
+** INPROGRESS A usage section
+** DONE A goals section
+* Remove duplicate functionality
