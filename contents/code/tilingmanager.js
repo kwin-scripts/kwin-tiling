@@ -222,31 +222,7 @@ function TilingManager() {
 					 "Toggle Border for all",
 					 "Meta+Shift+U",
 					 function() {
-						 self.tiles.toggleNoBorder()
-					 });
-    registerShortcut("Switch Focus Left",
-                     "Switch Focus Left",
-                     "Meta+H",
-                     function() {
-						 self._switchFocus(Direction.Left);
-					 });
-    registerShortcut("Switch Focus Right",
-                     "Switch Focus Right",
-                     "Meta+L",
-                     function() {
-						 self._switchFocus(Direction.Right);
-					 });
-    registerShortcut("Switch Focus Up",
-                     "Switch Focus Up",
-                     "Meta+K",
-                     function() {
-						 self._switchFocus(Direction.Up);
-					 });
-    registerShortcut("Switch Focus Down",
-                     "Switch Focus Down",
-                     "Meta+J",
-                     function() {
-						 self._switchFocus(Direction.Down);
+						 self.tiles.toggleNoBorder();
 					 });
     registerShortcut("Move Window Left",
                      "Move Window Left",
