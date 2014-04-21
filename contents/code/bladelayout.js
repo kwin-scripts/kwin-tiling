@@ -94,8 +94,6 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
 		// Update the other tiles
 		if (this.tiles.length == 1) {
 			this.tiles[0].rectangle = util.copyRect(this.screenRectangle);
-			this.tiles[0].hasDirectNeighbour[Direction.Left] = false;
-			this.tiles[0].hasDirectNeighbour[Direction.Right] = false;
 		}
 		if (this.tiles.length > 1) {
 			var tileCount = this.tiles.length;
@@ -110,10 +108,6 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
 				rect.x = newRect.x + newRect.width * i;
 				rect.width = newRect.width;
 				this.tiles[i].rectangle = rect;
-				this.tiles[i].hasDirectNeighbour[Direction.Left] = (i > 0);
-				this.tiles[i].hasDirectNeighbour[Direction.Right] = (i < this.tiles.length - 1);
-				this.tiles[i].neighbours[Direction.Left] = i - 1;
-				this.tiles[i].neighbours[Direction.Right] = i + 1;
 			}
 			// Adjust rightmost tile's height for rounding errors
 			this.tiles[this.tiles.length - 1].rectangle.width = (this.screenRectangle.width + this.screenRectangle.x) - this.tiles[this.tiles.length - 1].rectangle.x;
@@ -125,25 +119,9 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
 
 BladeLayout.prototype._createTile = function(rect) {
 	try {
-		// Update the last tile in the list
-		if (this.tiles.length > 0) {
-			var lastTile = this.tiles[this.tiles.length - 1];
-			lastTile.neighbours[Direction.Right] = this.tiles.length;
-			lastTile.hasDirectNeighbour[Direction.Right] = true;
-		}
 		// Create a new tile and add it to the list
 		var tile = {};
 		tile.rectangle = rect;
-		tile.neighbours = [];
-		tile.hasDirectNeighbour = [];
-		tile.neighbours[Direction.Left] = (this.tiles.length - 1);
-		tile.hasDirectNeighbour[Direction.Left] = (this.tiles.length > 0);
-		tile.neighbours[Direction.Right] = -1;
-		tile.hasDirectNeighbour[Direction.Right] = false;
-		tile.hasDirectNeighbour[Direction.Up] = false;
-		tile.neighbours[Direction.Up] = -1;
-		tile.neighbours[Direction.Down] = - 1;
-		tile.hasDirectNeighbour[Direction.Down] = false;
 		tile.index = this.tiles.length;
 		this.tiles.push(tile);
 	} catch(err) {

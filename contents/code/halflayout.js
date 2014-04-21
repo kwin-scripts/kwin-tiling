@@ -142,10 +142,6 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 		// Update the other tiles
 		if (this.tiles.length == 1) {
 			this.tiles[0].rectangle = util.copyRect(this.screenRectangle);
-			this.tiles[0].hasDirectNeighbour[Direction.Left] = false;
-			this.tiles[0].hasDirectNeighbour[Direction.Right] = false;
-			this.tiles[0].hasDirectNeighbour[Direction.Up] = false;
-			this.tiles[0].hasDirectNeighbour[Direction.Down] = false;
 		}
 		if (this.tiles.length > 1) {
 			var mC = Math.min(this.tiles.length, this.masterCount);
@@ -165,11 +161,6 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 		if (this.tiles.length > this.masterCount) {
 			if (tileIndex == 0) {
 				this.tiles[0].rectangle = oldrect;
-				this.tiles[0].hasDirectNeighbour[Direction.Left] = false;
-				this.tiles[0].hasDirectNeighbour[Direction.Right] = true;
-				this.tiles[0].hasDirectNeighbour[Direction.Up] = false;
-				this.tiles[0].hasDirectNeighbour[Direction.Down] = false;
-				this.tiles[0].neighbours[Direction.Right] = 1;
 			}
 			var tileCount = this.tiles.length - this.masterCount;
 			assertTrue(tileCount > 0, "Tilecount is zero");
@@ -185,21 +176,6 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 				rect.y = newRect.y + newRect.height * (i - this.masterCount);
 				rect.height = newRect.height;
 				this.tiles[i].rectangle = rect;
-				this.tiles[i].hasDirectNeighbour[Direction.Left] = true;
-				this.tiles[i].hasDirectNeighbour[Direction.Right] = false;
-				if (i == 1) {
-					this.tiles[i].hasDirectNeighbour[Direction.Up] = false;
-				} else {
-					this.tiles[i].hasDirectNeighbour[Direction.Up] = true;
-				}
-				if (i == this.tiles.length - 1) {
-					this.tiles[i].hasDirectNeighbour[Direction.Down] = false;
-				} else {
-					this.tiles[i].hasDirectNeighbour[Direction.Down] = true;
-				}
-				this.tiles[i].neighbours[Direction.Left] = 0;
-				this.tiles[i].neighbours[Direction.Up] = i - 1;
-				this.tiles[i].neighbours[Direction.Down] = i + 1;
 			}
 			// Adjust lowest tile's height for rounding errors
 			this.tiles[lowest].rectangle.height = (this.screenRectangle.y + this.screenRectangle.height) - this.tiles[lowest].rectangle.y;
@@ -293,38 +269,9 @@ HalfLayout.prototype.decrementMaster = function() {
 
 HalfLayout.prototype._createTile = function(rect) {
 	try {
-		// Update the last tile in the list
-		if (this.tiles.length > 1) {
-			var lastTile = this.tiles[this.tiles.length - 1];
-			lastTile.neighbours[Direction.Down] = this.tiles.length;
-			lastTile.hasDirectNeighbour[Direction.Down] = true;
-		}
-		
-		if (this.tiles.length == 1) {
-			var lastTile2 = this.tiles[0];
-			lastTile2.neighbours[Direction.Right] = 1;
-			lastTile2.hasDirectNeighbour[Direction.Right] = true;
-		}
 		// Create a new tile and add it to the list
 		var tile = {};
 		tile.rectangle = rect;
-		tile.neighbours = [];
-		tile.hasDirectNeighbour = [];
-		tile.neighbours[Direction.Left] = 0;
-		tile.hasDirectNeighbour[Direction.Left] = (this.tiles.length > 0);
-		tile.neighbours[Direction.Right] = - 1;
-		tile.hasDirectNeighbour[Direction.Right] = false;
-		if (this.tiles.length > 1) {
-			tile.hasDirectNeighbour[Direction.Up] = true;
-			tile.neighbours[Direction.Up] = this.tiles.length - 1;
-		} else {
-			if (this.tiles.length == 0) {
-				tile.hasDirectNeighbour[Direction.Up] = false;
-				tile.neighbours[Direction.Up] = - 1;
-			}
-		}
-		tile.neighbours[Direction.Down] = - 1;
-		tile.hasDirectNeighbour[Direction.Down] = false;
 		tile.index = this.tiles.length;
 		this.tiles.push(tile);
 	} catch(err) {

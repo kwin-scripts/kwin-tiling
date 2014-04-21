@@ -215,29 +215,6 @@ Tiling.prototype._getTileIndex = function(x, y) {
 	}
 };
 
-Tiling.prototype.getAdjacentTile = function(from, direction, directOnly) {
-	// If there is no tile, we can't select a thing
-	if (this.layout.tiles.length == 0) {
-		return;
-	}
-	// If no window is selected, just use the first
-	if (from != null) {
-		var index = this.tiles.indexOf(from);
-	} else {
-		return this.tiles[0];
-	}
-    var geometry = this.layout.tiles[index];
-    var nextIndex = geometry.neighbours[direction];
-    if (!geometry.hasDirectNeighbour && !directOnly) {
-        // This is not a direct neighbour (wrap-around situation), so cycle
-        // through the floating windows first
-        // TODO
-        print("TODO: getAdjacentTile(): Not a direct neighbour!");
-    } else {
-        return this.tiles[nextIndex];
-    }
-};
-
 Tiling.prototype.resizeTile = function(tile){
 	try {
 		if (tile != null) {

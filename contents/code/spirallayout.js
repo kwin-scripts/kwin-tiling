@@ -110,37 +110,11 @@ SpiralLayout.prototype.removeTile = function(tileIndex) {
     }
     // Remove the last array entry
     this.tiles.length--;
-    // Fix the neighbour information
-    if (this.tiles.length > 0) {
-        this.tiles[0].neighbours[Direction.Up] = this.tiles.length - 1;
-        var lastTile = this.tiles[this.tiles.length - 1];
-        lastTile.neighbours[Direction.Down] = 0;
-        lastTile.hasDirectNeighbour[Direction.Down] = false;
-    }
 };
 
 SpiralLayout.prototype._createTile = function(rect) {
-    // Update the last tile in the list
-    if (this.tiles.length != 0) {
-        var lastTile = this.tiles[this.tiles.length - 1];
-        lastTile.neighbours[Direction.Down] = this.tiles.length;
-        lastTile.hasDirectNeighbour[Direction.Down] = true;
-    }
     // Create a new tile and add it to the list
     var tile = {};
     tile.rectangle = rect;
-    tile.neighbours = [];
-    tile.hasDirectNeighbour = [];
-    tile.neighbours[Direction.Left] = this.tiles.length;
-    tile.hasDirectNeighbour[Direction.Left] = false;
-    tile.neighbours[Direction.Right] = this.tiles.length;
-    tile.hasDirectNeighbour[Direction.Right] = false;
-    tile.neighbours[Direction.Up] = this.tiles.length - 1;
-    tile.hasDirectNeighbour[Direction.Up] = true;
-    tile.neighbours[Direction.Down] = 0;
-    tile.hasDirectNeighbour[Direction.Down] = false;
     this.tiles.push(tile);
-    // Update the first tile
-    this.tiles[0].neighbours[Direction.Up] = this.tiles.length - 1;
-    this.tiles[0].hasDirectNeighbour[Direction.Up] = false;
 };
