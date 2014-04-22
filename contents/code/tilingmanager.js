@@ -152,8 +152,6 @@ function TilingManager() {
 	var existingClients = workspace.clientList();
 	existingClients.forEach(function(client) {
 		self.tiles.addClient(client);
-		// Don't reset floating so we don't lose the value over restarts
-		//client.tiling_floating = null;
 	});
 	// Activate the visible layouts
 	// Do it after adding the existingClients to prevent unnecessary geometry changes
@@ -290,7 +288,6 @@ function TilingManager() {
 					 function() {
 						 try {
 							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
-							 // Qt.rect automatically clamps negative values to zero
 							 geom = new Qt.rect(tile.rectangle.x - 10,
 												tile.rectangle.y,
 												tile.rectangle.width - 10,
@@ -309,7 +306,6 @@ function TilingManager() {
 					 function() {
 						 try {
 							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
-							 // Qt.rect automatically clamps negative values to zero
 							 geom = new Qt.rect(tile.rectangle.x,
 												tile.rectangle.y,
 												tile.rectangle.width + 10,
@@ -325,7 +321,6 @@ function TilingManager() {
 					 function() {
 						 try {
 							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
-							 // Qt.rect automatically clamps negative values to zero
 							 geom = new Qt.rect(tile.rectangle.x,
 												tile.rectangle.y - 10,
 												tile.rectangle.width,
@@ -341,7 +336,6 @@ function TilingManager() {
 					 function() {
 						 try {
 							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
-							 // Qt.rect automatically clamps negative values to zero
 							 geom = new Qt.rect(tile.rectangle.x,
 												tile.rectangle.y,
 												tile.rectangle.width,
@@ -523,8 +517,7 @@ TilingManager.prototype._onScreenResized = function(screen) {
 	}
 };
 
-TilingManager.prototype._onTileScreenChanged =
-    function(tile, oldScreen, newScreen) {
+TilingManager.prototype._onTileScreenChanged = function(tile, oldScreen, newScreen) {
 		// If a tile is moved by the user, screen changes are handled in the move
 		// callbacks below
 		if (this._moving) {
@@ -536,8 +529,7 @@ TilingManager.prototype._onTileScreenChanged =
 		this._changeTileLayouts(tile, oldLayouts, newLayouts);
 	};
 
-TilingManager.prototype._onTileDesktopChanged =
-    function(tile, oldDesktop, newDesktop) {
+TilingManager.prototype._onTileDesktopChanged = function(tile, oldDesktop, newDesktop) {
 		try {
 			var client = tile.clients[0];
 			var oldLayouts = this._getLayouts(oldDesktop, client.screen);
@@ -591,8 +583,7 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
 	}
 };
 
-TilingManager.prototype._changeTileLayouts =
-    function(tile, oldLayouts, newLayouts) {
+TilingManager.prototype._changeTileLayouts = function(tile, oldLayouts, newLayouts) {
 		try {
 			oldLayouts.forEach(function(layout) {
 				layout.removeTile(tile);
@@ -632,28 +623,27 @@ TilingManager.prototype._moveTile = function(direction) {
 	}
 	var activeTile = this.tiles.getTile(client);
 	if (activeTile == null) {
-		print("Tile is floating");
 		return;
 	}
 	if (direction == Direction.Left) {
 		var x = activeTile.rectangle.x - 1;
 		var y = activeTile.rectangle.y + 1;
-	}
-	if (direction == Direction.Right) {
+	} else if (direction == Direction.Right) {
 		var x = activeTile.rectangle.x + activeTile.rectangle.width + 1;
 		var y = activeTile.rectangle.y + 1;
-	}
-	if (direction == Direction.Up) {
+	} else if (direction == Direction.Up) {
 		var x = activeTile.rectangle.x + 1;
 		var y = activeTile.rectangle.y - 1;
-	}
-	if (direction == Direction.Down) {
+	} else if (direction == Direction.Down) {
 		var x = activeTile.rectangle.x + 1;
 		var y = activeTile.rectangle.y + activeTile.rectangle.height + 1;
+	} else {
+		print("Wrong direction in _moveTile");
+		return;
 	}
 	var layout = this.layouts[client.desktop - 1][this._currentScreen];
 	var nextTile = layout.getTile(x, y);
-	if (nextTile != null && nextTile != activeTile) {
+	if (nextTile != null) {
 		layout.swapTiles(activeTile, nextTile);
 	}
 };
@@ -670,4 +660,5 @@ TilingManager.prototype._getLayouts = function(desktop, screen) {
 		}
 		return result;
 	}
+	return null;
 };

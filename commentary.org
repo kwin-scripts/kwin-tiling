@@ -69,3 +69,6 @@
 ** INPROGRESS A usage section
 ** DONE A goals section
 * Remove duplicate functionality
+* Refactor and beautify code
+** Use "filter" etc more often
+** Remove duplicate code
