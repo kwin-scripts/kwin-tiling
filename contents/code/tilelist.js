@@ -198,6 +198,11 @@ TileList.prototype.addClient = function(client) {
 		client.noBorder = true;
 	}
 
+	// Check whether the client is part of an existing tile
+	if (this._indexWithClient(client) != -1) {
+		return;
+	}
+
 	this.connectSignals(client);
 
 	// shade can't be activated without borders, so it's okay to handle it here
@@ -210,24 +215,21 @@ TileList.prototype.addClient = function(client) {
 	client.keepAbove = false;
 	client.keepBelow = true;
 
-	// Check whether the client is part of an existing tile
-	if (this._indexWithClient(client) == -1) {
-		// If the client isn't the current tab, it's added to a tabgroup
-		// (because of autogrouping)
-		// HACK: Find it by comparing rectangles (yes, really)
-		if (client.isCurrentTab == false) {
-			for (var i = 0; i < this.tiles.length; i++) {
-				if (util.compareRect(this.tiles[i].rectangle, client.geometry) == true) {
-					if (this.tiles[i]._currentDesktop == client.desktop &&
-						this.tiles[i]._currentScreen  == client.screen) {
-						this.tiles[i].addClient(client);
-						break;
-					}
+	// If the client isn't the current tab, it's added to a tabgroup
+	// (because of autogrouping)
+	// HACK: Find it by comparing rectangles (yes, really)
+	if (client.isCurrentTab == false) {
+		for (var i = 0; i < this.tiles.length; i++) {
+			if (util.compareRect(this.tiles[i].rectangle, client.geometry) == true) {
+				if (this.tiles[i]._currentDesktop == client.desktop &&
+					this.tiles[i]._currentScreen  == client.screen) {
+					this.tiles[i].addClient(client);
+					break;
 				}
 			}
-		} else {
-			this._addTile(client);
 		}
+	} else {
+		this._addTile(client);
 	}
 	client.tiling_floating = false;
 };
