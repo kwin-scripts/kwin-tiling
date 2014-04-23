@@ -96,7 +96,6 @@ TileList.prototype.connectSignals = function(client) {
 				client.tiling_floating = true;
 				client.keepAbove = true;
 				client.keepBelow = false;
-				self._onClientRemoved(client);
 			} else {
 				client.keepAbove = false;
 				client.keepBelow = true;
