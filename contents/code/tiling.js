@@ -60,11 +60,9 @@ Tiling.prototype.setLayoutType = function(layoutType) {
 		var newLayout = new layoutType(this.layout.screenRectangle);
 		for (var i = 0; i < this.layout.tiles.length; i++) {
 			newLayout.addTile();
-			this.layout.tiles[i].tileIndex = i;
 		}
 		this.layout = newLayout;
 		this.layoutType = layoutType;
-		this.layout.resetTileSizes();
 		this._updateAllTiles();
 	} catch(err) {
 		print(err, "in Tiling.setLayoutType");
