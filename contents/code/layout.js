@@ -159,3 +159,16 @@ Layout.prototype.doResize = function(tileIndex, rectangle, set, get, setOther, g
 		}
 	}
 };
+
+Layout.prototype.resetTileSizes = function() {
+	try {
+		// Simply erase all tiles and recreate them to recompute the initial sizes
+		var tileCount = this.tiles.length;
+		this.tiles.length = 0;
+		for (var i = 0; i < tileCount; i++) {
+			this.addTile();
+		}
+	} catch(err) {
+		print(err, "in Layout.resetTileSizes");
+	}
+};

@@ -41,19 +41,6 @@ BladeLayout.image = null;
 BladeLayout.prototype = new Layout();
 BladeLayout.prototype.constructor = BladeLayout;
 
-BladeLayout.prototype.resetTileSizes = function() {
-	try {
-		// Simply erase all tiles and recreate them to recompute the initial sizes
-		var tileCount = this.tiles.length;
-		this.tiles.length = 0;
-		for (var i = 0; i < tileCount; i++) {
-			this.addTile();
-		}
-	} catch(err) {
-		print(err, "in BladeLayout.resetTileSizes");
-	}
-};
-
 BladeLayout.prototype.addTile = function() {
 	try {
 		if (this.tiles.length == 0) {

@@ -36,15 +36,6 @@ SpiralLayout.image = null;
 SpiralLayout.prototype = new Layout();
 SpiralLayout.prototype.constructor = SpiralLayout;
 
-SpiralLayout.prototype.resetTileSizes = function() {
-    // Simply erase all tiles and recreate them to recompute the initial sizes
-    var tileCount = this.tiles.length;
-    this.tiles.length = 0;
-    for (var i = 0; i < tileCount; i++) {
-        this.addTile();
-    }
-};
-
 SpiralLayout.prototype.addTile = function() {
     if (this.tiles.length == 0) {
         // The first tile fills the whole screen
