@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>443</width>
-    <height>293</height>
+    <width>650</width>
+    <height>392</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -26,6 +26,12 @@
    </item>
    <item>
     <widget class="KEditListBox" name="kcfg_floaters">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The windows that should be excluded from tiling, by window class&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="title">
+      <string>Excluded window classes</string>
+     </property>
      <property name="buttons">
       <set>KEditListBox::Add|KEditListBox::Remove</set>
      </property>
@@ -37,14 +43,17 @@
    <item>
     <widget class="QCheckBox" name="kcfg_userActive">
      <property name="text">
-      <string>Tiling Enabled</string>
+      <string>Tiling enabled by default</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QCheckBox" name="kcfg_noBorder">
      <property name="text">
-      <string>No Borders</string>
+      <string>Remove window borders on tiled windows</string>
      </property>
     </widget>
    </item>
@@ -60,10 +69,27 @@
      <property name="text">
       <string>Respect minimum/maximum Size</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>
-    <widget class="QSpinBox" name="kcfg_gapSize"/>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Gapsize</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="kcfg_gapSize">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The size (in pixels) for useless gaps between windows&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gapsize&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

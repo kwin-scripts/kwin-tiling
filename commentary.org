@@ -49,6 +49,7 @@
 	https://bugs.kde.org/show_bug.cgi?id=330102
 *** Pixmap issue
 	Seems it corrupts when clients are resized before windowShown (when compositing)
+	There are other cases, though, like firefox resizing after restoring the previous session
 *** Borders aren't raised properly
 *** KWin maximizes windows automatically on certain conditions
 	Possibly caused by electricBorderMaximize
@@ -59,6 +60,8 @@
 *** ClientArea options
 *** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)
 *** Difference between geometryChanged and geometryShapeChanged
+	geometryChanged fires on geometryShapeChanged and a few other signals
+*** windowClosed is only fired when compositing
 ** Wishes
 *** Integration with rules
 *** Some way to draw small window borders
