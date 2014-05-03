@@ -69,3 +69,5 @@
    [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling02.png]]
    Contrived example with four always-shown panels
    [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling03.png]]
+   Configuration
+   [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling04.png]]
