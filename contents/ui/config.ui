@@ -77,7 +77,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Gapsize</string>
+      <string>Size of gaps between windows</string>
      </property>
     </widget>
    </item>
