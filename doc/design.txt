@@ -35,7 +35,8 @@ Goals:
 
 Design decisions:
  * tiled windows at the bottom, floating windows over that, fullscreen or maximized windows on top (may add options on request)
- * floating or fullscreen windows aren't kept track of in the script
+ * windows that float permanently (because of configuration or type) aren't kept track of in the script - we're not a window manager
+ * KWin functionality should not be duplicated, even if it's off by default (e.g. "focus window to the right")
 
 Design description:
  * TileList: KWin doesn't give us any information about tab groups, so we have
