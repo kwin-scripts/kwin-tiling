@@ -62,8 +62,7 @@ function TilingManager() {
     /**
      * Number of desktops in the system.
      */
-    this.desktopCount = workspace.desktopGridWidth
-        * workspace.desktopGridHeight;
+    this.desktopCount = workspace.desktops;
     /**
      * Number of screens in the system.
      */
