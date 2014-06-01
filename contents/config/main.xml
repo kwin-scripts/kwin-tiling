@@ -7,7 +7,7 @@
     <group name="">
         <entry name="floaters" type="StringList">
 		  <label>The windows (by class) that should float</label>
-		  <default>yakuake,Plasma,Plasma-desktop,krunner,plugin-container</default>
+		  <default>yakuake,plasma,plasma-desktop,krunner,plugin-container,klipper,Wine</default>
         </entry>
 		<entry name="noBorder" type="bool">
 		  <label>Should borders be removed? FocusUnderMouse recommended</label>
