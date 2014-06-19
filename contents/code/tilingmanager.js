@@ -434,7 +434,7 @@ TilingManager.prototype._createDefaultLayouts = function(desktop) {
 		if (this.layoutConfig[i].desktop == desktop) {
 			userConfig = true;
 			layout = this.layoutConfig[i].layout;
-			var tiling = this.layoutConfig[i].tiling;
+			tiling = this.layoutConfig[i].tiling;
 			this.layoutConfig.splice(i,1);
 		}
 	}
