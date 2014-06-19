@@ -296,10 +296,12 @@ function TilingManager() {
 							 }
 							 geom = new Qt.rect(tile.rectangle.x - 10,
 												tile.rectangle.y,
-												tile.rectangle.width - 10,
+												tile.rectangle.width + 10,
 												tile.rectangle.height);
-							 if (geom.x < 0) {
-								 geom.x = 0;
+							 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+							 if (geom.x < screenRectangle.x) {
+								 geom.x = screenRectangle.x;
+								 geom.width = geom.width - 20;
 							 }
 							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
 						 } catch(err) {
@@ -319,10 +321,15 @@ function TilingManager() {
 							 if (tile == null) {
 								 return;
 							 }
-							 var geom = new Qt.rect(tile.rectangle.x + 10,
+							 var geom = new Qt.rect(tile.rectangle.x,
 													tile.rectangle.y,
-													tile.rectangle.width - 10,
+													tile.rectangle.width + 10,
 													tile.rectangle.height);
+							 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+							 if (geom.x + geom.width > screenRectangle.x + screenRectangle.width) {
+								 geom.x = geom.x + 10;
+								 geom.width = (screenRectangle.x + screenRectangle.width) - geom.x;
+							 }
 							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");
@@ -345,6 +352,11 @@ function TilingManager() {
 													tile.rectangle.y - 10,
 													tile.rectangle.width,
 													tile.rectangle.height + 10);
+							 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+							 if (geom.y < screenRectangle.y) {
+								 geom.y = screenRectangle.y;
+								 geom.height = geom.height - 20;
+							 }
 							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");
@@ -364,9 +376,14 @@ function TilingManager() {
 								 return;
 							 }
 							 var geom = new Qt.rect(tile.rectangle.x,
-													tile.rectangle.y + 10,
+													tile.rectangle.y,
 													tile.rectangle.width,
-													tile.rectangle.height - 10);
+													tile.rectangle.height + 10);
+							 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+							 if (geom.y + geom.height > screenRectangle.y + screenRectangle.height) {
+								 geom.y = geom.y + 10;
+								 geom.height = (screenRectangle.y + screenRectangle.height) - geom.y;
+							 }
 							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");
