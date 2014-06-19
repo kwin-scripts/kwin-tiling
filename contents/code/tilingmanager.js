@@ -286,7 +286,14 @@ function TilingManager() {
 					 "Meta+Alt+H",
 					 function() {
 						 try {
-							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
+							 var client = workspace.activeClient;
+							 if (client == null) {
+								 return;
+							 }
+							 var tile = self.tiles.getTile(client);
+							 if (tile == null) {
+								 return;
+							 }
 							 geom = new Qt.rect(tile.rectangle.x - 10,
 												tile.rectangle.y,
 												tile.rectangle.width - 10,
@@ -294,7 +301,7 @@ function TilingManager() {
 							 if (geom.x < 0) {
 								 geom.x = 0;
 							 }
-							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
+							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");
 						 }
@@ -304,12 +311,19 @@ function TilingManager() {
 					 "Meta+Alt+L",
 					 function() {
 						 try {
-							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
-							 geom = new Qt.rect(tile.rectangle.x,
-												tile.rectangle.y,
-												tile.rectangle.width + 10,
-												tile.rectangle.height);
-							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
+							 var client = workspace.activeClient;
+							 if (client == null) {
+								 return;
+							 }
+							 var tile = self.tiles.getTile(client);
+							 if (tile == null) {
+								 return;
+							 }
+							 var geom = new Qt.rect(tile.rectangle.x + 10,
+													tile.rectangle.y,
+													tile.rectangle.width - 10,
+													tile.rectangle.height);
+							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");
 						 }
@@ -319,12 +333,19 @@ function TilingManager() {
 					 "Meta+Alt+K",
 					 function() {
 						 try {
-							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
-							 geom = new Qt.rect(tile.rectangle.x,
-												tile.rectangle.y - 10,
-												tile.rectangle.width,
-												tile.rectangle.height + 10);
-							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
+							 var client = workspace.activeClient;
+							 if (client == null) {
+								 return;
+							 }
+							 var tile = self.tiles.getTile(client);
+							 if (tile == null) {
+								 return;
+							 }
+							 var geom = new Qt.rect(tile.rectangle.x,
+													tile.rectangle.y - 10,
+													tile.rectangle.width,
+													tile.rectangle.height + 10);
+							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");
 						 }
@@ -334,12 +355,19 @@ function TilingManager() {
 					 "Meta+Alt+J",
 					 function() {
 						 try {
-							 var tile = self._getMaster(self._currentScreen, self._currentDesktop);
-							 geom = new Qt.rect(tile.rectangle.x,
-												tile.rectangle.y,
-												tile.rectangle.width,
-												tile.rectangle.height - 10);
-							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeMaster(geom);
+							 var client = workspace.activeClient;
+							 if (client == null) {
+								 return;
+							 }
+							 var tile = self.tiles.getTile(client);
+							 if (tile == null) {
+								 return;
+							 }
+							 var geom = new Qt.rect(tile.rectangle.x,
+													tile.rectangle.y + 10,
+													tile.rectangle.width,
+													tile.rectangle.height - 10);
+							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
 						 } catch(err) {
 							 print(err, "in resize-window-to-the-left");
 						 }

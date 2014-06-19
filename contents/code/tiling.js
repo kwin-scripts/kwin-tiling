@@ -226,6 +226,19 @@ Tiling.prototype.resizeTile = function(tile){
 	}
 };
 
+Tiling.prototype.resizeTileTo = function(tile,geometry) {
+	try {
+		if (tile != null && geometry != null) {
+			var tileIndex = tile.tileIndex;
+			var client = tile.clients[0];
+			this.layout.resizeTile(tileIndex, geometry);
+			this._updateAllTiles();
+		}
+	} catch(err) {
+		print(err, "in Tiling.resizeTileTo");
+	}
+}
+
 Tiling.prototype._updateAllTiles = function() {
 	try {
 		// Set the position/size of all tiles
