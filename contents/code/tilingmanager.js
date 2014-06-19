@@ -114,6 +114,7 @@ function TilingManager() {
 		for (var j = 0; j < this.availableLayouts.length; j++) {
 			if (this.availableLayouts[j].name == layout[1]) {
 				l = this.availableLayouts[j];
+				break;
 			}
 		}
 		if (desktop < 0) {
