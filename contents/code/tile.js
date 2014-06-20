@@ -111,6 +111,10 @@ Tile.prototype.setGeometry = function(geometry) {
 		if (geometry == null) {
 			return;
 		}
+		if (this.maximize == true) {
+			this.oldRect = util.copyRect(geometry);
+			return;
+		}
 		if (this.rectangle == null) {
 			this.rectangle = util.copyRect(geometry);
 		} else {
@@ -351,6 +355,8 @@ Tile.prototype.addClient = function(client) {
 
 Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 	try {
+		// Reset this so setGeometry does its thing
+		this.maximize = false;
 		var screenRect = workspace.clientArea(KWin.PlacementArea, this._currentScreen, this._currentDesktop);
 		var newRect = util.copyRect(this.rectangle);
 		if (h) {
@@ -373,6 +379,9 @@ Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 		}
 		this.oldRect = util.copyRect(this.rectangle);
 		this.setGeometry(newRect);
+		if (h == true || v == true) {
+			this.maximize = true;
+		}
 	} catch(err) {
 		print(err, "in tile.onClientMaximizedStateChanged");
 	}
