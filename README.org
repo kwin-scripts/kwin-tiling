@@ -59,7 +59,9 @@
 
    Multimonitor is untested
 
-   BUUUGS
+** Bugs
+   There is no software without bufs. If you detect one please
+   share it. [[https://github.com/faho/kwin-tiling/issues?state=open]]
    
 
 ** Screenshots
