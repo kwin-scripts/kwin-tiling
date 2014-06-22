@@ -47,8 +47,11 @@
    Move windows around and see that they are tiled :-)
 
    Resize windows to resize the tiles
-   
-   Press M-PgUp or M-PgDn to switch the layout
+
+   Declare shortcuts (in Systemsettings->Shortcuts_and_Gestures->Global_Keyboard_Shortcuts)
+   for resize, minimize and maximize operations.
+
+   Press Meta-PgUp or Meta-PgDn to switch the layout
 
    Use the configuration menu (in Systemsettings->Window Behavior->Scripts)
 
@@ -59,7 +62,9 @@
 
    Multimonitor is untested
 
-   BUUUGS
+** Bugs
+   There is no software without bufs. If you detect one please
+   share it. [[https://github.com/faho/kwin-tiling/issues?state=open]]
    
 
 ** Screenshots
