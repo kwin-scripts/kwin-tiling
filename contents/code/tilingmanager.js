@@ -166,9 +166,12 @@ function TilingManager() {
     workspace.numberScreensChanged.connect(function() {
         self._onNumberScreensChanged();
     });
+
+	// HACK: Signal to send to QML so we can get a timer
+	this.resized = new Signal();
 	workspace.screenResized.connect(function(screen) {
 		try {
-			self._onScreenResized(screen);
+			self.resized.emit();
 		} catch(err) {
 			print(err);
 		}
@@ -425,6 +428,10 @@ function TilingManager() {
 	});
 };
 
+TilingManager.prototype.resize = function() {
+	this._onScreenResized();
+};
+
 TilingManager.prototype._createDefaultLayouts = function(desktop) {
     var screenLayouts = [];
 	var layout = this.defaultLayout;
@@ -555,9 +562,17 @@ TilingManager.prototype._onNumberScreensChanged = function() {
 };
 
 TilingManager.prototype._onScreenResized = function(screen) {
-	if (screen < this.screenCount) {
+	if (screen != null) {
+		if (screen < this.screenCount) {
+			for (var i = 0; i < this.desktopCount; i++) {
+				this.layouts[i][screen].activate();
+			}
+		}
+	} else {
 		for (var i = 0; i < this.desktopCount; i++) {
-			this.layouts[i][screen].activate();
+			for (var screen = 0; screen < this.screenCount; screen++) {
+				this.layouts[i][screen].activate();
+			}
 		}
 	}
 };
