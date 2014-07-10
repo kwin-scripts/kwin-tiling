@@ -50,7 +50,7 @@
 *** Pixmap issue
 	Seems it corrupts when clients are resized before windowShown (when compositing)
 	There are other cases, though, like firefox resizing after restoring the previous session
-*** Borders aren't raised properly
+	May be fixed by https://bugs.kde.org/show_bug.cgi?id=336589
 *** KWin maximizes windows automatically on certain conditions
 	Possibly caused by electricBorderMaximize
 *** QML doesn't draw stuff
@@ -58,6 +58,11 @@
 	It does not change to false when disabling compositing
 *** Crash when wrong desktop is used in workspace.clientArea()
 	See https://github.com/faho/kwin-tiling/issues/22
+*** Stacking order is buggy
+	i.e. sometimes maximizing a client maximizes it _below_ other clients
+  or glow is below other clients
+*** QTimer is not exported to qml
+	Either this or import functionality to javascript are needed to properly do resizes
 ** Documentation
 *** ClientArea options
 *** conditions/guarantees (e.g. is windowClosed always executed before FFM selects new activeClient?)

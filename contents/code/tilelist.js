@@ -63,6 +63,8 @@ function TileList() {
 		// This prevents (some, but not all) graphics bugs
 		// due to resizing before the pixmap is created (or something like that)
 		// Unfortunately, this signal is only emitted when compositing
+		// FIXME: options.useCompositing (et al) never change from the initial value
+		// and the changed signals aren't fired
 		if (options.useCompositing == true) {
 			client.windowShown.connect(function() {
 				self._onClientAdded(client);
