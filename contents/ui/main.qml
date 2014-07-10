@@ -36,7 +36,7 @@ Item {
 
     Timer {
         id: timer
-        interval: 250; running: false; repeat: false
+        interval: 1000; running: false; repeat: false
         onTriggered: tiling.resize();
     }
 
