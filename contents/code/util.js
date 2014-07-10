@@ -20,18 +20,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 var util = {};
 util.copyRect = function(rect) {
-	return new Qt.rect(rect.x,
-					   rect.y,
-					   rect.width,
-					   rect.height);
+	return new Qt.rect(Math.floor(rect.x),
+					   Math.floor(rect.y),
+					   Math.floor(rect.width),
+					   Math.floor(rect.height));
 };
 
 // Sets rect1 to rect2 by value
 util.setRect = function(rect1,rect2) {
-	rect1.x = rect2.x;
-	rect1.y = rect2.y;
-	rect1.width = rect2.width;
-	rect1.height = rect2.height;
+	rect1.x = Math.floor(rect2.x);
+	rect1.y = Math.floor(rect2.y);
+	rect1.width = Math.floor(rect2.width);
+	rect1.height = Math.floor(rect2.height);
 };
 
 // Returns true if rects are equal, false if not
@@ -58,10 +58,6 @@ util.intersectRect = function(rect1, rect2) {
 	newRect.width = (Math.min(rect1.x + rect1.width, rect2.x + rect2.width) - newRect.x);
 	newRect.height = (Math.min(rect1.y + rect1.height, rect2.y + rect2.height) - newRect.y);
 	return newRect;
-};
-
-Math.floor = function(a) {
-	return a;
 };
 
 util.setX = function(geom, value) {
