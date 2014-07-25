@@ -104,6 +104,8 @@ Layout.prototype.resizeTile = function(tileIndex, rectangle) {
 			print("No rect");
 			return;
 		}
+		// Cut off parts outside of the screen
+		rectangle = util.intersectRect(rectangle, this.screenRectangle);
 		// TODO: Remove overlap
 		this.doResize(tileIndex, rectangle, util.setX, util.getX, util.setR, util.getR);
 		this.doResize(tileIndex, rectangle, util.setY, util.getY, util.setB, util.getB);
