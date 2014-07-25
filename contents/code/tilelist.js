@@ -96,10 +96,8 @@ TileList.prototype.connectSignals = function(client) {
 		client.fullScreenChanged.connect(function() {
 			if (client.fullScreen == true) {
 				client.tiling_floating = true;
-				client.keepAbove = true;
 				client.keepBelow = false;
 			} else {
-				client.keepAbove = false;
 				client.keepBelow = true;
 				self._onClientAdded(client);
 			}
@@ -210,11 +208,9 @@ TileList.prototype.addClient = function(client) {
 	// shade can't be activated without borders, so it's okay to handle it here
 	if (client.fullScreen == true || client.shade == true) {
 		client.keepBelow = false;
-		client.keepAbove = true;
 		return;
 	}
 
-	client.keepAbove = false;
 	client.keepBelow = true;
 
 	// If the client isn't the current tab, it's added to a tabgroup

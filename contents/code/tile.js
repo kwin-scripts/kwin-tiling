@@ -297,6 +297,8 @@ Tile.prototype.onClientDesktopChanged = function(client) {
 };
 
 Tile.prototype.onClientStartUserMovedResized = function(client) {
+	// Let client stay above the other tilers so the user sees the move
+	client.keepBelow = false;
 };
 
 Tile.prototype.onClientStepUserMovedResized = function(client) {
@@ -328,6 +330,8 @@ Tile.prototype.onClientFinishUserMovedResized = function(client) {
 			this._resizing = false;
 			this.resizingEnded.emit();
 		}
+		// Put the client on the same layer as the other tilers again
+		client.keepBelow = true;
 	} catch(err) {
 		print(err, "in Tile.onClientFinishUserMovedResized");
 	}
