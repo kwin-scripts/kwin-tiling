@@ -68,6 +68,8 @@ function Tile(firstClient, tileIndex) {
 		 * List of the clients in this tile.
 		 */
 		this.clients = [firstClient];
+		this.originalx = util.middlex(firstClient.geometry);
+		this.originaly = util.middley(firstClient.geometry);
 		/**
 		 * Index of this tile in the TileList to which the tile belongs.
 		 */

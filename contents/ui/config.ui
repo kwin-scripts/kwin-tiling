@@ -58,10 +58,29 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="kcfg_startAsMaster">
+    <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Start As Master</string>
+      <string>Placement method</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="kcfg_placement">
+     <item>
+      <property name="text">
+       <string>Let KWin decide</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Open new tiles as master</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Open new tiles at the end</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item>

@@ -13,10 +13,6 @@
 		  <label>Should borders be removed? FocusUnderMouse recommended</label>
 		  <default>false</default>
 		</entry>
-		<entry name="startAsMaster" type="bool">
-		  <label>Put new windows in the master position</label>
-		  <default>false</default>
-		</entry>
 		<entry name="layouts" type="String">
 		  <label>The layout configuration in "desktop:layoutname" format, separated with commas. Negative desktop denotes disabled tiling by default</label>
 		  <default></default>
@@ -32,6 +28,10 @@
 		<entry name="respectMinMax" type="bool">
 		  <label>Should minimum/maximum Size be respected</label>
 		  <default>false</default>
+		</entry>
+		<entry name="placement" type="int">
+		  <label>Where new tiles should open</label>
+		  <default>0</default>
 		</entry>
     </group>
 </kcfg>

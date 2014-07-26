@@ -480,8 +480,28 @@ TilingManager.prototype._onTileAdded = function(tile) {
 	});
 	// Add the tile to the layouts
 	var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
+	var start = readConfig("placement", 0);
 	tileLayouts.forEach(function(layout) {
-		layout.addTile(tile);
+		// Let KWin decide
+		if (start == 0) {
+			x = tile.originalx;
+			y = tile.originaly;
+		// Start as master
+		} else if (start == 1) {
+			var master = layout.getMaster();
+			if (master != null && master.rectangle != null) {
+				x = master.rectangle.x;
+				y = master.rectangle.y;
+			} else {
+				x = tile.originalx;
+				y = tile.originaly;
+			}
+		// Start at the end
+		} else {
+			layout.addTile(tile);
+			return;
+		}
+		layout.addTile(tile, x, y);
 	});
 };
 

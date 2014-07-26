@@ -112,3 +112,11 @@ util.assertRectInScreen = function(rect, screenRectangle) {
 			   rect.width <= screenRectangle.width &&
 			   rect.height <= screenRectangle.height, "Rectangle not in screen");
 };
+
+util.middlex = function(rect) {
+	return rect.x + (rect.width / 2);
+};
+
+util.middley = function(rect) {
+	return rect.y + (rect.height / 2);
+};
