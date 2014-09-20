@@ -25,6 +25,30 @@
 		  <label>The size in pixels of the gap between windows</label>
 		  <default>0</default>
 		</entry>
+		<entry name="windowsGapSizeHeight" type="int">
+		  <label>The height in pixels of the gap between windows</label>
+		  <default>0</default>
+		</entry>
+		<entry name="windowsGapSizeWidth" type="int">
+		  <label>The width in pixels of the gap between windows</label>
+		  <default>0</default>
+		</entry>
+		<entry name="screenGapSizeLeft" type="int">
+		  <label>The size in pixels of the left gap between window and screenedge</label>
+		  <default>0</default>
+		</entry>
+		<entry name="screenGapSizeRight" type="int">
+		  <label>The size in pixels of the right gap between window and screenedge</label>
+		  <default>0</default>
+		</entry>
+		<entry name="screenGapSizeTop" type="int">
+		  <label>The size in pixels of the top gap between window and screenedge</label>
+		  <default>0</default>
+		</entry>
+		<entry name="screenGapSizeBottom" type="int">
+		  <label>The size in pixels of the bottom gap between window and screenedge</label>
+		  <default>0</default>
+		</entry>
 		<entry name="respectMinMax" type="bool">
 		  <label>Should minimum/maximum Size be respected</label>
 		  <default>false</default>
