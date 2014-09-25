@@ -49,7 +49,13 @@ function Tiling(layoutType, desktop, screen) {
 		this.active = false;
 		this.userActive = true;
 
-		this.gapSize = readConfig("gapSize", 0);
+		var gapSize = readConfig("gapSize", 0);  /* stick to old gaps config by default */
+		this.windowsGapSizeHeight = readConfig("windowsGapSizeHeight", gapSize);
+		this.windowsGapSizeWidth = readConfig("windowsGapSizeWidth", gapSize);
+		this.screenGapSizeLeft = readConfig("screenGapSizeLeft", 0);
+		this.screenGapSizeRight = readConfig("screenGapSizeRight", 0);
+		this.screenGapSizeTop = readConfig("screenGapSizeTop", 0);
+		this.screenGapSizeBottom = readConfig("screenGapSizeBottom", 0);
 	} catch(err) {
 		print(err, "in Tiling");
 	}
@@ -244,25 +250,28 @@ Tiling.prototype._updateAllTiles = function() {
 				if (! newRect) {
 					return;
 				}
-				var geometry = Qt.rect(newRect.x + this.gapSize,
-									   newRect.y + this.gapSize,
-									   newRect.width - (this.gapSize * 2),
-									   newRect.height - (this.gapSize * 2));
-				if (geometry.x < this.screenRectangle.x || 
-					geometry.x == this.screenRectangle.x + this.gapSize) {
-					geometry.x = this.screenRectangle.x;
-					geometry.width = geometry.width + this.gapSize;
+				var geometry = Qt.rect(0, 0, 0, 0);
+
+				if (newRect.x <= this.screenRectangle.x) {
+					geometry.x = this.screenRectangle.x + this.screenGapSizeLeft;
+				} else {
+					geometry.x = newRect.x;
 				}
-				if (geometry.x + geometry.width + this.gapSize * 2 >= this.screenRectangle.x + this.screenRectangle.width) {
-					geometry.width = this.screenRectangle.x + this.screenRectangle.width - geometry.x;
+				if (newRect.y <= this.screenRectangle.y) {
+					geometry.y = this.screenRectangle.y + this.screenGapSizeTop;
+				} else {
+					geometry.y = newRect.y;
 				}
-				if (geometry.y < this.screenRectangle.y 
-					|| geometry.y == this.screenRectangle.y + this.gapSize) {
-					geometry.y = this.screenRectangle.y;
-					geometry.height = geometry.height + this.gapSize;
+
+				if (newRect.x + newRect.width >= this.screenRectangle.x + this.screenRectangle.width) {
+					geometry.width = this.screenRectangle.width - (geometry.x - this.screenRectangle.x) - this.screenGapSizeRight;
+				} else {
+					geometry.width = newRect.width - (geometry.x - newRect.x) - this.windowsGapSizeWidth;
 				}
-				if (geometry.y + geometry.height + this.gapSize * 2 >= this.screenRectangle.y + this.screenRectangle.height) {
-					geometry.height = this.screenRectangle.y + this.screenRectangle.height - geometry.y;
+				if (newRect.y + newRect.height >= this.screenRectangle.y + this.screenRectangle.height) {
+					geometry.height = this.screenRectangle.height - (geometry.y - this.screenRectangle.y) - this.screenGapSizeBottom;
+				} else {
+					geometry.height = newRect.height - (geometry.y - newRect.y) - this.windowsGapSizeHeight;
 				}
 				this.tiles[i].setGeometry(geometry);
 			}
