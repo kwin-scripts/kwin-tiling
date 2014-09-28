@@ -250,29 +250,9 @@ Tiling.prototype._updateAllTiles = function() {
 				if (! newRect) {
 					return;
 				}
-				var geometry = Qt.rect(0, 0, 0, 0);
 
-				if (newRect.x <= this.screenRectangle.x) {
-					geometry.x = this.screenRectangle.x + this.screenGapSizeLeft;
-				} else {
-					geometry.x = newRect.x;
-				}
-				if (newRect.y <= this.screenRectangle.y) {
-					geometry.y = this.screenRectangle.y + this.screenGapSizeTop;
-				} else {
-					geometry.y = newRect.y;
-				}
-
-				if (newRect.x + newRect.width >= this.screenRectangle.x + this.screenRectangle.width) {
-					geometry.width = this.screenRectangle.width - (geometry.x - this.screenRectangle.x) - this.screenGapSizeRight;
-				} else {
-					geometry.width = newRect.width - (geometry.x - newRect.x) - this.windowsGapSizeWidth;
-				}
-				if (newRect.y + newRect.height >= this.screenRectangle.y + this.screenRectangle.height) {
-					geometry.height = this.screenRectangle.height - (geometry.y - this.screenRectangle.y) - this.screenGapSizeBottom;
-				} else {
-					geometry.height = newRect.height - (geometry.y - newRect.y) - this.windowsGapSizeHeight;
-				}
+				var geometry = util.intersectRect(newRect, this.screenRectangle);
+				this.applyGaps(geometry);
 				this.tiles[i].setGeometry(geometry);
 			}
 		}
@@ -315,8 +295,11 @@ Tiling.prototype.resizeScreen = function() {
 };
 
 Tiling.prototype.tile = function() {
+	var self = this;
 	this.tiles.forEach(function(tile) {
-		tile.setGeometry(tile.rectangle);
+		var geom = util.copyRect(tile.rectangle);
+		self.applyGaps(geom);
+		tile.setGeometry(geom);
 	});
 };
 
@@ -331,5 +314,35 @@ Tiling.prototype.decrementMaster = function() {
 	if (this.layout.decrementMaster != null) {
 		this.layout.decrementMaster();
 		this._updateAllTiles();
+	}
+};
+
+/*
+ * Apply gaps to a rectangle, in-place
+*/
+Tiling.prototype.applyGaps = function(rect) {
+	if (rect.x + rect.width == this.screenRectangle.x + this.screenRectangle.width) {
+		rect.width -= this.screenGapSizeRight;
+	} else {
+		rect.width -= this.windowsGapSizeWidth;
+	}
+	if (rect.x == this.screenRectangle.x) {
+		rect.x += this.screenGapSizeLeft;
+		rect.width -= this.screenGapSizeLeft;
+	} else {
+		rect.x += this.windowsGapSizeWidth;
+		rect.width -= this.windowsGapSizeWidth;
+	}
+	if (rect.y + rect.height == this.screenRectangle.y + this.screenRectangle.height) {
+		rect.height -= this.screenGapSizeBottom;
+	} else {
+		rect.height -= this.windowsGapSizeHeight;
+	}
+	if (rect.y == this.screenRectangle.y) {
+		rect.y += this.screenGapSizeTop;
+		rect.height -= this.screenGapSizeTop;
+	} else {
+		rect.y += this.windowsGapSizeHeight;
+		rect.height -= this.windowsGapSizeHeight;
 	}
 };
