@@ -105,13 +105,17 @@ Layout.prototype.resizeTile = function(tileIndex, rectangle) {
 			return;
 		}
 		// Cut off parts outside of the screen
-		rectangle = util.intersectRect(rectangle, this.screenRectangle);
+		var rect = util.intersectRect(rectangle, this.screenRectangle);
+		if (rect == null) {
+			print("Rectangle is off screen", util.rectToString(rectangle));
+			return;
+		}
 		// TODO: Remove overlap
-		this.doResize(tileIndex, rectangle, util.setX, util.getX, util.setR, util.getR);
-		this.doResize(tileIndex, rectangle, util.setY, util.getY, util.setB, util.getB);
-		this.doResize(tileIndex, rectangle, util.setR, util.getR, util.setX, util.getX);
-		this.doResize(tileIndex, rectangle, util.setB, util.getB, util.setY, util.getY);
-		this.tiles[tileIndex].rectangle = util.copyRect(rectangle);
+		this.doResize(tileIndex, rect, util.setX, util.getX, util.setR, util.getR);
+		this.doResize(tileIndex, rect, util.setY, util.getY, util.setB, util.getB);
+		this.doResize(tileIndex, rect, util.setR, util.getR, util.setX, util.getX);
+		this.doResize(tileIndex, rect, util.setB, util.getB, util.setY, util.getY);
+		this.tiles[tileIndex].rectangle = util.copyRect(rect);
 	} catch(err) {
 		print(err, "in Layout.resizeTile");
 	}
