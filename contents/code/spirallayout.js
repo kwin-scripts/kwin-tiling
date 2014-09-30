@@ -102,10 +102,3 @@ SpiralLayout.prototype.removeTile = function(tileIndex) {
     // Remove the last array entry
     this.tiles.length--;
 };
-
-SpiralLayout.prototype._createTile = function(rect) {
-    // Create a new tile and add it to the list
-    var tile = {};
-    tile.rectangle = rect;
-    this.tiles.push(tile);
-};

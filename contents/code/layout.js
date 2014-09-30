@@ -178,3 +178,15 @@ Layout.prototype.resetTileSizes = function() {
 		print(err, "in Layout.resetTileSizes");
 	}
 };
+
+Layout.prototype._createTile = function(rect) {
+	try {
+		// Create a new tile and add it to the list
+		var tile = {};
+		tile.rectangle = rect;
+		tile.index = this.tiles.length;
+		this.tiles.push(tile);
+	} catch(err) {
+		print(err, "in Layout._createTile");
+	}
+};
