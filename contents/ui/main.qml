@@ -32,15 +32,15 @@ Item {
         // Initialize tiling
         tiling = new Tiling.TilingManager();
         // Attach resized here so we can give it a timer (since QTimer isn't exported to QML)
-        tiling.resized.connect(function() {
-            timer.start();
-        });
+        /* tiling.resized.connect(function() { */
+        /*     timer.start(); */
+        /* }); */
     }
 
-    Timer {
-        id: timer
-        interval: 1000; running: false; repeat: false
-        onTriggered: tiling.resize();
-    }
+    /* Timer { */
+    /*     id: timer */
+    /*     interval: 1000; running: false; repeat: false */
+    /*     onTriggered: tiling.resize(); */
+    /* } */
 
 }
