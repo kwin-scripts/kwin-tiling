@@ -43,7 +43,7 @@ HalfLayout.prototype.addTile = function() {
 		if (this.tiles.length == 0) {
 			// The first tile fills the whole screen
 			var rect = util.copyRect(this.screenRectangle);
-			util.assertRectInScreen(rect, this.screenRectangle);
+			// util.assertRectInScreen(rect, this.screenRectangle);
 			this._createTile(rect);
 			return;
 		} 
@@ -92,12 +92,13 @@ HalfLayout.prototype.addTile = function() {
 			}
 			// Adjust new tile's height for rounding errors
 			newRect.height = (this.screenRectangle.y + this.screenRectangle.height) - newRect.y;
-			util.assertRectInScreen(newRect, this.screenRectangle);
+			// util.assertRectInScreen(newRect, this.screenRectangle);
 			this._createTile(newRect);
 		}
 	} catch(err) {
 		print(err, "in HalfLayout.addTile");
 	}
+	print("Added tile");
 };
 
 // Save the first tile's width
@@ -167,7 +168,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 			}
 			// Adjust lowest tile's height for rounding errors
 			this.tiles[lowest].rectangle.height = (this.screenRectangle.y + this.screenRectangle.height) - this.tiles[lowest].rectangle.y;
-			assertTrue(this.tiles[lowest].rectangle.height > 0, "Lowest rect has zero height");
+			// assertTrue(this.tiles[lowest].rectangle.height > 0, "Lowest rect has zero height");
 		}
 	} catch(err) {
 		print(err, "in HalfLayout.removeTile");
@@ -242,15 +243,199 @@ HalfLayout.prototype.decrementMaster = function() {
 		this.tiles[i].rectangle.width = newMWidth;
 		this.tiles[i].rectangle.y = this.screenRectangle.y;
 		this.tiles[i].rectangle.height = this.screenRectangle.height;
-		util.assertRectInScreen(this.tiles[i].rectangle, this.screenRectangle);
+		// util.assertRectInScreen(this.tiles[i].rectangle, this.screenRectangle);
 	}
 	for (var i = newC; i < this.tiles.length; i++) {
 		this.tiles[i].rectangle.y = this.screenRectangle.y + (i - newC) * newSHeight;
 		this.tiles[i].rectangle.height = newSHeight;
 		this.tiles[i].rectangle.width = newSWidth;
 		this.tiles[i].rectangle.x = this.screenRectangle.x + oldMWidth;
-		util.assertRectInScreen(this.tiles[i].rectangle, this.screenRectangle);
+		// util.assertRectInScreen(this.tiles[i].rectangle, this.screenRectangle);
 	}
 	this.masterCount--;
 	this.firstWidth = this.getMasterWidth();
 };
+
+Qt.include("util.js");
+var Direction = {
+    Up : 0,
+    Down : 1,
+    Left : 2,
+    Right : 3
+};
+
+HalfLayout.prototype.setLayoutArea = function(newArea) {
+	try {
+		var oldArea = this.screenRectangle;
+		var xscale = newArea.width / oldArea.width;
+		var yscale = newArea.height / oldArea.height;
+		var xoffset = newArea.x - oldArea.x;
+		var yoffset = newArea.y - oldArea.y;
+		this.tiles.forEach(function(tile) {
+			var lastrect = tile.rectangle;
+			var newrect = Qt.rect(Math.floor((lastrect.x + xoffset) * xscale),
+								  Math.floor((lastrect.y + yoffset) * yscale),
+								  Math.floor(lastrect.width * xscale),
+								  Math.floor(lastrect.height * yscale));
+			// Stay at the screenedges
+			// It's better to have roundingerrors in the middle than at the edges
+			// left screenedge, keep right windowedge (i.e. adjust width)
+			if (lastrect.x == oldArea.x) {
+				newrect.width = newrect.width + (newrect.x - newArea.x);
+				newrect.x = newArea.x;
+			}
+			// Top screenedge, keep bottom windowedge (i.e. adjust height)
+			if (lastrect.y == oldArea.y) {
+				newrect.height = newrect.height + (newrect.y - newArea.y);
+				newrect.y = newArea.y;
+			}
+			// Right screenedge, keep left windowedge (i.e. don't adjust x)
+			if (lastrect.x + lastrect.width == oldArea.x + oldArea.width) {
+				newrect.width = (newArea.width + newArea.x) - newrect.x;
+			}
+			// Bottom screenedge, keep top windowedge (i.e. don't adjust y)
+			if (lastrect.y + lastrect.height == oldArea.y + oldArea.height) {
+				newrect.height = (newArea.height + newArea.y) - newrect.y;
+			}
+			tile.rectangle = newrect;
+		});
+		this.screenRectangle = newArea;
+	} catch(err) {
+		print(err, "in Layout.setLayoutArea");
+	}
+};
+
+HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
+	try {
+		// Sanitize
+		if (tileIndex < 0 || tileIndex > (this.tiles.length - 1)) {
+			print("Tileindex invalid", tileIndex, "/", this.tiles.length);
+			return;
+		}
+		if (this.tiles[tileIndex] == null) {
+			print("No tile");
+			return;
+		}
+		if (rectangle == null){
+			print("No rect");
+			return;
+		}
+		// Cut off parts outside of the screen
+		var rect = util.intersectRect(rectangle, this.screenRectangle);
+		if (rect == null) {
+			print("Rectangle is off screen", util.rectToString(rectangle));
+			return;
+		}
+		// TODO: Remove overlap
+		this.doResize(tileIndex, rect, util.setX, util.getX, util.setR, util.getR);
+		this.doResize(tileIndex, rect, util.setY, util.getY, util.setB, util.getB);
+		this.doResize(tileIndex, rect, util.setR, util.getR, util.setX, util.getX);
+		this.doResize(tileIndex, rect, util.setB, util.getB, util.setY, util.getY);
+		this.tiles[tileIndex].rectangle = util.copyRect(rect);
+	} catch(err) {
+		print(err, "in Layout.resizeTile");
+	}
+};
+
+/*
+ * Resize all rectangles for one edge
+ * Params:
+ * set, get: a set/get function for one edge
+ * setOther, getOther: a set/get function for the opposite edge
+ */
+HalfLayout.prototype.doResize = function(tileIndex, rectangle, set, get, setOther, getOther) {
+	var oldD = get(this.tiles[tileIndex].rectangle);
+	var newD = get(rectangle);
+	if (oldD == newD) {
+		return;
+	}
+	// Disallow moving away from screenedges
+	if (oldD == get(this.screenRectangle)) {
+		set(rectangle, oldD);
+		return;
+	}
+	// Disallow moving to screenedges
+	// - otherwise we need to check when moving away if this is supposed to be there
+	if (newD == get(this.screenRectangle)) {
+		set(rectangle, oldD);
+		return;
+	}
+	/*
+	 * A tile needs to be changed if it
+	 * a) Had the same value as the oldRect
+	 * b) Had the same other edge value as oldRect
+	 */
+	for (var i = 0; i < this.tiles.length; i++) {
+		if (i == tileIndex) {
+			continue;
+		}
+		var dOther = getOther(this.tiles[i].rectangle);
+		var d = get(this.tiles[i].rectangle);
+		if (d == oldD) {
+			set(this.tiles[i].rectangle, newD);
+			continue;
+		}
+		if (dOther == oldD) {
+			setOther(this.tiles[i].rectangle, newD);
+			continue;
+		}
+	}
+};
+
+HalfLayout.prototype.resetTileSizes = function() {
+	try {
+		// Simply erase all tiles and recreate them to recompute the initial sizes
+		var tileCount = this.tiles.length;
+		this.tiles.length = 0;
+		for (var i = 0; i < tileCount; i++) {
+			this.addTile();
+		}
+	} catch(err) {
+		print(err, "in Layout.resetTileSizes");
+	}
+};
+
+HalfLayout.prototype._createTile = function(rect) {
+	try {
+		// Create a new tile and add it to the list
+		var tile = {};
+		tile.rectangle = rect;
+		tile.index = this.tiles.length;
+		this.tiles.push(tile);
+	} catch(err) {
+		print(err, "in Layout._createTile");
+	}
+};
+
+/**
+ * Class which arranges the windows in a spiral with the largest window filling
+ * the left half of the screen.
+ */
+function HalfLayout(screenRectangle) {
+	print("Creating HalfLayout");
+	try {
+		/**
+		 * Screen area which is used by the layout.
+		 */
+		this.screenRectangle = screenRectangle;
+		/**
+		 * Geometry of the different tiles. This array stays empty in the case of
+		 * floating layouts.
+		 */
+		this.tiles = [];
+		// TODO
+		print("Created layout");
+	} catch(err) {
+		print(err, "in Layout");
+	}
+	this.firstWidth = this.screenRectangle.width / 2;
+	this.master = 0;
+	this.masterCount = 1;
+};
+
+HalfLayout.name = "Half";
+// TODO: Add an image for the layout switcher
+HalfLayout.image = null;
+
+HalfLayout.prototype = new Layout();
+HalfLayout.prototype.constructor = HalfLayout;
