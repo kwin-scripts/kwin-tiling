@@ -240,6 +240,9 @@ Tile.prototype.setClientGeometry = function(client) {
 		// 	print(client.maxSize, client.maxSize.w);
 		// 	return;
 		// }
+		if (client.minSize.width == client.maxSize.width && client.minSize.height == client.maxSize.width) {
+			return;
+		}
 		if (this.rectangle != null) {
 			if (util.compareRect(this.rectangle, client.geometry) == false) {
 				client.tiling_resize = true;
@@ -247,32 +250,32 @@ Tile.prototype.setClientGeometry = function(client) {
 				var changedRect = false;
 				var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
 				if (this.respectMinMax) {
-					if (client.minSize.w > this.rectangle.width) {
+					if (client.minSize.width > this.rectangle.width) {
 						if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width - this.screenGapSizeRight) {
-							this.rectangle.x = (screenRect.x + screenRect.width - this.screenGapSizeRight) - client.minSize.w;
+							this.rectangle.x = (screenRect.x + screenRect.width - this.screenGapSizeRight) - client.minSize.width;
 						}
-						this.rectangle.width = client.minSize.w + this.windowsGapSizeWidth;
+						this.rectangle.width = client.minSize.width + this.windowsGapSizeWidth;
 						changedRect = true;
 					}
-					if (client.minSize.h > this.rectangle.height) {
+					if (client.minSize.height > this.rectangle.height) {
 						if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height - this.screenGapSizeBottom) {
-							this.rectangle.y = (screenRect.y + screenRect.height - this.screenGapSizeBottom) - client.minSize.h;
+							this.rectangle.y = (screenRect.y + screenRect.height - this.screenGapSizeBottom) - client.minSize.height;
 						}
-						this.rectangle.height = client.minSize.h + this.windowsGapSizeHeight;
+						this.rectangle.height = client.minSize.height + this.windowsGapSizeHeight;
 						changedRect = true;
 					}
-					if (client.maxSize.w < this.rectangle.width && client.maxSize.w > 0) {
+					if (client.maxSize.width < this.rectangle.width && client.maxSize.width > 0) {
 						if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width - this.screenGapSizeRight) {
-							this.rectangle.x = (screenRect.x + screenRect.width - this.screenGapSizeRight) - client.maxSize.w;
+							this.rectangle.x = (screenRect.x + screenRect.width - this.screenGapSizeRight) - client.maxSize.width;
 						}
-						this.rectangle.width = client.maxSize.w + this.windowsGapSizeWidth;
+						this.rectangle.width = client.maxSize.width + this.windowsGapSizeWidth;
 						changedRect = true;
 					}
-					if (client.maxSize.h < this.rectangle.height && client.maxSize.h > 0) {
+					if (client.maxSize.height < this.rectangle.height && client.maxSize.height > 0) {
 						if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height - this.screenGapSizeBottom) {
-							this.rectangle.y = (screenRect.y + screenRect.height - this.screenGapSizeBottom) - client.maxSize.h;
+							this.rectangle.y = (screenRect.y + screenRect.height - this.screenGapSizeBottom) - client.maxSize.height;
 						}
-						this.rectangle.height = client.maxSize.h + this.windowsGapSizeHeight;
+						this.rectangle.height = client.maxSize.height + this.windowsGapSizeHeight;
 						changedRect = true;
 					}
 				}
