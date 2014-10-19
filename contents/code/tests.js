@@ -44,7 +44,7 @@ print("Signal test 2: " + (success1 && !success2 ? "SUCCESS" : "FAILURE"));
 
 var isConfig = function(name, defaultValue) {
 	print("Reading", name);
-	c = readConfig(name, defaultValue);
+	c = KWin.readConfig(name, defaultValue);
 	print("Read", name);
 	if (c == null) {
 		print("Configuration option", name, "not defined");

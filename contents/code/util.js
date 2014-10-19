@@ -120,3 +120,11 @@ util.middlex = function(rect) {
 util.middley = function(rect) {
 	return rect.y + (rect.height / 2);
 };
+
+// readConfig moved to KWin.readConfig for KWin 5
+if(KWin.readConfig == null) {
+	print("Setting readConfig to KWin.readConfig");
+	KWin.readConfig = readConfig;
+} else {
+	print("We're running under KWin 5");
+}

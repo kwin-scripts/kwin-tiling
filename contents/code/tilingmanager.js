@@ -96,13 +96,13 @@ function TilingManager() {
 	 * Whether tiling is active on all desktops
 	 * This is overridden by per-desktop settings
 	 */
-	this.userActive = readConfig("userActive", true);
+	this.userActive = KWin.readConfig("userActive", true);
 	
 	// Read layout configuration
 	// Format: desktop:layoutname[,...]
 	// Negative desktop number deactivates tiling
 	this.layoutConfig = [];
-	var lC = String(readConfig("layouts", "")).replace(/ /g,"").split(",");
+	var lC = String(KWin.readConfig("layouts", "")).replace(/ /g,"").split(",");
 	for (var i = 0; i < lC.length; i++) {
 		var layout = lC[i].split(":");
 		try {
@@ -480,7 +480,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
 	});
 	// Add the tile to the layouts
 	var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
-	var start = readConfig("placement", 0);
+	var start = KWin.readConfig("placement", 0);
 	tileLayouts.forEach(function(layout) {
 		// Let KWin decide
 		if (start == 0) {

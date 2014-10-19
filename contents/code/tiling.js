@@ -49,13 +49,13 @@ function Tiling(layoutType, desktop, screen) {
 		this.active = false;
 		this.userActive = true;
 
-		var gapSize = readConfig("gapSize", 0);  /* stick to old gaps config by default */
-		this.windowsGapSizeHeight = readConfig("windowsGapSizeHeight", gapSize);
-		this.windowsGapSizeWidth = readConfig("windowsGapSizeWidth", gapSize);
-		this.screenGapSizeLeft = readConfig("screenGapSizeLeft", 0);
-		this.screenGapSizeRight = readConfig("screenGapSizeRight", 0);
-		this.screenGapSizeTop = readConfig("screenGapSizeTop", 0);
-		this.screenGapSizeBottom = readConfig("screenGapSizeBottom", 0);
+		var gapSize = KWin.readConfig("gapSize", 0);  /* stick to old gaps config by default */
+		this.windowsGapSizeHeight = KWin.readConfig("windowsGapSizeHeight", gapSize);
+		this.windowsGapSizeWidth = KWin.readConfig("windowsGapSizeWidth", gapSize);
+		this.screenGapSizeLeft = KWin.readConfig("screenGapSizeLeft", 0);
+		this.screenGapSizeRight = KWin.readConfig("screenGapSizeRight", 0);
+		this.screenGapSizeTop = KWin.readConfig("screenGapSizeTop", 0);
+		this.screenGapSizeBottom = KWin.readConfig("screenGapSizeBottom", 0);
 	} catch(err) {
 		print(err, "in Tiling");
 	}

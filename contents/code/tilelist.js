@@ -40,7 +40,7 @@ function TileList() {
     this.tileRemoved = new Signal();
 
 	try {
-		this.noBorder = readConfig("noBorder", false);
+		this.noBorder = KWin.readConfig("noBorder", false);
 	} catch(err) {
 		print(err, "in TileList");
 	}
@@ -354,9 +354,9 @@ TileList._isIgnored = function(client) {
     // Application workarounds should be put here
 	// HACK: Qt gives us a method-less QVariant(QStringList) if we ask for an array
 	// Ask for a string instead (which can and should still be a StringList for the UI)
-	var fl = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper";
+	var fl = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper,plasmashell,Plasma";
 	// TODO: This could break if an entry contains whitespace or a comma - it needs to be validated on the qt side
-	var floaters = String(readConfig("floaters", fl)).replace(/ /g,"").split(",");
+	var floaters = String(KWin.readConfig("floaters", fl)).replace(/ /g,"").split(",");
 	if (floaters.indexOf(client.resourceClass.toString()) > -1) {
 		client.syncTabGroupFor("kwin_tiling_floats", true);
 		return true;
