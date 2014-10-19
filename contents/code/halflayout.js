@@ -19,25 +19,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
-/**
- * Class which arranges the windows in a spiral with the largest window filling
- * the left half of the screen.
- */
-function HalfLayout(screenRectangle) {
-	print("Creating HalfLayout");
-    Layout.call(this, screenRectangle);
-	this.firstWidth = this.screenRectangle.width / 2;
-	this.master = 0;
-	this.masterCount = 1;
-};
-
-HalfLayout.name = "Half";
-// TODO: Add an image for the layout switcher
-HalfLayout.image = null;
-
-HalfLayout.prototype = new Layout();
-HalfLayout.prototype.constructor = HalfLayout;
-
 HalfLayout.prototype.addTile = function() {
 	try {
 		if (this.tiles.length == 0) {

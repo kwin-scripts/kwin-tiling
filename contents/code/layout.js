@@ -32,6 +32,10 @@ var Direction = {
  * @class
  */
 function Layout(screenRectangle) {
+	this.construct(screenRectangle);
+};
+
+Layout.prototype.construct = function(screenRectangle) {
 	try {
 		/**
 		 * Screen area which is used by the layout.
@@ -47,6 +51,8 @@ function Layout(screenRectangle) {
 		print(err, "in Layout");
 	}
 };
+Layout.prototype.constructor = Layout;
+Layout.prototype.name = "Wurst";
 
 Layout.prototype.setLayoutArea = function(newArea) {
 	try {
