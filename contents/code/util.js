@@ -107,10 +107,10 @@ util.rectToString = function(rect) {
 }
 
 util.assertRectInScreen = function(rect, screenRectangle) {
-	assertTrue(rect.x >= screenRectangle.x &&
-			   rect.y >= screenRectangle.y &&
-			   rect.width <= screenRectangle.width &&
-			   rect.height <= screenRectangle.height, "Rectangle not in screen");
+	// assertTrue(rect.x >= screenRectangle.x &&
+	// 		   rect.y >= screenRectangle.y &&
+	// 		   rect.width <= screenRectangle.width &&
+	// 		   rect.height <= screenRectangle.height, "Rectangle not in screen");
 };
 
 util.middlex = function(rect) {
