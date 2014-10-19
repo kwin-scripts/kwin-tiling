@@ -180,252 +180,252 @@ function TilingManager() {
         self._onCurrentDesktopChanged();
     });
     // Register keyboard shortcuts
-    registerShortcut("Next Tiling Layout",
-                     "Next Tiling Layout",
-                     "Meta+PgDown",
-                     function() {
-						 var currentLayout = self._getCurrentLayoutType();
-						 var nextIndex = (currentLayout.index + 1) % self.availableLayouts.length;
-						 self._switchLayout(workspace.currentDesktop - 1,
-											workspace.activeScreen,
-											nextIndex);
-					 });
-    registerShortcut("Previous Tiling Layout",
-                     "Previous Tiling Layout",
-                     "Meta+PgUp",
-                     function() {
-						 var currentLayout = self._getCurrentLayoutType();
-						 var nextIndex = currentLayout.index - 1;
-						 if (nextIndex < 0) {
-							 nextIndex += self.availableLayouts.length;
-						 }
-						 self._switchLayout(workspace.currentDesktop - 1,
-											workspace.activeScreen,
-											nextIndex);
-					 });
-    registerShortcut("Toggle Floating",
-                     "Toggle Floating",
-                     "Meta+F",
-                     function() {
-						 var client = workspace.activeClient;
-						 if (client == null) {
-							 print("No active client");
-							 return;
-						 }
-						 client.tiling_floating = !client.tiling_floating;
-						 if (client.tiling_floating == true) {
-							 self.tiles._onClientRemoved(client);
-						 } else {
-							 self.tiles.addClient(client);
-						 }
-					 });
-	registerShortcut("Toggle Border for all",
-					 "Toggle Border for all",
-					 "Meta+Shift+U",
-					 function() {
-						 self.tiles.toggleNoBorder();
-					 });
-    registerShortcut("Move Window Left",
-                     "Move Window Left",
-                     "Meta+Shift+H",
-                     function() {
-						 self._moveTile(Direction.Left);
-					 });
-    registerShortcut("Move Window Right",
-                     "Move Window Right",
-                     "Meta+Shift+L",
-                     function() {
-						 self._moveTile(Direction.Right);
-					 });
-    registerShortcut("Move Window Up",
-                     "Move Window Up",
-                     "Meta+Shift+K",
-                     function() {
-						 self._moveTile(Direction.Up);
-					 });
-    registerShortcut("Move Window Down",
-                     "Move Window Down",
-                     "Meta+Shift+J",
-                     function() {
-						 self._moveTile(Direction.Down);
-					 });
-	registerShortcut("Toggle Tiling",
-					 "Toggle Tiling",
-					 "Meta+Shift+f11",
-					 function() {
-						 var currentScreen = workspace.activeScreen;
-						 var currentDesktop = workspace.currentDesktop - 1;
-						 self.layouts[currentDesktop][currentScreen].toggleUserActive();
-					 });
-	registerShortcut("Tile now",
-					 "Tile now",
-					 "Meta+t",
-					 function() {
-						 var currentScreen = workspace.activeScreen;
-						 var currentDesktop = workspace.currentDesktop - 1;
-						 self.layouts[currentDesktop][currentScreen].toggleUserActive();
-						 self.layouts[currentDesktop][currentScreen].toggleUserActive();
-					 });
-	registerShortcut("Swap Window With Master",
-					 "Swap Window With Master",
-					 "Meta+Shift+M",
-					 function() {
-						 try {
-							 var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
-							 if (layout != null) {
-								 var client = workspace.activeClient;
-								 if (client != null) {
-									 var tile = layout.getTile(client.x, client.y);
-								 }
-							 }
-							 if (tile != null) {
-								 layout.swapTiles(tile, layout.tiles[0]);
-							 }
-						 } catch(err) {
-							 print(err, "in swap-window-with-master");
-						 }
-					 });
-	registerShortcut("Resize Active Window To The Left",
-					 "Resize Active Window To The Left",
-					 "Meta+Alt+H",
-					 function() {
-						 try {
-							 var client = workspace.activeClient;
-							 if (client == null) {
-								 return;
-							 }
-							 var tile = self.tiles.getTile(client);
-							 if (tile == null) {
-								 return;
-							 }
-							 geom = new Qt.rect(tile.rectangle.x - 10,
-												tile.rectangle.y,
-												tile.rectangle.width + 10,
-												tile.rectangle.height);
-							 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
-							 if (geom.x < screenRectangle.x) {
-								 geom.x = screenRectangle.x;
-								 geom.width = geom.width - 20;
-							 }
-							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
-						 } catch(err) {
-							 print(err, "in resize-window-to-the-left");
-						 }
-					 });
-	registerShortcut("Resize Active Window To The Right",
-					 "Resize Active Window To The Right",
-					 "Meta+Alt+L",
-					 function() {
-						 try {
-							 var client = workspace.activeClient;
-							 if (client == null) {
-								 return;
-							 }
-							 var tile = self.tiles.getTile(client);
-							 if (tile == null) {
-								 return;
-							 }
-							 var geom = new Qt.rect(tile.rectangle.x,
-													tile.rectangle.y,
-													tile.rectangle.width + 10,
-													tile.rectangle.height);
-							 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
-							 if (geom.x + geom.width > screenRectangle.x + screenRectangle.width) {
-								 geom.x = geom.x + 10;
-								 geom.width = (screenRectangle.x + screenRectangle.width) - geom.x;
-							 }
-							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
-						 } catch(err) {
-							 print(err, "in resize-window-to-the-left");
-						 }
-					 });
-	registerShortcut("Resize Active Window To The Top",
-					 "Resize Active Window To The Top",
-					 "Meta+Alt+K",
-					 function() {
-						 try {
-							 var client = workspace.activeClient;
-							 if (client == null) {
-								 return;
-							 }
-							 var tile = self.tiles.getTile(client);
-							 if (tile == null) {
-								 return;
-							 }
-							 var geom = new Qt.rect(tile.rectangle.x,
-													tile.rectangle.y - 10,
-													tile.rectangle.width,
-													tile.rectangle.height + 10);
-							 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
-							 if (geom.y < screenRectangle.y) {
-								 geom.y = screenRectangle.y;
-								 geom.height = geom.height - 20;
-							 }
-							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
-						 } catch(err) {
-							 print(err, "in resize-window-to-the-left");
-						 }
-					 });
-	registerShortcut("Resize Active Window To The Bottom",
-					 "Resize Active Window To The Bottom",
-					 "Meta+Alt+J",
-					 function() {
-						 try {
-							 var client = workspace.activeClient;
-							 if (client == null) {
-								 return;
-							 }
-							 var tile = self.tiles.getTile(client);
-							 if (tile == null) {
-								 return;
-							 }
-							 var geom = new Qt.rect(tile.rectangle.x,
-													tile.rectangle.y,
-													tile.rectangle.width,
-													tile.rectangle.height + 10);
-							 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
-							 if (geom.y + geom.height > screenRectangle.y + screenRectangle.height) {
-								 geom.y = geom.y + 10;
-								 geom.height = (screenRectangle.y + screenRectangle.height) - geom.y;
-							 }
-							 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
-						 } catch(err) {
-							 print(err, "in resize-window-to-the-left");
-						 }
-					 });
-	registerShortcut("Increase Number Of Masters",
-					 "Increase Number Of Masters",
-					 "Meta+*",
-					 function() {
-						 try {
-							 self.layouts[self._currentDesktop][self._currentScreen].increaseMaster();
-						 } catch(err) {
-							 print(err, "in Increase-Number-Of-Masters");
-						 }
-					 });
-	registerShortcut("Decrease Number Of Masters",
-					 "Decrease Number Of Masters",
-					 "Meta+_",
-					 function() {
-						 try {
-							 self.layouts[self._currentDesktop][self._currentScreen].decrementMaster();
-						 } catch(err) {
-							 print(err, "in Decrease-Number-Of-Masters");
-						 }
-					 });
-	registerUserActionsMenu(function(client) {
-		return {
-			text : "Toggle floating",
-			triggered: function () {
-				client.tiling_floating = ! client.tiling_floating;
-				if (client.tiling_floating == true) {
-					self.tiles._onClientRemoved(client);
-				} else {
-					self.tiles.addClient(client);
-				}
-			}
-		};
-	});
+    // registerShortcut("Next Tiling Layout",
+    //                  "Next Tiling Layout",
+    //                  "Meta+PgDown",
+    //                  function() {
+	// 					 var currentLayout = self._getCurrentLayoutType();
+	// 					 var nextIndex = (currentLayout.index + 1) % self.availableLayouts.length;
+	// 					 self._switchLayout(workspace.currentDesktop - 1,
+	// 										workspace.activeScreen,
+	// 										nextIndex);
+	// 				 });
+    // registerShortcut("Previous Tiling Layout",
+    //                  "Previous Tiling Layout",
+    //                  "Meta+PgUp",
+    //                  function() {
+	// 					 var currentLayout = self._getCurrentLayoutType();
+	// 					 var nextIndex = currentLayout.index - 1;
+	// 					 if (nextIndex < 0) {
+	// 						 nextIndex += self.availableLayouts.length;
+	// 					 }
+	// 					 self._switchLayout(workspace.currentDesktop - 1,
+	// 										workspace.activeScreen,
+	// 										nextIndex);
+	// 				 });
+    // registerShortcut("Toggle Floating",
+    //                  "Toggle Floating",
+    //                  "Meta+F",
+    //                  function() {
+	// 					 var client = workspace.activeClient;
+	// 					 if (client == null) {
+	// 						 print("No active client");
+	// 						 return;
+	// 					 }
+	// 					 client.tiling_floating = !client.tiling_floating;
+	// 					 if (client.tiling_floating == true) {
+	// 						 self.tiles._onClientRemoved(client);
+	// 					 } else {
+	// 						 self.tiles.addClient(client);
+	// 					 }
+	// 				 });
+	// registerShortcut("Toggle Border for all",
+	// 				 "Toggle Border for all",
+	// 				 "Meta+Shift+U",
+	// 				 function() {
+	// 					 self.tiles.toggleNoBorder();
+	// 				 });
+    // registerShortcut("Move Window Left",
+    //                  "Move Window Left",
+    //                  "Meta+Shift+H",
+    //                  function() {
+	// 					 self._moveTile(Direction.Left);
+	// 				 });
+    // registerShortcut("Move Window Right",
+    //                  "Move Window Right",
+    //                  "Meta+Shift+L",
+    //                  function() {
+	// 					 self._moveTile(Direction.Right);
+	// 				 });
+    // registerShortcut("Move Window Up",
+    //                  "Move Window Up",
+    //                  "Meta+Shift+K",
+    //                  function() {
+	// 					 self._moveTile(Direction.Up);
+	// 				 });
+    // registerShortcut("Move Window Down",
+    //                  "Move Window Down",
+    //                  "Meta+Shift+J",
+    //                  function() {
+	// 					 self._moveTile(Direction.Down);
+	// 				 });
+	// registerShortcut("Toggle Tiling",
+	// 				 "Toggle Tiling",
+	// 				 "Meta+Shift+f11",
+	// 				 function() {
+	// 					 var currentScreen = workspace.activeScreen;
+	// 					 var currentDesktop = workspace.currentDesktop - 1;
+	// 					 self.layouts[currentDesktop][currentScreen].toggleUserActive();
+	// 				 });
+	// registerShortcut("Tile now",
+	// 				 "Tile now",
+	// 				 "Meta+t",
+	// 				 function() {
+	// 					 var currentScreen = workspace.activeScreen;
+	// 					 var currentDesktop = workspace.currentDesktop - 1;
+	// 					 self.layouts[currentDesktop][currentScreen].toggleUserActive();
+	// 					 self.layouts[currentDesktop][currentScreen].toggleUserActive();
+	// 				 });
+	// registerShortcut("Swap Window With Master",
+	// 				 "Swap Window With Master",
+	// 				 "Meta+Shift+M",
+	// 				 function() {
+	// 					 try {
+	// 						 var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+	// 						 if (layout != null) {
+	// 							 var client = workspace.activeClient;
+	// 							 if (client != null) {
+	// 								 var tile = layout.getTile(client.x, client.y);
+	// 							 }
+	// 						 }
+	// 						 if (tile != null) {
+	// 							 layout.swapTiles(tile, layout.tiles[0]);
+	// 						 }
+	// 					 } catch(err) {
+	// 						 print(err, "in swap-window-with-master");
+	// 					 }
+	// 				 });
+	// registerShortcut("Resize Active Window To The Left",
+	// 				 "Resize Active Window To The Left",
+	// 				 "Meta+Alt+H",
+	// 				 function() {
+	// 					 try {
+	// 						 var client = workspace.activeClient;
+	// 						 if (client == null) {
+	// 							 return;
+	// 						 }
+	// 						 var tile = self.tiles.getTile(client);
+	// 						 if (tile == null) {
+	// 							 return;
+	// 						 }
+	// 						 geom = Qt.rect(tile.rectangle.x - 10,
+	// 											tile.rectangle.y,
+	// 											tile.rectangle.width + 10,
+	// 											tile.rectangle.height);
+	// 						 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+	// 						 if (geom.x < screenRectangle.x) {
+	// 							 geom.x = screenRectangle.x;
+	// 							 geom.width = geom.width - 20;
+	// 						 }
+	// 						 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
+	// 					 } catch(err) {
+	// 						 print(err, "in resize-window-to-the-left");
+	// 					 }
+	// 				 });
+	// registerShortcut("Resize Active Window To The Right",
+	// 				 "Resize Active Window To The Right",
+	// 				 "Meta+Alt+L",
+	// 				 function() {
+	// 					 try {
+	// 						 var client = workspace.activeClient;
+	// 						 if (client == null) {
+	// 							 return;
+	// 						 }
+	// 						 var tile = self.tiles.getTile(client);
+	// 						 if (tile == null) {
+	// 							 return;
+	// 						 }
+	// 						 var geom = Qt.rect(tile.rectangle.x,
+	// 												tile.rectangle.y,
+	// 												tile.rectangle.width + 10,
+	// 												tile.rectangle.height);
+	// 						 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+	// 						 if (geom.x + geom.width > screenRectangle.x + screenRectangle.width) {
+	// 							 geom.x = geom.x + 10;
+	// 							 geom.width = (screenRectangle.x + screenRectangle.width) - geom.x;
+	// 						 }
+	// 						 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
+	// 					 } catch(err) {
+	// 						 print(err, "in resize-window-to-the-left");
+	// 					 }
+	// 				 });
+	// registerShortcut("Resize Active Window To The Top",
+	// 				 "Resize Active Window To The Top",
+	// 				 "Meta+Alt+K",
+	// 				 function() {
+	// 					 try {
+	// 						 var client = workspace.activeClient;
+	// 						 if (client == null) {
+	// 							 return;
+	// 						 }
+	// 						 var tile = self.tiles.getTile(client);
+	// 						 if (tile == null) {
+	// 							 return;
+	// 						 }
+	// 						 var geom = Qt.rect(tile.rectangle.x,
+	// 												tile.rectangle.y - 10,
+	// 												tile.rectangle.width,
+	// 												tile.rectangle.height + 10);
+	// 						 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+	// 						 if (geom.y < screenRectangle.y) {
+	// 							 geom.y = screenRectangle.y;
+	// 							 geom.height = geom.height - 20;
+	// 						 }
+	// 						 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
+	// 					 } catch(err) {
+	// 						 print(err, "in resize-window-to-the-left");
+	// 					 }
+	// 				 });
+	// registerShortcut("Resize Active Window To The Bottom",
+	// 				 "Resize Active Window To The Bottom",
+	// 				 "Meta+Alt+J",
+	// 				 function() {
+	// 					 try {
+	// 						 var client = workspace.activeClient;
+	// 						 if (client == null) {
+	// 							 return;
+	// 						 }
+	// 						 var tile = self.tiles.getTile(client);
+	// 						 if (tile == null) {
+	// 							 return;
+	// 						 }
+	// 						 var geom = Qt.rect(tile.rectangle.x,
+	// 												tile.rectangle.y,
+	// 												tile.rectangle.width,
+	// 												tile.rectangle.height + 10);
+	// 						 var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+	// 						 if (geom.y + geom.height > screenRectangle.y + screenRectangle.height) {
+	// 							 geom.y = geom.y + 10;
+	// 							 geom.height = (screenRectangle.y + screenRectangle.height) - geom.y;
+	// 						 }
+	// 						 self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
+	// 					 } catch(err) {
+	// 						 print(err, "in resize-window-to-the-left");
+	// 					 }
+	// 				 });
+	// registerShortcut("Increase Number Of Masters",
+	// 				 "Increase Number Of Masters",
+	// 				 "Meta+*",
+	// 				 function() {
+	// 					 try {
+	// 						 self.layouts[self._currentDesktop][self._currentScreen].increaseMaster();
+	// 					 } catch(err) {
+	// 						 print(err, "in Increase-Number-Of-Masters");
+	// 					 }
+	// 				 });
+	// registerShortcut("Decrease Number Of Masters",
+	// 				 "Decrease Number Of Masters",
+	// 				 "Meta+_",
+	// 				 function() {
+	// 					 try {
+	// 						 self.layouts[self._currentDesktop][self._currentScreen].decrementMaster();
+	// 					 } catch(err) {
+	// 						 print(err, "in Decrease-Number-Of-Masters");
+	// 					 }
+	// 				 });
+	// registerUserActionsMenu(function(client) {
+	// 	return {
+	// 		text : "Toggle floating",
+	// 		triggered: function () {
+	// 			client.tiling_floating = ! client.tiling_floating;
+	// 			if (client.tiling_floating == true) {
+	// 				self.tiles._onClientRemoved(client);
+	// 			} else {
+	// 				self.tiles.addClient(client);
+	// 			}
+	// 		}
+	// 	};
+	// });
 };
 
 TilingManager.prototype.resize = function() {
