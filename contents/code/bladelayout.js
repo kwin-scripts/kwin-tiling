@@ -19,6 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+Qt.include("layout.js");
 /**
  * Class which arranges the windows in a spiral with the largest window filling
  * the left half of the screen.
@@ -32,11 +33,12 @@ function BladeLayout(screenRectangle) {
 		print(err, "in BladeLayout");
 	}
 	this.master = 0;
+	print("BladeLayout created");
 };
 
-BladeLayout.name = "Blade";
-// TODO: Add an image for the layout switcher
-BladeLayout.image = null;
+// BladeLayout.name = "Blade";
+// // TODO: Add an image for the layout switcher
+// BladeLayout.image = null;
 
 BladeLayout.prototype = new Layout();
 BladeLayout.prototype.constructor = BladeLayout;
