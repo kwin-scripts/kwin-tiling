@@ -62,19 +62,20 @@ HalfLayout.prototype.addTile = function() {
 			}
 
 			var lastRect = this.tiles[this.tiles.length - 1].rectangle;
-			var newRect = new Qt.rect(lastRect.x + lastRect.width,
+			var newRect = Qt.rect(lastRect.x + lastRect.width,
 									  this.screenRectangle.y,
 									  newSWidth,
 									  this.screenRectangle.height);
-			util.assertRectInScreen(newRect, this.screenRectangle);
+			// util.assertRectInScreen(newRect, this.screenRectangle);
 			this._createTile(newRect);
 			return;
 		}
 		if (this.tiles.length > this.masterCount) {
+			print("Adding slaves");
 			// Every other tile separates the right half
 			var slaveCount = this.tiles.length - this.masterCount;
 			var lastRect = this.tiles[this.master + this.masterCount].rectangle;
-			var newRect = new Qt.rect(lastRect.x,
+			var newRect = Qt.rect(lastRect.x,
 									  lastRect.y,
 									  this.screenRectangle.x + this.screenRectangle.width - this.getMasterWidth(),
 									  this.screenRectangle.height / (slaveCount + 1));
@@ -150,13 +151,13 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 				this.tiles[0].rectangle = oldrect;
 			}
 			var tileCount = this.tiles.length - this.masterCount;
-			assertTrue(tileCount > 0, "Tilecount is zero");
+			// assertTrue(tileCount > 0, "Tilecount is zero");
 			var lastRect = this.tiles[0].rectangle;
-			var newRect = new Qt.rect(this.screenRectangle.x + this.getMasterWidth(),
+			var newRect = Qt.rect(this.screenRectangle.x + this.getMasterWidth(),
 									  this.screenRectangle.y,
 									  this.screenRectangle.width - this.getMasterWidth(),
 									  this.screenRectangle.height / tileCount);
-			assertTrue(newRect.height > 0, "newRect.height is zero");
+			// assertTrue(newRect.height > 0, "newRect.height is zero");
 			var lowest = this.tiles.length - 1;
 			for (var i = this.masterCount + this.master; i < this.tiles.length; i++) {
 				var rect = this.tiles[i].rectangle;
@@ -197,12 +198,12 @@ HalfLayout.prototype.increaseMaster = function() {
 			this.tiles[i].rectangle.width = newWidth;
 			this.tiles[i].rectangle.height = this.screenRectangle.height;
 		}
-		this.tiles[this.master + this.masterCount - 1].rectangle = new Qt.rect(rightEdgeRect.x + rightEdgeRect.width,
+		this.tiles[this.master + this.masterCount - 1].rectangle = Qt.rect(rightEdgeRect.x + rightEdgeRect.width,
 																			   rightEdgeRect.y,
 																			   newWidth,
 																			   rightEdgeRect.height);
 	} else {
-		this.tiles[this.master + this.masterCount - 1].rectangle = new Qt.rect(this.screenRectangle.x,
+		this.tiles[this.master + this.masterCount - 1].rectangle = Qt.rect(this.screenRectangle.x,
 																			   this.screenRectangle.y,
 																			   this.firstWidth,
 																			   this.screenRectangle.height);
