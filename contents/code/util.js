@@ -107,10 +107,10 @@ util.rectToString = function(rect) {
 }
 
 util.assertRectInScreen = function(rect, screenRectangle) {
-	// assertTrue(rect.x >= screenRectangle.x &&
-	// 		   rect.y >= screenRectangle.y &&
-	// 		   rect.width <= screenRectangle.width &&
-	// 		   rect.height <= screenRectangle.height, "Rectangle not in screen");
+	util.assertTrue(rect.x >= screenRectangle.x &&
+					rect.y >= screenRectangle.y &&
+					rect.width <= screenRectangle.width &&
+					rect.height <= screenRectangle.height, "Rectangle not in screen");
 };
 
 util.middlex = function(rect) {
@@ -121,6 +121,11 @@ util.middley = function(rect) {
 	return rect.y + (rect.height / 2);
 };
 
+util.assertTrue = function(condition, message) {
+	if (condition != true) {
+		print(message);
+	}
+};
 // readConfig moved to KWin.readConfig for KWin 5
 if(KWin.readConfig == null) {
 	print("Setting readConfig to KWin.readConfig");
