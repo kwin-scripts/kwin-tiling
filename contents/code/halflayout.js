@@ -154,13 +154,13 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 				this.tiles[0].rectangle = oldrect;
 			}
 			var tileCount = this.tiles.length - this.masterCount;
-			assertTrue(tileCount > 0, "Tilecount is zero");
+			util.assertTrue(tileCount > 0, "Tilecount is zero");
 			var lastRect = this.tiles[0].rectangle;
 			var newRect = Qt.rect(this.screenRectangle.x + this.getMasterWidth(),
 									  this.screenRectangle.y,
 									  this.screenRectangle.width - this.getMasterWidth(),
 									  this.screenRectangle.height / tileCount);
-			assertTrue(newRect.height > 0, "newRect.height is zero");
+			util.assertTrue(newRect.height > 0, "newRect.height is zero");
 			var lowest = this.tiles.length - 1;
 			for (var i = this.masterCount + this.master; i < this.tiles.length; i++) {
 				var rect = this.tiles[i].rectangle;
@@ -170,7 +170,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 			}
 			// Adjust lowest tile's height for rounding errors
 			this.tiles[lowest].rectangle.height = (this.screenRectangle.y + this.screenRectangle.height) - this.tiles[lowest].rectangle.y;
-			assertTrue(this.tiles[lowest].rectangle.height > 0, "Lowest rect has zero height");
+			util.assertTrue(this.tiles[lowest].rectangle.height > 0, "Lowest rect has zero height");
 		}
 	} catch(err) {
 		print(err, "in HalfLayout.removeTile");
