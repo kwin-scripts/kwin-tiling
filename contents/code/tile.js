@@ -381,7 +381,9 @@ Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 		this.maximize = false;
 		var screenRect = workspace.clientArea(KWin.PlacementArea, this._currentScreen, this._currentDesktop);
 		var newRect = util.copyRect(this.rectangle);
-		if (h) {
+		// FIXME: If h was never true, maximizing and then unmaximizing v restores x/width to previous values
+		// Instead, we should save h _and_ v
+		if (h == true) {
 			newRect.x = screenRect.x;
 			newRect.width = screenRect.width;
 		} else {
@@ -390,7 +392,7 @@ Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 				newRect.width = this.oldRect.width;
 			}
 		}
-		if (v) {
+		if (v == true) {
 			newRect.y = screenRect.y;
 			newRect.height = screenRect.height;
 		} else {
@@ -401,8 +403,12 @@ Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 		}
 		this.oldRect = util.copyRect(this.rectangle);
 		this.setGeometry(newRect);
+		// Set keepBelow to keep maximized clients over tiled ones
 		if (h == true || v == true) {
+			client.keepBelow = false;
 			this.maximize = true;
+		} else {
+			client.keepBelow = true;
 		}
 	} catch(err) {
 		print(err, "in tile.onClientMaximizedStateChanged");
