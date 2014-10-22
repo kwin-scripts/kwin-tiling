@@ -67,7 +67,7 @@ function Tile(firstClient, tileIndex) {
 		/**
 		 * List of the clients in this tile.
 		 */
-		this.clients = [firstClient];
+		this.clients = [];
 		this.originalx = util.middlex(firstClient.geometry);
 		this.originaly = util.middley(firstClient.geometry);
 		/**
@@ -107,6 +107,7 @@ function Tile(firstClient, tileIndex) {
 		this.screenGapSizeRight = KWin.readConfig("screenGapSizeRight", 0);
 		this.screenGapSizeTop = KWin.readConfig("screenGapSizeTop", 0);
 		this.screenGapSizeBottom = KWin.readConfig("screenGapSizeBottom", 0);
+		this.addClient(firstClient);
 	} catch(err) {
 		print(err, "in Tile");
 	}
@@ -366,6 +367,10 @@ Tile.prototype.removeClient = function(client) {
 Tile.prototype.addClient = function(client) {
 	try {
 		if (this.clients.indexOf(client) == -1) {
+			client.keepBelow = true;
+			if (KWin.readConfig("noBorder", false) == true) {
+				client.noBorder = true;
+			}
 			this.clients.push(client);
 			this.syncCustomProperties();
 			this.onClientGeometryChanged(client);

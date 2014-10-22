@@ -92,7 +92,6 @@ TileList.prototype.connectSignals = function(client) {
 				client.tiling_floating = true;
 				client.keepBelow = false;
 			} else {
-				client.keepBelow = true;
 				self._onClientAdded(client);
 			}
 		});
@@ -194,10 +193,6 @@ TileList.prototype.addClient = function(client) {
         return;
     }
 
-	if (this.noBorder == true) {
-		client.noBorder = true;
-	}
-
 	// Check whether the client is part of an existing tile
 	if (this._indexWithClient(client) != -1) {
 		return;
@@ -210,8 +205,6 @@ TileList.prototype.addClient = function(client) {
 		client.keepBelow = false;
 		return;
 	}
-
-	client.keepBelow = true;
 
 	// If the client isn't the current tab, it's added to a tabgroup
 	// (because of autogrouping)
