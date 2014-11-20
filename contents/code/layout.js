@@ -96,6 +96,9 @@ Layout.prototype.resizeTile = function(tileIndex, rectangle) {
 			print("Tileindex invalid", tileIndex, "/", this.tiles.length);
 			return;
 		}
+		if (this.tiles.length == 1) {
+			return;
+		}
 		if (this.tiles[tileIndex] == null) {
 			print("No tile");
 			return;
