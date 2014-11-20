@@ -102,7 +102,10 @@ HalfLayout.prototype.addTile = function() {
 // Save the first tile's width
 HalfLayout.prototype.resizeTile = function(tileIndex, rectangle) {
 	Layout.prototype.resizeTile.call(this, tileIndex, rectangle);
-	this.firstWidth = this.getMasterWidth();
+	// Fixes bug where firstWidth will be set to the full screen when resizing with just masters
+	if (this.tiles.length > this.masterCount) {
+		this.firstWidth = this.getMasterWidth();
+	}
 };
 
 HalfLayout.prototype.getMasterWidth = function() {
