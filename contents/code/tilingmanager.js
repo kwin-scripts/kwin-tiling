@@ -214,7 +214,7 @@ function TilingManager() {
 	// 					 }
 	// 					 client.tiling_floating = !client.tiling_floating;
 	// 					 if (client.tiling_floating == true) {
-	// 						 self.tiles._onClientRemoved(client);
+	// 						 self.tiles.untileClient(client);
 	// 					 } else {
 	// 						 self.tiles.addClient(client);
 	// 					 }
@@ -419,7 +419,7 @@ function TilingManager() {
 	// 		triggered: function () {
 	// 			client.tiling_floating = ! client.tiling_floating;
 	// 			if (client.tiling_floating == true) {
-	// 				self.tiles._onClientRemoved(client);
+	// 				self.tiles.untileClient(client);
 	// 			} else {
 	// 				self.tiles.addClient(client);
 	// 			}

@@ -127,7 +127,7 @@ TileList.prototype.connectSignals = function(client) {
 		client.shadeChanged.connect(function() {
 			if (client.shade == true) {
 				client.tiling_floating = true;
-				self._onClientRemoved(client);
+				self.untileClient(client);
 			} else {
 				self.addClient(client);
 			}
@@ -154,7 +154,7 @@ TileList.prototype.connectSignals = function(client) {
 		}
     });
 	client.windowClosed.connect(function(cl, deleted) {
-		self._onClientRemoved(client);
+		self.removeClient(client);
 	});
     client.clientStartUserMovedResized.connect(function() {
 		var tile = getTile(client);
@@ -182,7 +182,7 @@ TileList.prototype.connectSignals = function(client) {
 	});
 	client.clientMinimized.connect(function(client) {
 		try {
-			self._onClientRemoved(client);
+			self.untileClient(client);
 		} catch(err) {
 			print(err, "in mimimized");
 		}
@@ -272,11 +272,32 @@ TileList.prototype._onClientAdded = function(client) {
     this.addClient(client);
 };
 
-TileList.prototype._onClientRemoved = function(client) {
+/*
+ * Untile a client
+ * This means undoing things we do to tiled clients
+ * and removing them from the list
+*/
+TileList.prototype.untileClient = function(client) {
 	try {
 		// Unset keepBelow because we set it when tiling
 		client.keepBelow = false;
 
+		// Don't remove tileIndex, so we can move the window to its position in case it comes back (after minimize etc)
+		//client.tiling_tileIndex = - 1;
+		if (client.tiling_floating == true) {
+			client.noBorder = false;
+		}
+
+		this.removeClient(client);
+	} catch(err) {
+		print(err, "in untileClient with", client.resourceClass.toString());
+	}
+};
+
+/*
+ * Remove client from the tileList
+*/
+TileList.prototype.removeClient = function(client) {
 		// Remove the client from its tile
 		var tileIndex = this._indexWithClient(client);
 		var tile = this.tiles[tileIndex];
@@ -289,14 +310,6 @@ TileList.prototype._onClientRemoved = function(client) {
 				tile.removeClient(client);
 			}
 		}
-		// Don't remove tileIndex, so we can move the window to its position in case it comes back (after minimize etc)
-		//client.tiling_tileIndex = - 1;
-		if (client.tiling_floating == true) {
-			client.noBorder = false;
-		}
-	} catch(err) {
-		print(err, "in onClientRemoved with", client.resourceClass.toString());
-	}
 };
 
 TileList.prototype._onClientTabGroupChanged = function(client) {
