@@ -283,7 +283,7 @@ Tiling.prototype.getMaster = function() {
 Tiling.prototype.resizeScreen = function() {
 	// FIXME: KWin bug: clientArea returns the _former_ area
 	// See https://bugs.kde.org/show_bug.cgi?id=330099
-	var rect = util.getTilingArea(this.screen, this.desktop);
+	var rect = util.getTilingArea(this.screen, this.desktop + 1);
 	if (util.compareRect(rect,this.screenRectangle) == false) {
 		this.layout.screenRectangle.x = this.screenRectangle.x;
 		this.layout.screenRectangle.y = this.screenRectangle.y;
