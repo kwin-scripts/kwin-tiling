@@ -374,8 +374,14 @@ Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
 		// Reset this so setGeometry does its thing
 		this.maximize = false;
 		var screenRect = workspace.clientArea(KWin.PlacementArea, this._currentScreen, this._currentDesktop);
-		var newRect = util.copyRect(this.rectangle);
-		if (h) {
+		if (this.rectangle != null) {
+			var newRect = util.copyRect(this.rectangle);
+		} else {
+			var newRect = util.copyRect(screenRect);
+		}
+		// FIXME: If h was never true, maximizing and then unmaximizing v restores x/width to previous values
+		// Instead, we should save h _and_ v
+		if (h == true) {
 			newRect.x = screenRect.x;
 			newRect.width = screenRect.width;
 		} else {
