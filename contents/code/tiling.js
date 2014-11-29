@@ -87,10 +87,9 @@ Tiling.prototype.addTile = function(tile, x, y) {
 				this.tiles.splice(index, 0, tile);
 			}
 		} else {
-			if (tile.tileIndex > -1) {
+			if (tile.tileIndex > -1 && tile.tileIndex <= this.tiles.length) {
 				this.tiles.splice(tile.tileIndex, 0, tile);
 			} else {
-				tile.tileIndex = this.tiles.length;
 				this.tiles.push(tile);
 			}
 		}
