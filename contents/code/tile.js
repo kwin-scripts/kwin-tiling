@@ -218,11 +218,6 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (!client.isCurrentTab) {
 			return;
 		}
-		// If the screen has changed, send an event
-		if (client.screen != this._currentScreen) {
-			this._currentScreen = client.screen;
-			this.screenChanged.emit();
-		}
 		if (client.move || client.resize) {
 			return;
 		}

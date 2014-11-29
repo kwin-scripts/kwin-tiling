@@ -94,6 +94,8 @@ Tiling.prototype.addTile = function(tile, x, y) {
 				this.tiles.push(tile);
 			}
 		}
+		tile._currentScreen = this.screen;
+		tile._currentDesktop = this.desktop + 1;
 		for (var i = 0; i < this.tiles.length; i++) {
 			this.tiles[i].tileIndex = i;
 			this.tiles[i].syncCustomProperties();
