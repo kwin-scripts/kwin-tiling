@@ -369,7 +369,10 @@ TileList.prototype._addTile = function(client) {
 
 TileList.prototype._removeTile = function(tileIndex) {
 	try {
-		// Don't modify tileIndex here - this is a list of _all_ tiles, while tileIndex is the index on the desktop
+		// "tileIndex" here is the index in the tileList, while outside this class
+		// it's "index in that desktop"
+		// That means you should _not_ try changing tile.tileIndex here
+		// TODO: Change to a better name
 		var tile = this.tiles[tileIndex];
 		if (tileIndex > -1) {
 			this.tiles.splice(tileIndex, 1);
