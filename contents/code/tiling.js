@@ -119,6 +119,10 @@ Tiling.prototype.removeTile = function(tile) {
 			}
 			// TODO: Unregister tile callbacks
 			this._updateAllTiles();
+		} else {
+			print("removeTile: No such tile ", tile._currentDesktop,
+				  tile._currentScreen, tile.clients[0].resourceClass.toString());
+			print(this.desktop, this.screen);
 		}
 	} catch(err) {
 		print(err, "in Tiling.removeTile");
@@ -223,6 +227,9 @@ Tiling.prototype.resizeTile = function(tile){
 			var client = tile.clients[0];
 			this.layout.resizeTile(tileIndex, client.geometry);
 			this._updateAllTiles();
+		} else {
+			print("Wrong layout called for tile ", tile._currentDesktop - 1, tile._currentScreen);
+			print("Layout is: ", this.desktop, this.screen);
 		}
 	} catch(err) {
 		print(err, "in Tiling.resizeTile");
