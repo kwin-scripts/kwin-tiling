@@ -140,7 +140,8 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
 		if (this.tiles.length > 1) {
 			var mC = Math.min(this.tiles.length, this.masterCount);
 			if (this.tiles.length > mC) {
-				var mWidth = (this.screenRectangle.width - this.tiles[this.masterCount].rectangle.width) / mC;
+				// The distance between the right edge of the last master and the left edge of the screen is the width of the master area
+				var mWidth = (this.tiles[mC - 1].rectangle.x + this.tiles[mC - 1].rectangle.width - this.screenRectangle.x) / mC;
 			} else {
 				var mWidth = this.screenRectangle.width / this.tiles.length;
 			}
