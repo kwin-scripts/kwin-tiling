@@ -102,7 +102,7 @@ function Tile(firstClient, tileIndex) {
 
 		this.syncCustomProperties();
 
-		this.respectMinMax = KWin.readConfig("respectMinMax", false);
+		this.respectMinMax = KWin.readConfig("respectMinMax", true);
 
 		var gapSize = KWin.readConfig("gapSize", 0);  /* stick to old gaps config by default */
 		this.windowsGapSizeHeight = KWin.readConfig("windowsGapSizeHeight", gapSize);
