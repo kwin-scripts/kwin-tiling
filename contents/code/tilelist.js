@@ -241,10 +241,10 @@ TileList.prototype.addClient = function(client) {
 	if (client.isCurrentTab == false) {
 		for (var i = 0; i < this.tiles.length; i++) {
 			if (util.compareRect(this.tiles[i].rectangle, client.geometry) == true) {
-				if ((this.tiles[i]._currentDesktop == client.desktop
-					 || (this.tiles[i]._currentDesktop == -1
-						 && client.onAllDesktops == true))
-					 &&
+				if (((this.tiles[i]._currentDesktop == client.desktop
+					  || (this.tiles[i]._currentDesktop == -1
+						  && client.onAllDesktops == true)))
+					&&
 					this.tiles[i]._currentScreen  == client.screen) {
 					this.tiles[i].addClient(client);
 					break;

@@ -92,8 +92,7 @@ function Tile(firstClient, tileIndex) {
 		 * Stores the current desktop as this is needed as a desktopChanged
 		 * parameter.
 		 */
-		if (firstClient.onAllDesktops == true
-			|| firstClient.desktop >= workspace.desktops) {
+		if (firstClient.onAllDesktops == true) {
 			this._currentDesktop = -1;
 		} else {
 			this._currentDesktop = firstClient.desktop;
@@ -312,8 +311,7 @@ Tile.prototype.onClientDesktopChanged = function(client) {
 		// KWin 5.2 at least will hand us a number larger than
 		// the last desktop to indicate it used to be on all desktops
 		// Check onAllDesktops instead
-		if (client.onAllDesktops == true
-		   || client.desktop >= workspace.desktops) {
+		if (client.onAllDesktops == true) {
 			this._currentDesktop = -1;
 		} else {
 			this._currentDesktop = client.desktop;
