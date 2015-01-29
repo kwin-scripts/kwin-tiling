@@ -203,7 +203,7 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (client == null) {
 			return;
 		}
-		if (client.tiling_tileIndex != this.tileIndex) {
+		if (this.hasClient(client) == false) {
 			print("Wrong tile called");
 			return;
 		}
