@@ -235,12 +235,7 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (client.moveable != true) {
 			return;
 		}
-		// print("Minsize");
-		// if (client.minSize.w == client.maxSize.w && client.minSize.h == client.maxSize.w) {
-		// 	print(client.minSize, client.minSize.w);
-		// 	print(client.maxSize, client.maxSize.w);
-		// 	return;
-		// }
+		// Nothing to be done here - this just doesn't make sense
 		if (client.minSize.width == client.maxSize.width && client.minSize.height == client.maxSize.width) {
 			return;
 		}
@@ -250,6 +245,8 @@ Tile.prototype.setClientGeometry = function(client) {
 				// Respect min/maxSize
 				var changedRect = false;
 				var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
+				// This can theoretically result in an endless loop
+				// e.g. when the only client has a maxsize smaller than the clientarea
 				if (this.respectMinMax) {
 					if (client.minSize.width > this.rectangle.width) {
 						if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width - this.screenGapSizeRight) {
