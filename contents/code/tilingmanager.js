@@ -714,23 +714,26 @@ TilingManager.prototype._moveTile = function(direction) {
 	if (activeTile == null) {
 		return;
 	}
+	var layout = this.layouts[client.desktop - 1][this._currentScreen];
+	// Add gaps so we don't land in one
 	if (direction == Direction.Left) {
-		var x = activeTile.rectangle.x - 1;
+		var x = activeTile.rectangle.x - 1 - layout.windowsGapSizeWidth;
 		var y = activeTile.rectangle.y + 1;
 	} else if (direction == Direction.Right) {
-		var x = activeTile.rectangle.x + activeTile.rectangle.width + 1;
+		var x = activeTile.rectangle.x + activeTile.rectangle.width + 1
+			+ layout.windowsGapSizeWidth;
 		var y = activeTile.rectangle.y + 1;
 	} else if (direction == Direction.Up) {
 		var x = activeTile.rectangle.x + 1;
-		var y = activeTile.rectangle.y - 1;
+		var y = activeTile.rectangle.y - 1 - layout.windowsGapSizeHeight;
 	} else if (direction == Direction.Down) {
 		var x = activeTile.rectangle.x + 1;
-		var y = activeTile.rectangle.y + activeTile.rectangle.height + 1;
+		var y = activeTile.rectangle.y + activeTile.rectangle.height + 1
+			+ layout.windowsGapSizeHeight;
 	} else {
 		print("Wrong direction in _moveTile");
 		return;
 	}
-	var layout = this.layouts[client.desktop - 1][this._currentScreen];
 	var nextTile = layout.getTile(x, y);
 	if (nextTile != null) {
 		layout.swapTiles(activeTile, nextTile);
