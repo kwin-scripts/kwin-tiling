@@ -92,7 +92,12 @@ function Tile(firstClient, tileIndex) {
 		 * Stores the current desktop as this is needed as a desktopChanged
 		 * parameter.
 		 */
-		this._currentDesktop = firstClient.desktop;
+		if (firstClient.onAllDesktops == true
+			|| firstClient.desktop >= workspace.desktops) {
+			this._currentDesktop = -1;
+		} else {
+			this._currentDesktop = firstClient.desktop;
+		}
 
 		this.rectangle = null;
 
@@ -203,9 +208,10 @@ Tile.prototype.setClientGeometry = function(client) {
 			print("Wrong tile called");
 			return;
 		}
-		// Don't resize when client isn't on current desktop
-		// Prevents a couple unnecessary resizes
-		if (client.desktop != workspace.currentDesktop && client.desktop > -1) {
+		// Don't resize when we aren't the current desktop
+		// or on all desktops
+		if (this._currentDesktop != workspace.currentDesktop
+			&& this._currentDesktop != -1) {
 			return;
 		}
 		// These two should never be reached
@@ -303,7 +309,15 @@ Tile.prototype.onClientDesktopChanged = function(client) {
 			return;
 		}
 		var oldDesktop = this._currentDesktop;
-		this._currentDesktop = client.desktop;
+		// KWin 5.2 at least will hand us a number larger than
+		// the last desktop to indicate it used to be on all desktops
+		// Check onAllDesktops instead
+		if (client.onAllDesktops == true
+		   || client.desktop >= workspace.desktops) {
+			this._currentDesktop = -1;
+		} else {
+			this._currentDesktop = client.desktop;
+		}
 		this.desktopChanged.emit(oldDesktop, this._currentDesktop);
 	} catch(err) {
 		print(err, "in Tile.onClientDesktopChanged");

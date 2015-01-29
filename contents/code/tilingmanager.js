@@ -611,13 +611,18 @@ TilingManager.prototype._onTileScreenChanged = function(tile, oldScreen, newScre
 
 TilingManager.prototype._onTileDesktopChanged = function(tile, oldDesktop, newDesktop) {
 		try {
+			if (oldDesktop == newDesktop) {
+				return;
+			}
 			var client = tile.clients[0];
+			if (client == null) {
+				print("Tile " + tile.tileIndex + " has no client while switching desktops");
+				return;
+			}
 			var oldLayouts = this._getLayouts(oldDesktop, client.screen);
 			var newLayouts = this._getLayouts(newDesktop, client.screen);
-			if (oldDesktop == -1) {
-				oldLayouts.splice(newDesktop - 1, 1);
-				newLayouts.splice(newDesktop - 1, 1);
-			}
+			// We don't need to handle onAllDesktops special here
+			// because adding and readding is a noop
 			this._changeTileLayouts(tile, oldLayouts, newLayouts);
 		} catch(err) {
 			print(err, "in TilingManager._onTileDesktopChanged");
@@ -665,12 +670,16 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
 
 TilingManager.prototype._changeTileLayouts = function(tile, oldLayouts, newLayouts) {
 		try {
-			oldLayouts.forEach(function(layout) {
-				layout.removeTile(tile);
-			});
-			newLayouts.forEach(function(layout) {
-				layout.addTile(tile);
-			});
+			if (oldLayouts != null) {
+				oldLayouts.forEach(function(layout) {
+					layout.removeTile(tile);
+				});
+			}
+			if (newLayouts != null) {
+				newLayouts.forEach(function(layout) {
+					layout.addTile(tile);
+				});
+			}
 		} catch(err) {
 			print(err, "in TilingManager._changeTileLayouts");
 		}
