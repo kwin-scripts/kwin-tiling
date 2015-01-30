@@ -228,8 +228,7 @@ TileList.prototype.addClient = function(client) {
 		for (var i = 0; i < this.tiles.length; i++) {
 			if (util.compareRect(this.tiles[i].rectangle, client.geometry) == true) {
 				if (this.tiles[i]._currentDesktop == util.getClientDesktop(client)
-					&&
-					this.tiles[i]._currentScreen  == client.screen) {
+					&& this.tiles[i]._currentScreen  == client.screen) {
 					this.tiles[i].addClient(client);
 					break;
 				}
