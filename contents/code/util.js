@@ -106,6 +106,16 @@ util.rectToString = function(rect) {
 	return "x" + rect.x + "y" + rect.y + "w" + rect.width + "h" + rect.height;
 }
 
+util.printRect = function(rect) {
+	print(util.rectToString(rect));
+}
+
+util.printTile = function(tile) {
+	print("Tile ", tile.tileIndex, " on desktop ", tile.desktop,
+		  " screen ", tile.screen, " rect ", util.rectToString(tile.rectangle),
+		  " client ", tile.clients[0].resourceClass.toString());
+}
+
 util.assertRectInScreen = function(rect, screenRectangle) {
 	util.assertTrue(rect.x >= screenRectangle.x &&
 					rect.y >= screenRectangle.y &&
