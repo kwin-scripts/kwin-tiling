@@ -311,7 +311,7 @@ TileList.prototype._onClientTabGroupChanged = function(client) {
 				var rect  = this.tiles[i].rectangle;
 				if (util.compareRect(rect, client.geometry) == true) {
 					// TODO: Is this necessary or is desktopChanged always called before tabgroupchanged?
-					if (this.tiles[i]._currentDesktop == util.getClientDesktop(client) {
+					if (this.tiles[i]._currentDesktop == util.getClientDesktop(client)) {
 						tabGroup = this.tiles[i];
 						break;
 					}
