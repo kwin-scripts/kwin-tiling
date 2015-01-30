@@ -125,7 +125,6 @@ HalfLayout.prototype.getMasterWidth = function() {
 
 HalfLayout.prototype.removeTile = function(tileIndex) {
 	try {
-		//FIXME: There is a crash here
 		// Remove the array entry
 		var oldrect = this.tiles[tileIndex].rectangle;
 		if (tileIndex < 0 || tileIndex >= this.tiles.length) {

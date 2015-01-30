@@ -537,6 +537,7 @@ TilingManager.prototype._onNumberDesktopsChanged = function() {
 	var onAllDesktops = tiles.tiles.filter(function(tile) {
 		return tile.desktop == -1;
 	});
+	// FIXME: Is this needed?
 	// Remove tiles from desktops which do not exist any more (we only have to
 	// care about tiles shown on all desktops as all others have been moved away
 	// from the desktops by kwin before)
