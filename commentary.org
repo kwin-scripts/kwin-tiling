@@ -2,22 +2,18 @@
 ** TODO Doesn't tile properly when screen disappears
 ** TODO Resolution changes
    Almost possible, but clientArea returns the _old_ resolution
-* DONE Avoid struts
-  Almost finished, but doesn't directly react to changes
-  Needs an additional kwin signal
-** DONE Halflayout
-** DONE Spirallayout
-** DONE Bladelayout
 * TODO Testing
 ** Weird apps (mplayer, gimp)
    Add those to rules by default
 ** Weird configurations
 ** Multi-monitor
-** DONE Multiple workspaces (e.g. moving windows across, in floating and tiling mode)
 ** Crashes
-** DONE Graphic issues
-   e.g. Steam doesn't update properly after resize
 ** Better release process (i.e. don't just pack up git, TEST)
+** Testcases
+*** Client on all desktops
+**** There, back, there again
+*** Client on last desktop
+**** was interpreted as being on all desktops
 * TODO Layouts
 ** DONE Refactor layouts to share more code
    See [[https://github.com/copycat-killer/vain-again][vain]]
@@ -35,8 +31,6 @@
    Each client belongs to multiple activities, but is on the same desktop on each
    There can only be one activity at the same time
 *** Needs changes in tilingmanager (large) and maybe tile and tilelist
-** DONE Add option to add some gaps between windows
-   This could just be another layout
 ** React on configuration change
    Right now kwin restarts are needed every time the configuration is changed
 * TODO Report
