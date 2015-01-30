@@ -41,10 +41,10 @@
 	https://bugs.kde.org/show_bug.cgi?id=330100
 *** INPROGRESS windowClosed's "deleted" not properly converted
 	https://bugs.kde.org/show_bug.cgi?id=330102
-*** Pixmap issue
+*** INPROGRESS Pixmap issue
 	Seems it corrupts when clients are resized before windowShown (when compositing)
 	There are other cases, though, like firefox resizing after restoring the previous session
-	May be fixed by https://bugs.kde.org/show_bug.cgi?id=336589
+	https://bugs.kde.org/show_bug.cgi?id=341195
 *** KWin maximizes windows automatically on certain conditions
 	Possibly caused by electricBorderMaximize
 *** QML doesn't draw stuff
