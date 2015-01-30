@@ -241,9 +241,7 @@ TileList.prototype.addClient = function(client) {
 	if (client.isCurrentTab == false) {
 		for (var i = 0; i < this.tiles.length; i++) {
 			if (util.compareRect(this.tiles[i].rectangle, client.geometry) == true) {
-				if (((this.tiles[i]._currentDesktop == client.desktop
-					  || (this.tiles[i]._currentDesktop == -1
-						  && client.onAllDesktops == true)))
+				if (this.tiles[i]._currentDesktop == util.getClientDesktop(client)
 					&&
 					this.tiles[i]._currentScreen  == client.screen) {
 					this.tiles[i].addClient(client);
@@ -327,8 +325,7 @@ TileList.prototype._onClientTabGroupChanged = function(client) {
 				var rect  = this.tiles[i].rectangle;
 				if (util.compareRect(rect, client.geometry) == true) {
 					// TODO: Is this necessary or is desktopChanged always called before tabgroupchanged?
-					if (this.tiles[i]._currentDesktop == client.desktop
-						|| client.onAllDesktops == true) {
+					if (this.tiles[i]._currentDesktop == util.getClientDesktop(client) {
 						tabGroup = this.tiles[i];
 						break;
 					}
