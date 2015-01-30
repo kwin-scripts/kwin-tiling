@@ -116,6 +116,11 @@ util.printTile = function(tile) {
 		  " client ", tile.clients[0].resourceClass.toString());
 }
 
+util.printClient = function(client) {
+	print("Client ", client.resourceClass.toString(), " on desktop ", client.desktop,
+		  " at ", util.rectToString(client.geometry), " on tile ", client.tiling_tileIndex);
+}
+
 util.assertRectInScreen = function(rect, screenRectangle) {
 	util.assertTrue(rect.x >= screenRectangle.x &&
 					rect.y >= screenRectangle.y &&
