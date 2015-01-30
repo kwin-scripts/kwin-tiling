@@ -76,8 +76,7 @@ function TileList() {
 
 	// HACK: Add client whenever they are activated since workspace.clientList doesn't work
 	// See https://bugs.kde.org/show_bug.cgi?id=340125
-	workspace.clientActivated.connect(function() {
-		var client = workspace.activeClient;
+	workspace.clientActivated.connect(function(client) {
 		if (client == null || client.tiling_tileIndex != null) {
 			return;
 		}
@@ -87,20 +86,7 @@ function TileList() {
 			client.keepBelow = false;
 			return;
 		}
-
-		// Delay adding until the window is actually shown
-		// This prevents (some, but not all) graphics bugs
-		// due to resizing before the pixmap is created (or something like that)
-		// Unfortunately, this signal is only emitted when compositing
-		// FIXME: options.useCompositing (et al) never change from the initial value
-		// and the changed signals aren't fired
-		if (options.useCompositing == true) {
-			client.windowShown.connect(function() {
-				self._onClientAdded(client);
-			});
-		} else {
-			self._onClientAdded(client);
-		}
+		self._onClientAdded(client);
 	});
 };
 
