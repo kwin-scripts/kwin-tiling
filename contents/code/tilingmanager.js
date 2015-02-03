@@ -83,7 +83,7 @@ function TilingManager() {
     /**
      * Current desktop, needed to be able to track screen changes.
      */
-    this._currentDesktop = workspace.currentDesktop - 1;
+    this._currentDesktop = workspace.currentDesktop;
     /**
      * True if a user moving operation is in progress.
      */
@@ -126,8 +126,7 @@ function TilingManager() {
 		if (desktop == 0) {
 			this.defaultLayout = l;
 		}
-		// Subtract 1 because the config is in user-indexed format
-		desktop = desktop - 1;
+		desktop = desktop;
 		var desktoplayout = {};
 		desktoplayout.desktop = desktop;
 		desktoplayout.layout = l;
@@ -155,7 +154,7 @@ function TilingManager() {
 	// }
 	// Activate the visible layouts
 	// Do it after adding the existingClients to prevent unnecessary geometry changes
-	this.layouts[workspace.currentDesktop - 1].forEach(function(layout) {
+	this._getLayouts(workspace.currentDesktop, null).forEach(function(layout) {
 		layout.activate();
 	});
 
@@ -186,7 +185,7 @@ function TilingManager() {
     //                  function() {
 	// 					 var currentLayout = self._getCurrentLayoutType();
 	// 					 var nextIndex = (currentLayout.index + 1) % self.availableLayouts.length;
-	// 					 self._switchLayout(workspace.currentDesktop - 1,
+	// 					 self._switchLayout(workspace.currentDesktop,
 	// 										workspace.activeScreen,
 	// 										nextIndex);
 	// 				 });
@@ -199,7 +198,7 @@ function TilingManager() {
 	// 					 if (nextIndex < 0) {
 	// 						 nextIndex += self.availableLayouts.length;
 	// 					 }
-	// 					 self._switchLayout(workspace.currentDesktop - 1,
+	// 					 self._switchLayout(workspace.currentDesktop,
 	// 										workspace.activeScreen,
 	// 										nextIndex);
 	// 				 });
@@ -254,7 +253,7 @@ function TilingManager() {
 	// 				 "Meta+Shift+f11",
 	// 				 function() {
 	// 					 var currentScreen = workspace.activeScreen;
-	// 					 var currentDesktop = workspace.currentDesktop - 1;
+	// 					 var currentDesktop = workspace.currentDesktop;
 	// 					 self.layouts[currentDesktop][currentScreen].toggleUserActive();
 	// 				 });
 	// registerShortcut("Tile now",
@@ -262,7 +261,7 @@ function TilingManager() {
 	// 				 "Meta+t",
 	// 				 function() {
 	// 					 var currentScreen = workspace.activeScreen;
-	// 					 var currentDesktop = workspace.currentDesktop - 1;
+	// 					 var currentDesktop = workspace.currentDesktop;
 	// 					 self.layouts[currentDesktop][currentScreen].toggleUserActive();
 	// 					 self.layouts[currentDesktop][currentScreen].toggleUserActive();
 	// 				 });
@@ -455,7 +454,7 @@ TilingManager.prototype._createDefaultLayouts = function(desktop) {
 };
 
 TilingManager.prototype._getCurrentLayoutType = function() {
-    var currentLayout = this.layouts[this._currentDesktop][this._currentScreen];
+	var currentLayout = this._getLayouts(this._currentDesktop, this._currentScreen);
     return currentLayout.layoutType;
 };
 
@@ -514,7 +513,12 @@ TilingManager.prototype._onTileResized = function(tile) {
 
 TilingManager.prototype._getMaster = function(screen, desktop) {
 	try {
-		return this.layouts[desktop][screen].getMaster();
+		var layouts = this._getLayouts(desktop, screen);
+		if (layouts != null && layouts.length > 0) {
+			return layouts[0].getMaster();
+		} else {
+			print("No layout");
+		}
 	} catch(err) {
 		print(err, "in _getMaster");
 	}
@@ -543,14 +547,20 @@ TilingManager.prototype._onNumberDesktopsChanged = function() {
 	// from the desktops by kwin before)
 	for (var i = newDesktopCount; i < this.desktopCount; i++) {
 		onAllDesktops.forEach(function(tile) {
-			this.layouts[i][tile.screen].removeTile(tile);
+			var layouts = self._getLayouts(i, tile.screen);
+			layouts.forEach(function(layout) {
+				layout.removeTile(tile);
+			});
 		});
 	}
 	// Add new desktops
 	for (var i = this.desktopCount; i < newDesktopCount; i++) {
 		this._createDefaultLayouts(i);
 		onAllDesktops.forEach(function(tile) {
-			this.layouts[i][tile.screen].addTile(tile);
+			var layouts = self._getLayouts(i, tile.screen);
+			layouts.forEach(function(layout) {
+				layout.addTile(tile);
+			});
 		});
 	}
 	// Remove deleted desktops
@@ -585,29 +595,33 @@ TilingManager.prototype._onNumberScreensChanged = function() {
 TilingManager.prototype._onScreenResized = function(screen) {
 	if (screen != null) {
 		if (screen < this.screenCount) {
-			for (var i = 0; i < this.desktopCount; i++) {
-				this.layouts[i][screen].activate();
+			for (var i = 1; i <= this.desktopCount; i++) {
+				this._getLayouts(i, screen).forEach(function(layout) {
+					layout.activate();
+				});
 			}
 		}
 	} else {
-		for (var i = 0; i < this.desktopCount; i++) {
+		for (var i = 1; i <= this.desktopCount; i++) {
 			for (var screen = 0; screen < this.screenCount; screen++) {
-				this.layouts[i][screen].activate();
+				this._getLayouts(i, screen).forEach(function(layout) {
+					layout.activate();
+				});
 			}
 		}
 	}
 };
 
 TilingManager.prototype._onTileScreenChanged = function(tile, oldScreen, newScreen) {
-		// If a tile is moved by the user, screen changes are handled in the move
-		// callbacks below
-		if (this._moving) {
-			return;
-		}
-		var client = tile.clients[0];
-		var oldLayouts = this._getLayouts(client.desktop, oldScreen);
-		var newLayouts = this._getLayouts(client.desktop, newScreen);
-		this._changeTileLayouts(tile, oldLayouts, newLayouts);
+	// If a tile is moved by the user, screen changes are handled in the move
+	// callbacks below
+	if (this._moving) {
+		return;
+	}
+	// Use tile desktop for the onAllDesktops case
+	var oldLayouts = this._getLayouts(tile.desktop, oldScreen);
+	var newLayouts = this._getLayouts(tile.desktop, newScreen);
+	this._changeTileLayouts(tile, oldLayouts, newLayouts);
 	};
 
 TilingManager.prototype._onTileDesktopChanged = function(tile, oldDesktop, newDesktop) {
@@ -646,14 +660,14 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
 			if (this._movingStartScreen != movingEndScreen) {
 				// Transfer the tile from one layout to another layout
 				var startLayout =
-					this.layouts[this._currentDesktop][this._movingStartScreen];
-				var endLayout = this.layouts[this._currentDesktop][client.screen];
+					this._getLayouts(this._currentDesktop, this._movingStartScreen)[0];
+				var endLayout = this._getLayouts(this._currentDesktop, client.screen)[0];
 				startLayout.removeTile(tile);
 				endLayout.addTile(tile, windowRect.x + windowRect.width / 2,
 								  windowRect.y + windowRect.height / 2);
 			} else {
 				// Transfer the tile to a different location in the same layout
-				var layout = this.layouts[this._currentDesktop][client.screen];
+				var layout = this._getLayouts(this._currentDesktop, client.screen)[0];
 				var targetTile = layout.getTile(windowRect.x + windowRect.width / 2,
 												windowRect.y + windowRect.height / 2);
 				// In case no tile is found (e.g. middle of the window is offscreen), move the client back
@@ -687,23 +701,30 @@ TilingManager.prototype._changeTileLayouts = function(tile, oldLayouts, newLayou
 	};
 
 TilingManager.prototype._onCurrentDesktopChanged = function() {
-	// TODO: This is wrong, we need to activate *all* visible layouts
-	if (this.layouts[this._currentDesktop][this._currentScreen].active) {
-		this.layouts[this._currentDesktop][this._currentScreen].deactivate();
-	}
-	if (this._currentDesktop === workspace.currentDesktop -1) {
+	if (this._currentDesktop === workspace.currentDesktop) {
 		return;
 	}
-	this._currentDesktop = workspace.currentDesktop - 1;
-	if (! this.layouts[this._currentDesktop][this._currentScreen].active) {
-		this.layouts[this._currentDesktop][this._currentScreen].activate();
-	}
+	var layouts = this._getLayouts(this._currentDesktop, null);
+	layouts.forEach(function(layout) {
+		if (layout.active) {
+			layout.deactivate();
+		}
+	});
+	this._currentDesktop = workspace.currentDesktop;
+	var layouts = this._getLayouts(this._currentDesktop, null);
+	layouts.forEach(function(layout) {
+		if (! layout.active) {
+			layout.activate();
+		}
+	});
 };
 
 TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {
     // TODO: Show the layout switcher dialog
     var layoutType = this.availableLayouts[layoutIndex];
-    this.layouts[desktop][screen].setLayoutType(layoutType);
+	this._getLayouts(desktop, screen).forEach(function(layout) {
+		layout.setLayoutType(layoutType);
+	});
 };
 
 TilingManager.prototype._moveTile = function(direction) {
@@ -715,7 +736,12 @@ TilingManager.prototype._moveTile = function(direction) {
 	if (activeTile == null) {
 		return;
 	}
-	var layout = this.layouts[client.desktop - 1][this._currentScreen];
+	// If the client is on all desktops, only move it on the current
+	var desktop = client.desktop;
+	if (desktop == -1 || client.onAllDesktops == true) {
+		desktop = this._currentDesktop;
+	}
+	var layout = this._getLayouts(desktop, this._currentScreen)[0];
 	// Add gaps so we don't land in one
 	if (direction == Direction.Left) {
 		var x = activeTile.rectangle.x - 1 - layout.windowsGapSizeWidth;
@@ -741,17 +767,31 @@ TilingManager.prototype._moveTile = function(direction) {
 	}
 };
 
+/*
+ * Function to get the layouts for a given desktop/screen (or all desktops, if -1)
+ * Always returns an array (which is more consistent and would make it easier to switch to a multiple-layouts-per-desktop model
+ * FIXME: Add a function to _set_ the layouts
+ */
 TilingManager.prototype._getLayouts = function(desktop, screen) {
 	if (desktop > 0) {
-		return [this.layouts[desktop - 1][screen]];
+		if (screen != null) {
+			return [this.layouts[desktop - 1][screen]];
+		} else {
+			return this.layouts[desktop - 1];
+		}
 	} else if (desktop == 0) {
+		print("Invalid desktop 0");
 		return [];
 	} else if (desktop == -1) {
-		var result = [];
-		for (var i = 0; i < this.desktopCount; i++) {
-			result.push(this.layouts[i][screen]);
+		if (screen != null) {
+			var result = [];
+			for (var i = 0; i < this.desktopCount; i++) {
+				result.push(this.layouts[i][screen]);
+			}
+			return result;
+		} else {
+			return this.layouts;
 		}
-		return result;
 	}
 	return null;
 };
