@@ -637,7 +637,7 @@ TilingManager.prototype._onTileDesktopChanged = function(tile, oldDesktop, newDe
 			var oldLayouts = this._getLayouts(oldDesktop, client.screen);
 			var newLayouts = this._getLayouts(newDesktop, client.screen);
 			// We don't need to handle onAllDesktops special here
-			// because adding and readding is a noop
+			// because removing and readding is a noop
 			this._changeTileLayouts(tile, oldLayouts, newLayouts);
 		} catch(err) {
 			print(err, "in TilingManager._onTileDesktopChanged");
