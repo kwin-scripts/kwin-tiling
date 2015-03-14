@@ -180,7 +180,7 @@ function TilingManager() {
         self._onCurrentDesktopChanged();
     });
     // Register keyboard shortcuts
-    // registerShortcut("Next Tiling Layout",
+    // registerShortcut("TILING: Next Tiling Layout",
     //                  "Next Tiling Layout",
     //                  "Meta+PgDown",
     //                  function() {
@@ -190,7 +190,7 @@ function TilingManager() {
 	// 										workspace.activeScreen,
 	// 										nextIndex);
 	// 				 });
-    // registerShortcut("Previous Tiling Layout",
+    // registerShortcut("TILING: Previous Tiling Layout",
     //                  "Previous Tiling Layout",
     //                  "Meta+PgUp",
     //                  function() {
@@ -203,7 +203,7 @@ function TilingManager() {
 	// 										workspace.activeScreen,
 	// 										nextIndex);
 	// 				 });
-    // registerShortcut("Toggle Floating",
+    // registerShortcut("TILING: Toggle Floating",
     //                  "Toggle Floating",
     //                  "Meta+F",
     //                  function() {
@@ -219,37 +219,37 @@ function TilingManager() {
 	// 						 self.tiles.addClient(client);
 	// 					 }
 	// 				 });
-	// registerShortcut("Toggle Border for all",
+	// registerShortcut("TILING: Toggle Border for all",
 	// 				 "Toggle Border for all",
 	// 				 "Meta+Shift+U",
 	// 				 function() {
 	// 					 self.tiles.toggleNoBorder();
 	// 				 });
-    // registerShortcut("Move Window Left",
+    // registerShortcut("TILING: Move Window Left",
     //                  "Move Window Left",
     //                  "Meta+Shift+H",
     //                  function() {
 	// 					 self._moveTile(Direction.Left);
 	// 				 });
-    // registerShortcut("Move Window Right",
+    // registerShortcut("TILING: Move Window Right",
     //                  "Move Window Right",
     //                  "Meta+Shift+L",
     //                  function() {
 	// 					 self._moveTile(Direction.Right);
 	// 				 });
-    // registerShortcut("Move Window Up",
+    // registerShortcut("TILING: Move Window Up",
     //                  "Move Window Up",
     //                  "Meta+Shift+K",
     //                  function() {
 	// 					 self._moveTile(Direction.Up);
 	// 				 });
-    // registerShortcut("Move Window Down",
+    // registerShortcut("TILING: Move Window Down",
     //                  "Move Window Down",
     //                  "Meta+Shift+J",
     //                  function() {
 	// 					 self._moveTile(Direction.Down);
 	// 				 });
-	// registerShortcut("Toggle Tiling",
+	// registerShortcut("TILING: Toggle Tiling",
 	// 				 "Toggle Tiling",
 	// 				 "Meta+Shift+f11",
 	// 				 function() {
@@ -257,7 +257,7 @@ function TilingManager() {
 	// 					 var currentDesktop = workspace.currentDesktop - 1;
 	// 					 self.layouts[currentDesktop][currentScreen].toggleUserActive();
 	// 				 });
-	// registerShortcut("Tile now",
+	// registerShortcut("TILING: Tile now",
 	// 				 "Tile now",
 	// 				 "Meta+t",
 	// 				 function() {
@@ -266,7 +266,7 @@ function TilingManager() {
 	// 					 self.layouts[currentDesktop][currentScreen].toggleUserActive();
 	// 					 self.layouts[currentDesktop][currentScreen].toggleUserActive();
 	// 				 });
-	// registerShortcut("Swap Window With Master",
+	// registerShortcut("TILING: Swap Window With Master",
 	// 				 "Swap Window With Master",
 	// 				 "Meta+Shift+M",
 	// 				 function() {
@@ -285,7 +285,7 @@ function TilingManager() {
 	// 						 print(err, "in swap-window-with-master");
 	// 					 }
 	// 				 });
-	// registerShortcut("Resize Active Window To The Left",
+	// registerShortcut("TILING: Resize Active Window To The Left",
 	// 				 "Resize Active Window To The Left",
 	// 				 "Meta+Alt+H",
 	// 				 function() {
@@ -312,7 +312,7 @@ function TilingManager() {
 	// 						 print(err, "in resize-window-to-the-left");
 	// 					 }
 	// 				 });
-	// registerShortcut("Resize Active Window To The Right",
+	// registerShortcut("TILING: Resize Active Window To The Right",
 	// 				 "Resize Active Window To The Right",
 	// 				 "Meta+Alt+L",
 	// 				 function() {
@@ -339,7 +339,7 @@ function TilingManager() {
 	// 						 print(err, "in resize-window-to-the-left");
 	// 					 }
 	// 				 });
-	// registerShortcut("Resize Active Window To The Top",
+	// registerShortcut("TILING: Resize Active Window To The Top",
 	// 				 "Resize Active Window To The Top",
 	// 				 "Meta+Alt+K",
 	// 				 function() {
@@ -366,7 +366,7 @@ function TilingManager() {
 	// 						 print(err, "in resize-window-to-the-left");
 	// 					 }
 	// 				 });
-	// registerShortcut("Resize Active Window To The Bottom",
+	// registerShortcut("TILING: Resize Active Window To The Bottom",
 	// 				 "Resize Active Window To The Bottom",
 	// 				 "Meta+Alt+J",
 	// 				 function() {
@@ -393,7 +393,7 @@ function TilingManager() {
 	// 						 print(err, "in resize-window-to-the-left");
 	// 					 }
 	// 				 });
-	// registerShortcut("Increase Number Of Masters",
+	// registerShortcut("TILING: Increase Number Of Masters",
 	// 				 "Increase Number Of Masters",
 	// 				 "Meta+*",
 	// 				 function() {
@@ -403,7 +403,7 @@ function TilingManager() {
 	// 						 print(err, "in Increase-Number-Of-Masters");
 	// 					 }
 	// 				 });
-	// registerShortcut("Decrease Number Of Masters",
+	// registerShortcut("TILING: Decrease Number Of Masters",
 	// 				 "Decrease Number Of Masters",
 	// 				 "Meta+_",
 	// 				 function() {
