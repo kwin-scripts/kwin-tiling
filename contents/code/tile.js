@@ -92,7 +92,7 @@ function Tile(firstClient, tileIndex) {
 		 * Stores the current desktop as this is needed as a desktopChanged
 		 * parameter.
 		 */
-		this._currentDesktop = firstClient.desktop;
+		this._currentDesktop = util.getClientDesktop(firstClient);
 
 		this.rectangle = null;
 
@@ -204,13 +204,14 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (client == null) {
 			return;
 		}
-		if (client.tiling_tileIndex != this.tileIndex) {
+		if (this.hasClient(client) == false) {
 			print("Wrong tile called");
 			return;
 		}
-		// Don't resize when client isn't on current desktop
-		// Prevents a couple unnecessary resizes
-		if (client.desktop != workspace.currentDesktop && client.desktop > -1) {
+		// Don't resize when we aren't the current desktop
+		// or on all desktops
+		if (this._currentDesktop != workspace.currentDesktop
+			&& this._currentDesktop != -1) {
 			return;
 		}
 		// These two should never be reached
@@ -242,6 +243,8 @@ Tile.prototype.setClientGeometry = function(client) {
 				// Respect min/maxSize
 				var changedRect = false;
 				var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
+				// This can theoretically result in an endless loop
+				// e.g. when the only client has a maxsize smaller than the clientarea
 				if (this.respectMinMax) {
 		if (client.tiling_resize == true) {
 			return;
@@ -312,7 +315,7 @@ Tile.prototype.onClientDesktopChanged = function(client) {
 			return;
 		}
 		var oldDesktop = this._currentDesktop;
-		this._currentDesktop = client.desktop;
+		this._currentDesktop = util.getClientDesktop(client);
 		this.desktopChanged.emit(oldDesktop, this._currentDesktop);
 	} catch(err) {
 		print(err, "in Tile.onClientDesktopChanged");

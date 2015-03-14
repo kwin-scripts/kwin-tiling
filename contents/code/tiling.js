@@ -206,6 +206,14 @@ Tiling.prototype._getTileIndex = function(x, y) {
 	try {
 		for (var i = 0; i < this.layout.tiles.length; i++) {
 			var tile = this.layout.tiles[i];
+			// Remove gaps
+			// FIXME: Take screenGaps into account - not important for what we use this for
+			// but this would break if we'd ask about x=screenRect.x or similar and sG is larger than wG
+			var realrect = Qt.rect(tile.rectangle.x - this.windowsGapSizeWidth,
+								   tile.rectangle.y - this.windowsGapSizeHeight,
+								   tile.rectangle.width + this.windowsGapSizeHeight * 2,
+								   tile.rectangle.height + this.windowsGapSizeHeight * 2);
+			realrect = util.intersectRect(this.screenRectangle, realrect);
 			if (tile.rectangle.x <= x
                 && tile.rectangle.y <= y
                 && tile.rectangle.x + tile.rectangle.width > x

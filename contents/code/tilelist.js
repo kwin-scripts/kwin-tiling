@@ -64,8 +64,7 @@ function TileList() {
 
 	// HACK: Add client whenever they are activated since workspace.clientList doesn't work
 	// See https://bugs.kde.org/show_bug.cgi?id=340125
-	workspace.clientActivated.connect(function() {
-		var client = workspace.activeClient;
+	workspace.clientActivated.connect(function(client) {
 		if (client == null || client.tiling_tileIndex != null) {
 			return;
 		}
@@ -75,20 +74,7 @@ function TileList() {
 			client.keepBelow = false;
 			return;
 		}
-
-		// Delay adding until the window is actually shown
-		// This prevents (some, but not all) graphics bugs
-		// due to resizing before the pixmap is created (or something like that)
-		// Unfortunately, this signal is only emitted when compositing
-		// FIXME: options.useCompositing (et al) never change from the initial value
-		// and the changed signals aren't fired
-		if (options.useCompositing == true) {
-			client.windowShown.connect(function() {
-				self._onClientAdded(client);
-			});
-		} else {
-			self._onClientAdded(client);
-		}
+		self._onClientAdded(client);
 	});
 };
 
@@ -229,8 +215,8 @@ TileList.prototype.addClient = function(client) {
 	if (client.isCurrentTab == false) {
 		for (var i = 0; i < this.tiles.length; i++) {
 			if (util.compareRect(this.tiles[i].rectangle, client.geometry) == true) {
-				if (this.tiles[i]._currentDesktop == client.desktop &&
-					this.tiles[i]._currentScreen  == client.screen) {
+				if (this.tiles[i]._currentDesktop == util.getClientDesktop(client)
+					&& this.tiles[i]._currentScreen  == client.screen) {
 					this.tiles[i].addClient(client);
 					break;
 				}
@@ -312,7 +298,7 @@ TileList.prototype._onClientTabGroupChanged = function(client) {
 				var rect  = this.tiles[i].rectangle;
 				if (util.compareRect(rect, client.geometry) == true) {
 					// TODO: Is this necessary or is desktopChanged always called before tabgroupchanged?
-					if (this.tiles[i]._currentDesktop == client.desktop || client.desktop == -1) {
+					if (this.tiles[i]._currentDesktop == util.getClientDesktop(client)) {
 						tabGroup = this.tiles[i];
 						break;
 					}
@@ -380,7 +366,7 @@ TileList._isIgnored = function(client) {
     // Application workarounds should be put here
 	// HACK: Qt gives us a method-less QVariant(QStringList) if we ask for an array
 	// Ask for a string instead (which can and should still be a StringList for the UI)
-	var fl = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper,plasmashell,Plasma,ksmserver";
+	var fl = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper,plasmashell,Plasma,ksmserver, pinentry";
 	// TODO: This could break if an entry contains whitespace or a comma - it needs to be validated on the qt side
 	var floaters = String(KWin.readConfig("floaters", fl)).replace(/ /g,"").split(",");
 	if (floaters.indexOf(client.resourceClass.toString()) > -1) {

@@ -109,6 +109,21 @@ util.rectToString = function(rect) {
 	}
 }
 
+util.printRect = function(rect) {
+	print(util.rectToString(rect));
+}
+
+util.printTile = function(tile) {
+	print("Tile ", tile.tileIndex, " on desktop ", tile.desktop,
+		  " screen ", tile.screen, " rect ", util.rectToString(tile.rectangle),
+		  " client ", tile.clients[0].resourceClass.toString());
+}
+
+util.printClient = function(client) {
+	print("Client ", client.resourceClass.toString(), " on desktop ", client.desktop,
+		  " at ", util.rectToString(client.geometry), " on tile ", client.tiling_tileIndex);
+}
+
 util.assertRectInScreen = function(rect, screenRectangle) {
 	util.assertTrue(rect.x >= screenRectangle.x &&
 					rect.y >= screenRectangle.y &&
@@ -135,4 +150,14 @@ if(KWin.readConfig == null) {
 	KWin.readConfig = readConfig;
 } else {
 	print("We're running under KWin 5");
+}
+
+// HACK: KWin 5.2 (at least) will sometimes give us client.desktop == workspace.desktops
+// (i.e. a desktop number that is too large)
+// when a client is on all desktops
+util.getClientDesktop = function(client) {
+	if (client.onAllDesktops == true) {
+		return -1;
+	}
+	return client.desktop;
 }
