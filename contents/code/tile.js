@@ -234,12 +234,16 @@ Tile.prototype.setClientGeometry = function(client) {
 			return;
 		}
 		if (this.rectangle != null) {
-			if (util.compareRect(this.rectangle, client.geometry) == false) {
-				client.tiling_resize = true;
 				// Respect min/maxSize
 				var changedRect = false;
 				var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
 				if (this.respectMinMax) {
+		if (client.tiling_resize == true) {
+			return;
+		}
+		if (client.fullScreen == true) {
+			return;
+		}
 					if (client.minSize.width > this.rectangle.width) {
 						if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width - this.screenGapSizeRight) {
 							this.rectangle.x = (screenRect.x + screenRect.width - this.screenGapSizeRight) - client.minSize.width;
@@ -274,6 +278,13 @@ Tile.prototype.setClientGeometry = function(client) {
 				options.electricBorderMaximize = false;
 				client.geometry = util.copyRect(this.rectangle);
 				options.electricBorderMaximize = eBM;
+			if (client.basicUnit.width > 1) {
+				this.rectangle.width = Math.floor((this.rectangle.width - client.minSize.width) / client.basicUnit.width) * client.basicUnit.width + client.minSize.width;
+			}
+			if (client.basicUnit.height > 1) {
+				this.rectangle.height = Math.floor((this.rectangle.height - client.minSize.height) / client.basicUnit.height) * client.basicUnit.height + client.minSize.height;
+			}
+				client.tiling_resize = true;
 
 				if (changedRect == true) {
 					this._resizing = true;
@@ -282,7 +293,6 @@ Tile.prototype.setClientGeometry = function(client) {
 				}
 
 				client.tiling_resize = false;
-			}
 		} else {
 			print("No rectangle", client.resourceClass.toString(), client.windowId);
 		}
