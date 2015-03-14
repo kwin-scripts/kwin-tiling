@@ -230,12 +230,6 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (client.moveable != true) {
 			return;
 		}
-		// print("Minsize");
-		// if (client.minSize.w == client.maxSize.w && client.minSize.h == client.maxSize.w) {
-		// 	print(client.minSize, client.minSize.w);
-		// 	print(client.maxSize, client.maxSize.w);
-		// 	return;
-		// }
 		if (client.minSize.width == client.maxSize.width && client.minSize.height == client.maxSize.width) {
 			return;
 		}
