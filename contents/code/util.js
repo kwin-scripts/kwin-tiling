@@ -104,6 +104,9 @@ util.getTilingArea = function(screen, desktop) {
 
 util.rectToString = function(rect) {
 	return "x" + rect.x + "y" + rect.y + "w" + rect.width + "h" + rect.height;
+	if (rect == null) {
+		return "null";
+	}
 }
 
 util.assertRectInScreen = function(rect, screenRectangle) {
