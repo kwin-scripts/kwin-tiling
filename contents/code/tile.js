@@ -96,8 +96,6 @@ function Tile(firstClient, tileIndex) {
 
 		this.rectangle = null;
 
-		this.syncCustomProperties();
-
 		this.respectMinMax = KWin.readConfig("respectMinMax", false);
 
 		var gapSize = KWin.readConfig("gapSize", 0);  /* stick to old gaps config by default */
@@ -107,7 +105,14 @@ function Tile(firstClient, tileIndex) {
 		this.screenGapSizeRight = KWin.readConfig("screenGapSizeRight", 0);
 		this.screenGapSizeTop = KWin.readConfig("screenGapSizeTop", 0);
 		this.screenGapSizeBottom = KWin.readConfig("screenGapSizeBottom", 0);
-		this.addClient(firstClient);
+		// Do this manually instead of calling "addClient" to not try to resize
+		// because we don't have a rectangle at this point
+		firstClient.keepBelow = true;
+		if (KWin.readConfig("noBorder", false) == true) {
+			firstClient.noBorder = true;
+		}
+		this.clients.push(firstClient);
+		this.syncCustomProperties();
 	} catch(err) {
 		print(err, "in Tile");
 	}
