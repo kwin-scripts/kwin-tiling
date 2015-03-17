@@ -281,6 +281,7 @@ Tile.prototype.setClientGeometry = function(client) {
 						changedRect = true;
 					}
 				}
+				client.tiling_resize = true;
 				// Don't accidentally maximize windows
 				var eBM = options.electricBorderMaximize;
 				options.electricBorderMaximize = false;
@@ -292,7 +293,6 @@ Tile.prototype.setClientGeometry = function(client) {
 			if (client.basicUnit.height > 1) {
 				this.rectangle.height = Math.floor((this.rectangle.height - client.minSize.height) / client.basicUnit.height) * client.basicUnit.height + client.minSize.height;
 			}
-				client.tiling_resize = true;
 
 				if (changedRect == true) {
 					this._resizing = true;
