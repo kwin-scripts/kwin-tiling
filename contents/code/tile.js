@@ -140,7 +140,7 @@ Tile.prototype.setGeometry = function(geometry) {
 		}
 		for (var i = 0; i < this.clients.length; i++) {
 			this.clients[i].tiling_MoveResize = false;
-			this.onClientGeometryChanged(this.clients[i]);
+			this.setClientGeometry(this.clients[i]);
 		}
 	} catch(err) {
 		print(err, "in Tile.setGeometry");
@@ -380,7 +380,7 @@ Tile.prototype.addClient = function(client) {
 			}
 			this.clients.push(client);
 			this.syncCustomProperties();
-			this.onClientGeometryChanged(client);
+			this.setClientGeometry(client);
 		}
 	} catch(err) {
 		print(err, "in Tile.addClient");
