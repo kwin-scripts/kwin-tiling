@@ -423,18 +423,6 @@ TileList._isIgnored = function(client) {
 	if (client.dndIcon == true) {
 		return true;
 	}
-	// Client can't be moved or resized so tiling is pointless
-	// FIXME: This might change later but there's no signal
-	// If clients actually change that in practice, then we need to recheck periodically
-	if (client.resizeable != true) {
-		return true;
-	}
-	if (client.moveable != true) {
-		return true;
-	}
-	if ((client.minSize != null && client.maxSize != null) && client.minSize.width == client.maxSize.width && client.minSize.height == client.maxSize.width) {
-		return true;
-	}
 
     return false;
 };
