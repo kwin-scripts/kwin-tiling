@@ -59,7 +59,7 @@ function TileList() {
 			return;
 		}
 		
-		self._onClientAdded(client);
+		self.addClient(client);
     });
 
 	// HACK: Add client whenever they are activated since workspace.clientList doesn't work
@@ -74,7 +74,7 @@ function TileList() {
 			client.keepBelow = false;
 			return;
 		}
-		self._onClientAdded(client);
+		self.addClient(client);
 	});
 };
 
@@ -169,7 +169,7 @@ TileList.prototype.connectSignals = function(client) {
 	});
 	client.clientUnminimized.connect(function(client) {
 		try {
-			self._onClientAdded(client);
+			self.addClient(client);
 		} catch(err) {
 			print(err, "in Unminimized");
 		}
@@ -246,10 +246,6 @@ TileList.prototype.getTile = function(client) {
 		return this.tiles[index];
 	}
 	return null;
-};
-
-TileList.prototype._onClientAdded = function(client) {
-    this.addClient(client);
 };
 
 /*
@@ -368,8 +364,8 @@ TileList.prototype._removeTile = function(tileIndex) {
  * e.g. panels, dialogs or the user-defined apps
  */
 TileList._isIgnored = function(client) {
-	// TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
     // Application workarounds should be put here
+	// TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
 	// HACK: Qt gives us a method-less QVariant(QStringList) if we ask for an array
 	// Ask for a string instead (which can and should still be a StringList for the UI)
 	var fl = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper,plasmashell,Plasma,ksmserver, pinentry";
@@ -387,46 +383,21 @@ TileList._isIgnored = function(client) {
 	} else if (client.resourceClass.toString() != "steam" && client.caption == "Steam") {
 		return true;
 	}
-	if (client.specialWindow == true) {
-		return true;
-	}
-	if (client.desktopWindow == true) {
-		return true;
-	}
-	if (client.dock == true) {
-		return true;
-	}
-	if (client.toolbar == true) {
-		return true;
-	}
-	if (client.menu == true) {
-		return true;
-	}
-	if (client.dialog == true) {
-		return true;
-	}
-	if (client.splash == true) {
-		return true;
-	}
-	if (client.utility == true) {
-		return true;
-	}
-	if (client.dropdownMenu == true) {
-		return true;
-	}
-	if (client.popupMenu == true) {
-		return true;
-	}
-	if (client.tooltip == true) {
-		return true;
-	}
-	if (client.notification == true) {
-		return true;
-	}
-	if (client.comboBox == true) {
-		return true;
-	}
-	if (client.dndIcon == true) {
+	// Client has a type that shouldn't be tiled
+	if (client.specialWindow == true ||
+		client.desktopWindow == true ||
+		client.dock == true ||
+		client.toolbar == true ||
+		client.menu == true ||
+		client.dialog == true ||
+		client.splash == true ||
+		client.utility == true ||
+		client.dropdownMenu == true ||
+		client.popupMenu == true ||
+		client.tooltip == true ||
+		client.notification == true ||
+		client.comboBox == true ||
+		client.dndIcon == true) {
 		return true;
 	}
 
