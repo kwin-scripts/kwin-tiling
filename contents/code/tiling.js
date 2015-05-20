@@ -232,9 +232,6 @@ Tiling.prototype.resizeTile = function(tile){
 			var client = tile.clients[0];
 			this.layout.resizeTile(tileIndex, client.geometry);
 			this._updateAllTiles();
-		} else {
-			print("Wrong layout called for tile ", tile._currentDesktop - 1, tile._currentScreen);
-			print("Layout is: ", this.desktop, this.screen);
 		}
 	} catch(err) {
 		print(err, "in Tiling.resizeTile");
