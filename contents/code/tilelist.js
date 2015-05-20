@@ -87,6 +87,11 @@ TileList.prototype.connectSignals = function(client) {
 	}
 
     var self = this;
+    // We also have to connect other client signals here instead of in Tile
+    // because the tile of a client might change over time
+    var getTile = function(client) {
+        return self.getTile(client);
+    };
 
 	if (client.tiling_connected1 != true) {
 		// First handle fullscreen and shade as they can change and affect the tiling or floating decision
@@ -95,7 +100,13 @@ TileList.prototype.connectSignals = function(client) {
 				client.tiling_floating = true;
 				client.keepBelow = false;
 			} else {
-				self._onClientAdded(client);
+				// If we already have a tile, just re-change the geometry
+				var tile = getTile(client);
+				if (tile != null) {
+					tile.onClientGeometryChanged(client);
+				} else {
+					self.addClient(client);
+				}
 			}
 		});
 		client.shadeChanged.connect(function() {
@@ -114,11 +125,6 @@ TileList.prototype.connectSignals = function(client) {
     client.tabGroupChanged.connect(function() {
         self._onClientTabGroupChanged(client);
     });
-    // We also have to connect other client signals here instead of in Tile
-    // because the tile of a client might change over time
-    var getTile = function(client) {
-        return self.getTile(client);
-    };
 	// geometryChanged fires also on maximizedStateChanged and stepUserMovedResized
 	// so use geometryShapeChanged
     client.geometryShapeChanged.connect(function() {
