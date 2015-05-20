@@ -2,6 +2,9 @@
 
   Tiling script for kwin, based on [[https://github.com/mgottschlag/kwin-tiling][Mathias Gottschlag's version]]
 
+  NOTE: This is the Plasma 5 version.
+  For the Plasma 1/KWin 4 version, see the Plasma1 branch
+
 ** Goals:
    The purpose of this is to create a userfriendly tiling solution that
 
