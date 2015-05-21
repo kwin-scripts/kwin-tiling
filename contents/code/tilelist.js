@@ -114,19 +114,19 @@ TileList.prototype.connectSignals = function(client) {
 				}
 			}
 		});
-		// Just tile the shaded clients since we get the border geometry
-		// This needs improvement in our resizing/tile-finding logic
-		client.shadeChanged.connect(function() {
-			var tile = getTile(client);
-			if (tile != null) {
-				tile.onClientGeometryChanged(client);
-			}
-		});
 		client.tiling_connected1 = true;
 	}
 	if (client.tiling_connected2 == true) {
 		return;
 	}
+	// Just tile the shaded clients since we get the border geometry
+	// TODO: This needs improvement in our resizing/tile-finding logic
+	client.shadeChanged.connect(function() {
+		var tile = getTile(client);
+		if (tile != null) {
+			tile.onClientGeometryChanged(client);
+		}
+	});
     client.tabGroupChanged.connect(function() {
         self._onClientTabGroupChanged(client);
     });
