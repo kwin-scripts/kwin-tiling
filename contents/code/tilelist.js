@@ -103,6 +103,8 @@ TileList.prototype.connectSignals = function(client) {
 				// If we already have a tile, just re-change the geometry
 				var tile = getTile(client);
 				if (tile != null) {
+					client.tiling_floating = false;
+					client.keepBelow = true;
 					tile.onClientGeometryChanged(client);
 				} else {
 					self.addClient(client);
