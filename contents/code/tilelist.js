@@ -87,20 +87,23 @@ TileList.prototype.connectSignals = function(client) {
 	}
 
     var self = this;
-    // We also have to connect other client signals here instead of in Tile
+    // We have to connect client signals here instead of in Tile
     // because the tile of a client might change over time
     var getTile = function(client) {
         return self.getTile(client);
     };
 
 	if (client.tiling_connected1 != true) {
-		// First handle fullscreen and shade as they can change and affect the tiling or floating decision
+		// First handle fullscreen as clients become interesting when they unfullscreen
+		// We don't need to remove a client on fullscreen as it may be temporary (vlc)
+		// and no other client is visible while one is fullscreen (meaning their geom doesn't matter)
+		// and we can properly restore the geometry this way
 		client.fullScreenChanged.connect(function() {
 			if (client.fullScreen == true) {
 				client.tiling_floating = true;
 				client.keepBelow = false;
 			} else {
-				// If we already have a tile, just re-change the geometry
+				// If we already have a tile, just reset the geometry
 				var tile = getTile(client);
 				if (tile != null) {
 					client.tiling_floating = false;
@@ -128,6 +131,7 @@ TileList.prototype.connectSignals = function(client) {
         self._onClientTabGroupChanged(client);
     });
 	// geometryChanged fires also on maximizedStateChanged and stepUserMovedResized
+	// (from a cursory reading of the KWin source code)
 	// so use geometryShapeChanged
     client.geometryShapeChanged.connect(function() {
 		var tile = getTile(client);
@@ -362,10 +366,10 @@ TileList.prototype._removeTile = function(tileIndex) {
 
 /**
  * Returns true for clients which shall never be handled by the tiling script,
- * e.g. panels, dialogs or the user-defined apps
+ * e.g. panels, dialogs or user-defined apps
+ * Application workarounds should be put here
  */
 TileList._isIgnored = function(client) {
-    // Application workarounds should be put here
 	// TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
 	// HACK: Qt gives us a method-less QVariant(QStringList) if we ask for an array
 	// Ask for a string instead (which can and should still be a StringList for the UI)
