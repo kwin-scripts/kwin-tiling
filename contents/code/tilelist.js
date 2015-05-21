@@ -111,12 +111,12 @@ TileList.prototype.connectSignals = function(client) {
 				}
 			}
 		});
+		// Just tile the shaded clients since we get the border geometry
+		// This needs improvement in our resizing/tile-finding logic
 		client.shadeChanged.connect(function() {
-			if (client.shade == true) {
-				client.tiling_floating = true;
-				self.untileClient(client);
-			} else {
-				self.addClient(client);
+			var tile = getTile(client);
+			if (tile != null) {
+				tile.onClientGeometryChanged(client);
 			}
 		});
 		client.tiling_connected1 = true;
@@ -211,8 +211,7 @@ TileList.prototype.addClient = function(client) {
 
 	this.connectSignals(client);
 
-	// shade can't be activated without borders, so it's okay to handle it here
-	if (client.fullScreen == true || client.shade == true) {
+	if (client.fullScreen == true) {
 		client.keepBelow = false;
 		return;
 	}

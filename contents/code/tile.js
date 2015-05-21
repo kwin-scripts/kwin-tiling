@@ -281,6 +281,10 @@ Tile.prototype.setClientGeometry = function(client) {
 					changedRect = true;
 				}
 			}
+			if (client.shade == true) {
+				this.rectangle.height = client.geometry.height;
+				changedRect = true;
+			}
 			client.tiling_resize = true;
 			// Don't accidentally maximize windows
 			var eBM = options.electricBorderMaximize;
