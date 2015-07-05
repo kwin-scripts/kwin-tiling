@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>392</height>
+    <width>417</width>
+    <height>507</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="commonTab">
       <property name="accessibleName">
@@ -23,255 +23,171 @@
       <attribute name="title">
        <string>Tab 1</string>
       </attribute>
-      <widget class="QWidget" name="gridLayoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>641</width>
-         <height>351</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="3" column="0">
-         <widget class="QCheckBox" name="kcfg_respectMinMax">
-          <property name="text">
-           <string>Respect minimum/maximum Size</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="KEditListBox" name="kcfg_floaters">
-          <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The windows that should be excluded from tiling, by window class&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="title">
-           <string>Excluded window classes</string>
-          </property>
-          <property name="buttons">
-           <set>KEditListBox::Add|KEditListBox::Remove</set>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Placement method</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="kcfg_noBorder">
-          <property name="text">
-           <string>Remove window borders on tiled windows</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLineEdit" name="kcfg_layouts"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QCheckBox" name="kcfg_userActive">
-          <property name="text">
-           <string>Tiling enabled by default</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QComboBox" name="kcfg_placement">
-          <item>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="5" column="0">
+          <widget class="QComboBox" name="kcfg_placement">
+           <item>
+            <property name="text">
+             <string>Let KWin decide</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Open new tiles as master</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Open new tiles at the end</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Let KWin decide</string>
+            <string>Placement method</string>
            </property>
-          </item>
-          <item>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QCheckBox" name="kcfg_respectMinMax">
            <property name="text">
-            <string>Open new tiles as master</string>
+            <string>Respect minimum/maximum Size</string>
            </property>
-          </item>
-          <item>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLineEdit" name="kcfg_layouts"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QCheckBox" name="kcfg_userActive">
            <property name="text">
-            <string>Open new tiles at the end</string>
+            <string>Tiling enabled by default</string>
            </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="kcfg_noBorder">
+           <property name="text">
+            <string>Remove window borders on tiled windows</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="KEditListBox" name="kcfg_floaters">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The windows that should be excluded from tiling, by window class&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="title">
+            <string>Excluded window classes</string>
+           </property>
+           <property name="buttons">
+            <set>KEditListBox::Add|KEditListBox::Remove</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
        <string>Tab 2</string>
       </attribute>
-      <widget class="QSpinBox" name="kcfg_screenGapSizeLeft">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>49</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="kcfg_windowsGapSizeWidth">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>220</y>
-         <width>49</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="kcfg_screenGapSizeRight">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>50</y>
-         <width>49</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="kcfg_windowsGapSizeHeight">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>220</y>
-         <width>49</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="kcfg_screenGapSizeTop">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>130</y>
-         <width>49</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="kcfg_screenGapSizeBottom">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>130</y>
-         <width>49</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>0</y>
-         <width>371</width>
-         <height>21</height>
+         <width>236</width>
+         <height>226</height>
         </rect>
        </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Gaps between screenedges and windows&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>201</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Gaps between windows&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>53</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Left</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_5">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>200</y>
-         <width>53</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Width</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_6">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>30</y>
-         <width>53</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Right</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_7">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>200</y>
-         <width>53</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Height</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_8">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>53</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Top</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_10">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>110</y>
-         <width>53</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Bottom</string>
-       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Gaps between screenedges and windows&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Left</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Right</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QSpinBox" name="kcfg_screenGapSizeLeft"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="kcfg_screenGapSizeRight"/>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Top</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Bottom</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QSpinBox" name="kcfg_screenGapSizeTop"/>
+        </item>
+        <item row="4" column="1">
+         <widget class="QSpinBox" name="kcfg_screenGapSizeBottom"/>
+        </item>
+        <item row="5" column="0" colspan="2">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Gaps between windows&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Width</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Height</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QSpinBox" name="kcfg_windowsGapSizeWidth"/>
+        </item>
+        <item row="7" column="1">
+         <widget class="QSpinBox" name="kcfg_windowsGapSizeHeight"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </widget>
