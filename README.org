@@ -42,7 +42,7 @@
 
    cd kwin-tiling/
 
-   plasmapkg --type kwinscript -i .
+   plasmapkg2 --type kwinscript -i .
 
 ** Usage
    Install
