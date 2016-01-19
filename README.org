@@ -38,11 +38,11 @@
    - Many bugfixes over mgottschlag's version
 ** Installation:
 
+   #+BEGIN_SRC bash
    git clone https://github.com/faho/kwin-tiling.git
-
    cd kwin-tiling/
-
-   plasmapkg2 \-\-type kwinscript -i .
+   plasmapkg2 --type kwinscript -i .
+   #+END_SRC
 
 ** Usage
    Install
