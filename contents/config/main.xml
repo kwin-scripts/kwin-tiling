@@ -55,7 +55,7 @@
 		</entry>
 		<entry name="respectMinMax" type="bool">
 		  <label>Should minimum/maximum Size be respected</label>
-		  <default>false</default>
+		  <default>true</default>
 		</entry>
 		<entry name="placement" type="int">
 		  <label>Where new tiles should open</label>
