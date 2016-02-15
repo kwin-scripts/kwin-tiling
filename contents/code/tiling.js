@@ -332,6 +332,7 @@ Tiling.prototype.decrementMaster = function() {
  * Apply gaps to a rectangle, in-place
 */
 Tiling.prototype.applyGaps = function(rect) {
+	if (KWin.readConfig("fullscreenGaps", false) == false && util.compareRect(rect, this.screenRectangle) == true) return;
 	if (rect.x + rect.width == this.screenRectangle.x + this.screenRectangle.width) {
 		rect.width -= this.screenGapSizeRight;
 	} else {

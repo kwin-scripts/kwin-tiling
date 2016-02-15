@@ -49,6 +49,10 @@
 		  <label>The size in pixels of the bottom gap between window and screenedge</label>
 		  <default>0</default>
 		</entry>
+		<entry name="fullscreenGaps" type="bool">
+		  <label>Should gaps also be applied to windows that take up the whole screen</label>
+		  <default>false</default>
+		</entry>
 		<entry name="respectMinMax" type="bool">
 		  <label>Should minimum/maximum Size be respected</label>
 		  <default>false</default>
