@@ -25,7 +25,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="1" column="0">
-        <widget class="KEditListWidget" name="kfcfg_floaters">
+        <widget class="KEditListWidget" name="kcfg_floaters">
          <property name="toolTip">
           <string>The windows that should be excluded from tiling, by window class</string>
          </property>
