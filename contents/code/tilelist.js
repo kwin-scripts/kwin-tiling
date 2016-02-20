@@ -388,6 +388,14 @@ TileList._isIgnored = function(client) {
 	} else if (client.resourceClass.toString() != "steam" && client.caption == "Steam") {
 		return true;
 	}
+	// HACK: Eclipse's quick outline (and possibly other windows) closes when it loses focus
+	// with FFM and this script, that happens a ton
+	// Unfortunately, this is still declared as a normal window
+	if (client.resourceClass.toString() == "eclipse"
+		&& client.transient == true) {
+			return true;
+	}
+
 	// Client has a type that shouldn't be tiled
 	if (client.specialWindow == true ||
 		client.desktopWindow == true ||
