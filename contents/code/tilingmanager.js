@@ -88,10 +88,6 @@ function TilingManager() {
      * True if a user moving operation is in progress.
      */
     this._moving = false;
-    /**
-     * The screen where the current window move operation started.
-     */
-    this._movingStartScreen = 0;
 	/**
 	 * Whether tiling is active on all desktops
 	 * This is overridden by per-desktop settings
@@ -654,13 +650,12 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
 	try {
 		var client = tile.clients[0];
 		this._moving = false;
-		var movingEndScreen = client.screen;
 		var windowRect = client.geometry;
 		if (client.tiling_tileIndex >= 0) {
-			if (this._movingStartScreen != movingEndScreen) {
+			if (tile._currentScreen != client.screen) {
 				// Transfer the tile from one layout to another layout
 				var startLayout =
-					this._getLayouts(this._currentDesktop, this._movingStartScreen)[0];
+					this._getLayouts(this._currentDesktop, tile._currentScreen)[0];
 				var endLayout = this._getLayouts(this._currentDesktop, client.screen)[0];
 				startLayout.removeTile(tile);
 				endLayout.addTile(tile, windowRect.x + windowRect.width / 2,

@@ -246,6 +246,9 @@ Tile.prototype.setClientGeometry = function(client) {
 			return;
 		}
 		if (this.rectangle != null) {
+			if (client.screen != this._currentScreen) {
+				this._currentScreen = client.screen;
+			}
 			// Respect min/maxSize
 			var changedRect = false;
 			var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
