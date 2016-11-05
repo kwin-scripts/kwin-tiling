@@ -396,7 +396,7 @@ function TilingManager() {
 					          "Meta+*",
 					          function() {
 						          try {
-							          self.layouts[self._currentDesktop][self._currentScreen].increaseMaster();
+							          self.layouts[self._currentDesktop - 1][self._currentScreen].increaseMaster();
 						          } catch(err) {
 							          print(err, "in Increase-Number-Of-Masters");
 						          }
@@ -406,7 +406,7 @@ function TilingManager() {
 					          "Meta+_",
 					          function() {
 						          try {
-							          self.layouts[self._currentDesktop][self._currentScreen].decrementMaster();
+							          self.layouts[self._currentDesktop - 1][self._currentScreen].decrementMaster();
 						          } catch(err) {
 							          print(err, "in Decrease-Number-Of-Masters");
 						          }
