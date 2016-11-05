@@ -252,7 +252,7 @@ function TilingManager() {
 					          "Meta+Shift+f11",
 					          function() {
 						          var currentScreen = workspace.activeScreen;
-						          var currentDesktop = workspace.currentDesktop;
+						          var currentDesktop = workspace.currentDesktop - 1;
 						          self.layouts[currentDesktop][currentScreen].toggleUserActive();
 					          });
 	    KWin.registerShortcut("TILING: Tile now",
@@ -260,7 +260,7 @@ function TilingManager() {
 					          "Meta+t",
 					          function() {
 						          var currentScreen = workspace.activeScreen;
-						          var currentDesktop = workspace.currentDesktop;
+						          var currentDesktop = workspace.currentDesktop - 1;
 						          self.layouts[currentDesktop][currentScreen].toggleUserActive();
 						          self.layouts[currentDesktop][currentScreen].toggleUserActive();
 					          });
