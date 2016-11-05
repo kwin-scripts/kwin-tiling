@@ -229,6 +229,7 @@ Tile.prototype.setClientGeometry = function(client) {
 		if (client.moveable != true) {
 			return;
 		}
+        // This client is bogus
 		if (client.minSize.width == client.maxSize.width && client.minSize.height == client.maxSize.width) {
 			return;
 		}
@@ -245,37 +246,38 @@ Tile.prototype.setClientGeometry = function(client) {
 			// Respect min/maxSize
 			var changedRect = false;
 			var screenRect = util.getTilingArea(this._currentScreen, this._currentDesktop);
-			// This can theoretically result in an endless loop
-			// e.g. when the only client has a maxsize smaller than the clientarea
-			if (this.respectMinMax) {
-				if (client.minSize.width > this.rectangle.width) {
-					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width - this.screenGapSizeRight) {
-						this.rectangle.x = (screenRect.x + screenRect.width - this.screenGapSizeRight) - client.minSize.width;
-					}
-					this.rectangle.width = client.minSize.width + this.windowsGapSizeWidth;
-					changedRect = true;
+            // We cannot accomodate this. The client is wrong.
+            if (client.minSize.width > screenRect.width
+                || client.minSize.height > screenRect.height) {
+                return;
+            }
+			if (client.minSize.width > this.rectangle.width) {
+				if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width - this.screenGapSizeRight) {
+					this.rectangle.x = (screenRect.x + screenRect.width - this.screenGapSizeRight) - client.minSize.width;
 				}
-				if (client.minSize.height > this.rectangle.height) {
-					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height - this.screenGapSizeBottom) {
-						this.rectangle.y = (screenRect.y + screenRect.height - this.screenGapSizeBottom) - client.minSize.height;
-					}
-					this.rectangle.height = client.minSize.height + this.windowsGapSizeHeight;
-					changedRect = true;
+				this.rectangle.width = client.minSize.width + this.windowsGapSizeWidth;
+				changedRect = true;
+			}
+			if (client.minSize.height > this.rectangle.height) {
+				if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height - this.screenGapSizeBottom) {
+					this.rectangle.y = (screenRect.y + screenRect.height - this.screenGapSizeBottom) - client.minSize.height;
 				}
-				if (client.maxSize.width < this.rectangle.width && client.maxSize.width > 0) {
-					if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width - this.screenGapSizeRight) {
-						this.rectangle.x = (screenRect.x + screenRect.width - this.screenGapSizeRight) - client.maxSize.width;
-					}
-					this.rectangle.width = client.maxSize.width + this.windowsGapSizeWidth;
-					changedRect = true;
+				this.rectangle.height = client.minSize.height + this.windowsGapSizeHeight;
+				changedRect = true;
+			}
+			if (client.maxSize.width < this.rectangle.width && client.maxSize.width > 0) {
+				if (this.rectangle.x + this.rectangle.width == screenRect.x + screenRect.width - this.screenGapSizeRight) {
+					this.rectangle.x = (screenRect.x + screenRect.width - this.screenGapSizeRight) - client.maxSize.width;
 				}
-				if (client.maxSize.height < this.rectangle.height && client.maxSize.height > 0) {
-					if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height - this.screenGapSizeBottom) {
-						this.rectangle.y = (screenRect.y + screenRect.height - this.screenGapSizeBottom) - client.maxSize.height;
-					}
-					this.rectangle.height = client.maxSize.height + this.windowsGapSizeHeight;
-					changedRect = true;
+				this.rectangle.width = client.maxSize.width + this.windowsGapSizeWidth;
+				changedRect = true;
+			}
+			if (client.maxSize.height < this.rectangle.height && client.maxSize.height > 0) {
+				if (this.rectangle.y + this.rectangle.height == screenRect.y + screenRect.height - this.screenGapSizeBottom) {
+					this.rectangle.y = (screenRect.y + screenRect.height - this.screenGapSizeBottom) - client.maxSize.height;
 				}
+				this.rectangle.height = client.maxSize.height + this.windowsGapSizeHeight;
+				changedRect = true;
 			}
 			if (client.shade == true) {
 				this.rectangle.height = client.geometry.height;
