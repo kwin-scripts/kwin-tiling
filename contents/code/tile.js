@@ -192,13 +192,6 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 	this.setClientGeometry(client);
 };
 
-Tile.prototype.setAllClientGeometries = function() {
-	var self = this;
-	this.clients.forEach(function(client) {
-		self.setClientGeometry(client);
-	});
-};
-
 Tile.prototype.setClientGeometry = function(client) {
 	try {
 		if (client == null) {
