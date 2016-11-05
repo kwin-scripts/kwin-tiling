@@ -52,28 +52,12 @@ function TileList() {
 	// Instead, connect to client.windowClosed
     var self = this;
     workspace.clientAdded.connect(function(client) {
-		// Don't connect signal if the client is ignored
-		if (TileList._isIgnored(client)) {
-			client.tiling_tileIndex = -1;
-			client.keepBelow = false;
-			return;
-		}
-		
 		self.addClient(client);
     });
 
 	// HACK: Add client whenever they are activated since workspace.clientList doesn't work
 	// See https://bugs.kde.org/show_bug.cgi?id=340125
 	workspace.clientActivated.connect(function(client) {
-		if (client == null || client.tiling_tileIndex != null) {
-			return;
-		}
-		// Don't connect signal if the client is ignored
-		if (TileList._isIgnored(client)) {
-			client.tiling_tileIndex = -1;
-			client.keepBelow = false;
-			return;
-		}
 		self.addClient(client);
 	});
 };
@@ -82,10 +66,6 @@ function TileList() {
  * Connect all signals for a client we need
  */
 TileList.prototype.connectSignals = function(client) {
-	if (TileList._isIgnored(client)) {
-		return;
-	}
-
     var self = this;
     // We have to connect client signals here instead of in Tile
     // because the tile of a client might change over time
