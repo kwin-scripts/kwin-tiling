@@ -296,10 +296,10 @@ function TilingManager() {
 							          if (tile == null) {
 								          return;
 							          }
-							          geom = Qt.rect(tile.rectangle.x - 10,
-												     tile.rectangle.y,
-												     tile.rectangle.width + 10,
-												     tile.rectangle.height);
+							          var geom = Qt.rect(tile.rectangle.x - 10,
+												         tile.rectangle.y,
+												         tile.rectangle.width + 10,
+												         tile.rectangle.height);
 							          var screenRectangle = util.getTilingArea(client.screen, client.desktop);
 							          if (geom.x < screenRectangle.x) {
 								          geom.x = screenRectangle.x;
