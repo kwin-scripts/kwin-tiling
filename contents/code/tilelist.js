@@ -54,12 +54,6 @@ function TileList() {
     workspace.clientAdded.connect(function(client) {
 		self.addClient(client);
     });
-
-	// HACK: Add client whenever they are activated since workspace.clientList doesn't work
-	// See https://bugs.kde.org/show_bug.cgi?id=340125
-	workspace.clientActivated.connect(function(client) {
-		self.addClient(client);
-	});
 };
 
 /*
