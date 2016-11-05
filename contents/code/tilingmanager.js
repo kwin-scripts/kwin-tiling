@@ -454,7 +454,7 @@ TilingManager.prototype._createDefaultLayouts = function(desktop) {
 };
 
 TilingManager.prototype._getCurrentLayoutType = function() {
-	var currentLayout = this._getLayouts(this._currentDesktop, this._currentScreen);
+	var currentLayout = this._getLayouts(this._currentDesktop, this._currentScreen)[0];
     return currentLayout.layoutType;
 };
 
