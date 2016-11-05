@@ -351,13 +351,13 @@ TileList.prototype._removeTile = function(tileIndex) {
  */
 TileList._isIgnored = function(client) {
 	// TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
+	var fl = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper,plasmashell,Plasma,ksmserver, pinentry";
 	// HACK: Qt gives us a method-less QVariant(QStringList) if we ask for an array
 	// Ask for a string instead (which can and should still be a StringList for the UI)
-	var fl = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper,plasmashell,Plasma,ksmserver, pinentry";
 	// TODO: This could break if an entry contains whitespace or a comma - it needs to be validated on the qt side
-	var floaters = String(KWin.readConfig("floaters", fl)).replace(/ /g,"").split(",");
-	if (floaters.indexOf(client.resourceClass.toString()) > -1) {
-		client.syncTabGroupFor("kwin_tiling_floats", true);
+    var floaters = KWin.readConfig("floaters", "").replace(/ /g,"").split(",");
+    if (floaters.indexOf(client.resourceClass.toString()) > -1
+        || fl.indexOf(client.resourceClass.toString()) > -1) {
 		return true;
 	}
 	// HACK: Steam doesn't set the windowtype properly
