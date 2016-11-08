@@ -25,9 +25,9 @@ Qt.include("layout.js");
  * the left half of the screen.
  */
 function SpiralLayout(screenRectangle) {
-	print("Creating SpiralLayout");
+    print("Creating SpiralLayout");
     Layout.call(this, screenRectangle);
-	this.master = 0;
+    this.master = 0;
 };
 
 SpiralLayout.name = "Spiral";
@@ -77,7 +77,7 @@ SpiralLayout.prototype.addTile = function() {
             newRect.width = splitX;
             break;
         }
-		this.tiles[this.tiles.length - 1].rectangle = lastRect;
+        this.tiles[this.tiles.length - 1].rectangle = lastRect;
         this._createTile(newRect);
     }
     //var lastRect = this.tiles[this.tiles.length - 1].rectangle;

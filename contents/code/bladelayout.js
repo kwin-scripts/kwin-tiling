@@ -25,15 +25,15 @@ Qt.include("layout.js");
  * the left half of the screen.
  */
 function BladeLayout(screenRectangle) {
-	try {
-		print("Creating BladeLayout");
-		Layout.call(this, screenRectangle);
-		// TODO
-	} catch(err) {
-		print(err, "in BladeLayout");
-	}
-	this.master = 0;
-	print("BladeLayout created");
+    try {
+        print("Creating BladeLayout");
+        Layout.call(this, screenRectangle);
+        // TODO
+    } catch(err) {
+        print(err, "in BladeLayout");
+    }
+    this.master = 0;
+    print("BladeLayout created");
 };
 
 // BladeLayout.name = "Blade";
@@ -44,64 +44,64 @@ BladeLayout.prototype = new Layout();
 BladeLayout.prototype.constructor = BladeLayout;
 
 BladeLayout.prototype.addTile = function() {
-	try {
-		if (this.tiles.length == 0) {
-			// The first tile fills the whole screen
-			var rect = util.copyRect(this.screenRectangle);
-			this._createTile(rect);
-			return;
-		} else {
-			// Divide the screen width evenly between full-height tiles
-			var lastRect = this.tiles[0].rectangle;
-			var newRect = Qt.rect(this.screenRectangle.x,
-								  lastRect.y,
-								  (this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1), 
-								  this.screenRectangle.height);
-			// FIXME: Try to keep ratio
-			for (var i = 0; i < this.tiles.length; i++) { 
-				var rect = this.tiles[i].rectangle;
-				rect.x = newRect.x + newRect.width * i;
-				rect.width = newRect.width;
-				this.tiles[i].rectangle = rect;
-			}
-			// Adjust tile's width for rounding errors
-			newRect.x = newRect.x + newRect.width * this.tiles.length;
-			newRect.width = (this.screenRectangle.width + this.screenRectangle.x) - newRect.x;
-			// TODO: Move this before setting ratio to simplify
-			this._createTile(newRect);
-		}
-	} catch(err) {
-		print(err, "in BladeLayout.addTile");
-	}
+    try {
+        if (this.tiles.length == 0) {
+            // The first tile fills the whole screen
+            var rect = util.copyRect(this.screenRectangle);
+            this._createTile(rect);
+            return;
+        } else {
+            // Divide the screen width evenly between full-height tiles
+            var lastRect = this.tiles[0].rectangle;
+            var newRect = Qt.rect(this.screenRectangle.x,
+                                  lastRect.y,
+                                  (this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1), 
+                                  this.screenRectangle.height);
+            // FIXME: Try to keep ratio
+            for (var i = 0; i < this.tiles.length; i++) { 
+                var rect = this.tiles[i].rectangle;
+                rect.x = newRect.x + newRect.width * i;
+                rect.width = newRect.width;
+                this.tiles[i].rectangle = rect;
+            }
+            // Adjust tile's width for rounding errors
+            newRect.x = newRect.x + newRect.width * this.tiles.length;
+            newRect.width = (this.screenRectangle.width + this.screenRectangle.x) - newRect.x;
+            // TODO: Move this before setting ratio to simplify
+            this._createTile(newRect);
+        }
+    } catch(err) {
+        print(err, "in BladeLayout.addTile");
+    }
 };
 
 BladeLayout.prototype.removeTile = function(tileIndex) {
-	try {
-		// Remove the array entry
-		var oldrect = this.tiles[tileIndex].rectangle;
-		this.tiles.splice(tileIndex, 1);
-		// Update the other tiles
-		if (this.tiles.length == 1) {
-			this.tiles[0].rectangle = util.copyRect(this.screenRectangle);
-		}
-		if (this.tiles.length > 1) {
-			var tileCount = this.tiles.length;
-			var lastRect = this.tiles[0].rectangle;
-			var newRect = Qt.rect(this.screenRectangle.x,
-								  this.screenRectangle.y,
-								  this.screenRectangle.width / tileCount,
-								  this.screenRectangle.height);
-			var lowest = 1;
-			for (var i = 0; i < this.tiles.length; i++) {
-				var rect = this.tiles[i].rectangle;
-				rect.x = newRect.x + newRect.width * i;
-				rect.width = newRect.width;
-				this.tiles[i].rectangle = rect;
-			}
-			// Adjust rightmost tile's height for rounding errors
-			this.tiles[this.tiles.length - 1].rectangle.width = (this.screenRectangle.width + this.screenRectangle.x) - this.tiles[this.tiles.length - 1].rectangle.x;
-		}
-	} catch(err) {
-		print(err, "in BladeLayout.removeTile");
-	}
+    try {
+        // Remove the array entry
+        var oldrect = this.tiles[tileIndex].rectangle;
+        this.tiles.splice(tileIndex, 1);
+        // Update the other tiles
+        if (this.tiles.length == 1) {
+            this.tiles[0].rectangle = util.copyRect(this.screenRectangle);
+        }
+        if (this.tiles.length > 1) {
+            var tileCount = this.tiles.length;
+            var lastRect = this.tiles[0].rectangle;
+            var newRect = Qt.rect(this.screenRectangle.x,
+                                  this.screenRectangle.y,
+                                  this.screenRectangle.width / tileCount,
+                                  this.screenRectangle.height);
+            var lowest = 1;
+            for (var i = 0; i < this.tiles.length; i++) {
+                var rect = this.tiles[i].rectangle;
+                rect.x = newRect.x + newRect.width * i;
+                rect.width = newRect.width;
+                this.tiles[i].rectangle = rect;
+            }
+            // Adjust rightmost tile's height for rounding errors
+            this.tiles[this.tiles.length - 1].rectangle.width = (this.screenRectangle.width + this.screenRectangle.x) - this.tiles[this.tiles.length - 1].rectangle.x;
+        }
+    } catch(err) {
+        print(err, "in BladeLayout.removeTile");
+    }
 };
