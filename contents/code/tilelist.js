@@ -45,6 +45,8 @@ function TileList() {
         print(err, "in TileList");
     }
 
+    // A hardcoded list of clients that should never be tiled
+    this.blacklist = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper,plasmashell,Plasma,ksmserver, pinentry".split(",");
     // We connect to the global workspace callbacks which are triggered when
     // clients are added in order to be able to keep track of the
     // new tiles
@@ -174,7 +176,7 @@ TileList.prototype.addClient = function(client) {
     if (client == null) {
         return;
     }
-    if (TileList._isIgnored(client)) {
+    if (this._isIgnored(client)) {
         client.tiling_tileIndex = -1;
         client.keepBelow = false;
         // WARNING: This crashes kwin!
@@ -343,15 +345,14 @@ TileList.prototype._removeTile = function(tileIndex) {
  * e.g. panels, dialogs or user-defined apps
  * Application workarounds should be put here
  */
-TileList._isIgnored = function(client) {
+TileList.prototype._isIgnored = function(client) {
     // TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
-    var fl = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper,plasmashell,Plasma,ksmserver, pinentry";
     // HACK: Qt gives us a method-less QVariant(QStringList) if we ask for an array
     // Ask for a string instead (which can and should still be a StringList for the UI)
     // TODO: This could break if an entry contains whitespace or a comma - it needs to be validated on the qt side
     var floaters = KWin.readConfig("floaters", "").replace(/ /g,"").split(",");
     if (floaters.indexOf(client.resourceClass.toString()) > -1
-        || fl.indexOf(client.resourceClass.toString()) > -1) {
+        || this.blacklist.indexOf(client.resourceClass.toString()) > -1) {
         return true;
     }
     // HACK: Steam doesn't set the windowtype properly
