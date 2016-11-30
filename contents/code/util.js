@@ -127,8 +127,8 @@ util.printClient = function(client) {
 util.assertRectInScreen = function(rect, screenRectangle) {
     util.assertTrue(rect.x >= screenRectangle.x &&
                     rect.y >= screenRectangle.y &&
-                    rect.width <= screenRectangle.width &&
-                    rect.height <= screenRectangle.height, "Rectangle not in screen");
+                    util.getR(rect) <= util.getR(screenRectangle) &&
+                    util.getB(rect) <= util.getB(screenRectangle), "Rectangle not in screen");
 };
 
 util.middlex = function(rect) {
