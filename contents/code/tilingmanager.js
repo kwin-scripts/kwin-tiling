@@ -210,7 +210,10 @@ function TilingManager() {
                                       print("No active client");
                                       return;
                                   }
-                                  if (!client.tiling_floating) {
+                                  // This can be undefined if the client
+                                  // has never been seen before
+                                  if (client.tiling_floating
+                                     || client.tiling_floating == null) {
                                       self.tiles.addClient(client);
                                       client.tiling_floating = false;
                                   } else {
