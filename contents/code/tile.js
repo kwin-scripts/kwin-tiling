@@ -129,10 +129,6 @@ Tile.prototype.setGeometry = function(geometry) {
         if (geometry == null) {
             return;
         }
-        if (this.maximize == true) {
-            this.oldRect = util.copyRect(geometry);
-            return;
-        }
         if (this.rectangle == null) {
             this.rectangle = util.copyRect(geometry);
         } else {
@@ -293,11 +289,7 @@ Tile.prototype.setClientGeometry = function(client) {
             }
 
             client.tiling_resize = true;
-            // Don't accidentally maximize windows
-            var eBM = options.electricBorderMaximize;
-            options.electricBorderMaximize = false;
             client.geometry = util.copyRect(this.rectangle);
-            options.electricBorderMaximize = eBM;
 
             if (changedRect == true) {
                 this._resizing = true;
@@ -394,40 +386,17 @@ Tile.prototype.addClient = function(client) {
 
 Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
     try {
-        // Reset this so setGeometry does its thing
-        this.maximize = false;
-        var screenRect = workspace.clientArea(KWin.PlacementArea, this._currentScreen, this._currentDesktop);
-        if (this.rectangle != null) {
-            var newRect = util.copyRect(this.rectangle);
-        } else {
-            var newRect = util.copyRect(screenRect);
-        }
-        // FIXME: If h was never true, maximizing and then unmaximizing v restores x/width to previous values
-        // Instead, we should save h _and_ v
-        if (h == true) {
-            newRect.x = screenRect.x;
-            newRect.width = screenRect.width;
-        } else {
-            if (this.oldRect != null) {
-                newRect.x = this.oldRect.x;
-                newRect.width = this.oldRect.width;
-            }
-        }
-        if (v == true) {
-            newRect.y = screenRect.y;
-            newRect.height = screenRect.height;
-        } else {
-            if (this.oldRect != null) {
-                newRect.y = this.oldRect.y;
-                newRect.height = this.oldRect.height;
-            }
-        }
-        this.oldRect = util.copyRect(this.rectangle);
-        this.setGeometry(newRect);
         // Set keepBelow to keep maximized clients over tiled ones
-        if (h == true || v == true) {
+        // TODO: We don't distinguish between horizontal and vertical maximization,
+        // also there's no way to find that the _user_ caused this.
+        // So we might want to ignore maximization entirely.
+        if (h || v) {
             client.keepBelow = false;
-            this.maximize = true;
+            // We might get a geometryChanged signal before this
+            // so we need to manually maximize the client.
+            client.tiling_resize = true;
+            client.geometry = workspace.clientArea(KWin.MaximizeFullArea, this._currentScreen, this._currentDesktop);
+            client.tiling_resize = false;
         } else {
             client.keepBelow = true;
         }
