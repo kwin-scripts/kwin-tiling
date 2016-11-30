@@ -80,7 +80,7 @@ HalfLayout.prototype.addTile = function() {
             var lastRect = this.tiles[this.master + this.masterCount].rectangle;
             var newRect = Qt.rect(lastRect.x,
                                   lastRect.y,
-                                  this.screenRectangle.x + this.screenRectangle.width - this.getMasterWidth(),
+                                  this.screenRectangle.width - this.getMasterWidth(),
                                   this.screenRectangle.height / (slaveCount + 1));
             newRect.y = newRect.y + newRect.height * slaveCount;
             // FIXME: Try to keep ratio
