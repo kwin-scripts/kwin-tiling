@@ -210,11 +210,12 @@ function TilingManager() {
                                       print("No active client");
                                       return;
                                   }
-                                  client.tiling_floating = !client.tiling_floating;
-                                  if (client.tiling_floating == true) {
-                                      self.tiles.untileClient(client);
-                                  } else {
+                                  if (!client.tiling_floating) {
                                       self.tiles.addClient(client);
+                                      client.tiling_floating = false;
+                                  } else {
+                                      self.tiles.untileClient(client);
+                                      client.tiling_floating = true;
                                   }
                               });
         KWin.registerShortcut("TILING: Toggle Border for all",
