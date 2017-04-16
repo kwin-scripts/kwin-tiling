@@ -300,14 +300,15 @@ function TilingManager() {
                                       if (tile == null) {
                                           return;
                                       }
-                                      var geom = Qt.rect(tile.rectangle.x - 10,
-                                                         tile.rectangle.y,
-                                                         tile.rectangle.width + 10,
-                                                         tile.rectangle.height);
                                       var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+                                      var delta = Math.floor(screenRectangle.width / 20);
+                                      var geom = Qt.rect(tile.rectangle.x - delta,
+                                                         tile.rectangle.y,
+                                                         tile.rectangle.width + delta,
+                                                         tile.rectangle.height);
                                       if (geom.x < screenRectangle.x) {
                                           geom.x = screenRectangle.x;
-                                          geom.width = geom.width - 20;
+                                          geom.width = geom.width - 2 * delta;
                                       }
                                       self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
                                   } catch(err) {
@@ -327,13 +328,14 @@ function TilingManager() {
                                       if (tile == null) {
                                           return;
                                       }
+                                      var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+                                      var delta = Math.floor(screenRectangle.width / 20);
                                       var geom = Qt.rect(tile.rectangle.x,
                                                          tile.rectangle.y,
-                                                         tile.rectangle.width + 10,
+                                                         tile.rectangle.width + delta,
                                                          tile.rectangle.height);
-                                      var screenRectangle = util.getTilingArea(client.screen, client.desktop);
                                       if (geom.x + geom.width > screenRectangle.x + screenRectangle.width) {
-                                          geom.x = geom.x + 10;
+                                          geom.x = geom.x + delta;
                                           geom.width = (screenRectangle.x + screenRectangle.width) - geom.x;
                                       }
                                       self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
@@ -354,14 +356,15 @@ function TilingManager() {
                                       if (tile == null) {
                                           return;
                                       }
-                                      var geom = Qt.rect(tile.rectangle.x,
-                                                         tile.rectangle.y - 10,
-                                                         tile.rectangle.width,
-                                                         tile.rectangle.height + 10);
                                       var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+                                      var delta = Math.floor(screenRectangle.height / 20);
+                                      var geom = Qt.rect(tile.rectangle.x,
+                                                         tile.rectangle.y - delta,
+                                                         tile.rectangle.width,
+                                                         tile.rectangle.height + delta);
                                       if (geom.y < screenRectangle.y) {
                                           geom.y = screenRectangle.y;
-                                          geom.height = geom.height - 20;
+                                          geom.height = geom.height - 2 * delta;
                                       }
                                       self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
                                   } catch(err) {
@@ -381,13 +384,14 @@ function TilingManager() {
                                       if (tile == null) {
                                           return;
                                       }
+                                      var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+                                      var delta = Math.floor(screenRectangle.height / 20);
                                       var geom = Qt.rect(tile.rectangle.x,
                                                          tile.rectangle.y,
                                                          tile.rectangle.width,
-                                                         tile.rectangle.height + 10);
-                                      var screenRectangle = util.getTilingArea(client.screen, client.desktop);
+                                                         tile.rectangle.height + delta);
                                       if (geom.y + geom.height > screenRectangle.y + screenRectangle.height) {
-                                          geom.y = geom.y + 10;
+                                          geom.y = geom.y + delta;
                                           geom.height = (screenRectangle.y + screenRectangle.height) - geom.y;
                                       }
                                       self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
