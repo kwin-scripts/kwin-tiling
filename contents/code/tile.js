@@ -280,11 +280,11 @@ Tile.prototype.setClientGeometry = function(client) {
                 changedRect = true;
             }
             if (client.basicUnit.width > 1) {
-                this.rectangle.width = Math.floor(Math.abs(this.rectangle.width - client.geometry.width) / client.basicUnit.width) * client.basicUnit.width + client.geometry.width;
+                this.rectangle.width = Math.floor((this.rectangle.width - client.geometry.width) / client.basicUnit.width) * client.basicUnit.width + client.geometry.width;
                 changedRect = true;
             }
             if (client.basicUnit.height > 1) {
-                this.rectangle.height = Math.floor(Math.abs(this.rectangle.height - client.geometry.height) / client.basicUnit.height) * client.basicUnit.height + client.geometry.height;
+                this.rectangle.height = Math.floor((this.rectangle.height - client.geometry.height) / client.basicUnit.height) * client.basicUnit.height + client.geometry.height;
                 changedRect = true;
             }
 
