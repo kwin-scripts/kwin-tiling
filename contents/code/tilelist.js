@@ -64,11 +64,24 @@ function TileList() {
     // We connect to the global workspace callbacks which are triggered when
     // clients are added in order to be able to keep track of the
     // new tiles
-    // Do not use clientRemoved as it is called after FFM selects a new active client
-    // Instead, connect to client.windowClosed
     var self = this;
     workspace.clientAdded.connect(function(client) {
-        self.addClient(client);
+        // TODO: When compositing is on,
+        // we need to delay first tiling until the window is shown
+        // otherwise we end up with artifacts.
+        // However, we can only determine what the option is set to on start
+        // neither of (options.):
+        // - "useCompositing"
+        // - "compositingMode"
+        // - "compositingInitialized"
+        // change when it is disabled/enabled.
+        if (options.useCompositing) {
+            client.windowShown.connect(function(client) {
+                self.addClient(client);
+            });
+        } else {
+            self.addClient(client);
+        }
     });
 };
 
@@ -129,6 +142,8 @@ TileList.prototype.connectSignals = function(client) {
             tile.onClientGeometryChanged(client);
         }
     });
+    // Do not use clientRemoved as it is called after FFM selects a new active client
+    // Instead, connect to client.windowClosed
     client.windowClosed.connect(function(cl, deleted) {
         self.removeClient(client);
     });
