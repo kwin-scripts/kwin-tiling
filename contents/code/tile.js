@@ -108,7 +108,7 @@ function Tile(firstClient, tileIndex) {
         // Do this manually instead of calling "addClient" to not try to resize
         // because we don't have a rectangle at this point
         firstClient.keepBelow = true;
-        if (KWin.readConfig("noBorder", false) == true) {
+        if (KWin.readConfig("noBorder", false)) {
             firstClient.noBorder = true;
         }
         this.clients.push(firstClient);
@@ -126,16 +126,15 @@ function Tile(firstClient, tileIndex) {
  */
 Tile.prototype.setGeometry = function(geometry) {
     try {
-        if (geometry == null) {
+        if (!geometry) {
             return;
         }
-        if (this.rectangle == null) {
+        if (!this.rectangle) {
             this.rectangle = util.copyRect(geometry);
         } else {
             util.setRect(this.rectangle, geometry);
         }
         for (var i = 0; i < this.clients.length; i++) {
-            this.clients[i].tiling_MoveResize = false;
             this.setClientGeometry(this.clients[i]);
         }
     } catch(err) {
@@ -171,10 +170,10 @@ Tile.prototype.getActiveClient = function() {
 Tile.prototype.syncCustomProperties = function() {
     try {
         var client = this.getActiveClient();
-        if (client == null) {
+        if (!client) {
             client = this.clients[0];
         }
-        if (client != null) {
+        if (client) {
             client.tiling_tileIndex = this.tileIndex;
             client.syncTabGroupFor("tiling_tileIndex", true);
             client.syncTabGroupFor("tiling_floating", true);
@@ -190,10 +189,16 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 
 Tile.prototype.setClientGeometry = function(client) {
     try {
-        if (client == null) {
+        if (!client) {
             return;
         }
-        if (this.hasClient(client) == false) {
+        if (client.tiling_resize) {
+            return;
+        }
+        if (client.fullScreen) {
+            return;
+        }
+        if (!this.hasClient(client)) {
             print("Wrong tile called");
             return;
         }
@@ -204,38 +209,29 @@ Tile.prototype.setClientGeometry = function(client) {
             return;
         }
         // These two should never be reached
-        if (client.deleted == true) {
+        if (client.deleted) {
             return;
         }
-        if (client.managed == false) {
+        if (!client.managed) {
             return;
         }
         if (!client.isCurrentTab) {
             return;
         }
-        if (client.move || client.resize) {
+        if (client.move
+            || client.resize
+            || !client.resizeable
+            || !client.moveable) {
             return;
         }
         if (this._moving || this._resizing) {
-            return;
-        }
-        if (client.resizeable != true) {
-            return;
-        }
-        if (client.moveable != true) {
             return;
         }
         // This client is bogus
         if (client.minSize.width == client.maxSize.width && client.minSize.height == client.maxSize.width) {
             return;
         }
-        if (client.tiling_resize == true) {
-            return;
-        }
-        if (client.fullScreen == true) {
-            return;
-        }
-        if (this.rectangle != null) {
+        if (this.rectangle) {
             if (client.screen != this._currentScreen) {
                 this._currentScreen = client.screen;
             }
@@ -275,7 +271,7 @@ Tile.prototype.setClientGeometry = function(client) {
                 this.rectangle.height = client.maxSize.height + this.windowsGapSizeHeight;
                 changedRect = true;
             }
-            if (client.shade == true) {
+            if (client.shade) {
                 this.rectangle.height = client.geometry.height;
                 changedRect = true;
             }
@@ -291,7 +287,7 @@ Tile.prototype.setClientGeometry = function(client) {
             client.tiling_resize = true;
             client.geometry = util.copyRect(this.rectangle);
 
-            if (changedRect == true) {
+            if (changedRect) {
                 this._resizing = true;
                 this.resizingEnded.emit();
                 this._resizing = false;
@@ -302,7 +298,7 @@ Tile.prototype.setClientGeometry = function(client) {
             print("No rectangle", client.resourceClass.toString(), client.windowId);
         }
     } catch(err) {
-        print(err, "in Tile.onClientGeometryChanged");
+        print(err, "in Tile.setClientGeometry");
     }
 };
 
@@ -329,7 +325,7 @@ Tile.prototype.onClientStepUserMovedResized = function(client) {
         if (client.resize) {
             this._resizing = true;
             this.resizingStep.emit();
-            // This means it gets animated
+            // This means it gets "animated"
             this.resizingEnded.emit();
             return;
         }
@@ -372,7 +368,7 @@ Tile.prototype.addClient = function(client) {
     try {
         if (this.clients.indexOf(client) == -1) {
             client.keepBelow = true;
-            if (KWin.readConfig("noBorder", false) == true) {
+            if (KWin.readConfig("noBorder", false)) {
                 client.noBorder = true;
             }
             this.clients.push(client);
