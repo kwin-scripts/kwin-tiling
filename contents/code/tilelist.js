@@ -46,7 +46,21 @@ function TileList() {
     }
 
     // A hardcoded list of clients that should never be tiled
-    this.blacklist = "yakuake,krunner,plasma,plasma-desktop,plugin-container,Wine,klipper,plasmashell,Plasma,ksmserver, pinentry".split(",");
+    this.blacklist = [
+        "Plasma",
+        "Wine",
+        "klipper",
+        "krunner",
+        "ksmserver",
+        "pinentry",
+        "plasma",
+        "plasma-desktop",
+        "plasmashell",
+        "plugin-container",
+        "wine",
+        "yakuake",
+    ]
+
     // We connect to the global workspace callbacks which are triggered when
     // clients are added in order to be able to keep track of the
     // new tiles
