@@ -214,7 +214,11 @@ TileList.prototype.addClient = function(client) {
 
     this.connectSignals(client);
 
-    if (client.fullScreen == true) {
+    // Ignore fullscreen or minimized clients,
+    // but after connecting signals, so
+    // they'll be added once that changes.
+    if (client.fullScreen
+       || client.minimized) {
         client.keepBelow = false;
         return;
     }
