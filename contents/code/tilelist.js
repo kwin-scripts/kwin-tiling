@@ -374,10 +374,8 @@ TileList.prototype._removeTile = function(tileIndex) {
  */
 TileList.prototype._isIgnored = function(client) {
     // TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
-    // HACK: Qt gives us a method-less QVariant(QStringList) if we ask for an array
-    // Ask for a string instead (which can and should still be a StringList for the UI)
-    // TODO: This could break if an entry contains whitespace or a comma - it needs to be validated on the qt side
-    var floaters = KWin.readConfig("floaters", "").replace(/ /g,"").split(",");
+    // A QLineEdit will backslash-escape ",", so we'll need to split on `\\,`.
+    var floaters = KWin.readConfig("floaters", "").replace(/ /g,"").split("\\,");
     if (floaters.indexOf(client.resourceClass.toString()) > -1
         || this.blacklist.indexOf(client.resourceClass.toString()) > -1) {
         return true;

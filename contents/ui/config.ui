@@ -25,18 +25,15 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="1" column="0">
-        <widget class="KEditListWidget" name="kcfg_floaters">
+        <widget class="QLineEdit" name="kcfg_floaters">
          <property name="toolTip">
-          <string>The windows that should be excluded from tiling, by window class</string>
+          <string>The windows that should be excluded from tiling, by window class. Comma-separated.</string>
          </property>
          <property name="statusTip">
           <string>Excluded window classes</string>
          </property>
          <property name="whatsThis">
           <string>Excluded window classes</string>
-         </property>
-         <property name="buttons">
-          <set>KEditListWidget::Add|KEditListWidget::Remove</set>
          </property>
         </widget>
        </item>
