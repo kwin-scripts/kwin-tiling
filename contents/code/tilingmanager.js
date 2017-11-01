@@ -421,7 +421,7 @@ function TilingManager() {
                               });
         KWin.registerShortcut("TILING: Focus next tile",
                               "Focus next tile",
-                              "Meta+Control+N",
+                              "Meta+]",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
@@ -446,7 +446,7 @@ function TilingManager() {
                               });
         KWin.registerShortcut("TILING: Focus previous tile",
                               "Focus previous tile",
-                              "Meta+Control+P",
+                              "Meta+[",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
@@ -471,7 +471,7 @@ function TilingManager() {
                               });
         KWin.registerShortcut("TILING: Swap with next tile",
                               "Swap with next tile",
-                              "Meta+Control+Shift+N",
+                              "Meta+Shift+]",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
@@ -496,7 +496,7 @@ function TilingManager() {
                               });
         KWin.registerShortcut("TILING: Swap with previous tile",
                               "Swap with previous tile",
-                              "Meta+Control+Shift+P",
+                              "Meta+Shift+[",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
