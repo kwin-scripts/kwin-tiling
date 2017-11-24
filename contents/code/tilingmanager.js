@@ -419,6 +419,106 @@ function TilingManager() {
                                       print(err, "in Decrease-Number-Of-Masters");
                                   }
                               });
+        KWin.registerShortcut("TILING: Focus next tile",
+                              "Focus next tile",
+                              "Meta+]",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null) {
+                                          var client = workspace.activeClient;
+                                          if (client != null) {
+                                              var tile = layout.getTile(client.x, client.y);
+                                          }
+                                      }
+                                      if (tile != null) {
+                                          var index1 = layout.tiles.indexOf(tile);
+                                          if (index1 == layout.tiles.length-1) {
+                                              var index2 = 0;
+                                          } else {
+                                              var index2 = index1 + 1;
+                                          } 
+                                          workspace.activeClient = layout.tiles[index2].clients[0];
+                                      }
+                                  } catch(err) {
+                                      print(err, "in focus-next-tile");
+                                  }
+                              });
+        KWin.registerShortcut("TILING: Focus previous tile",
+                              "Focus previous tile",
+                              "Meta+[",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null) {
+                                          var client = workspace.activeClient;
+                                          if (client != null) {
+                                              var tile = layout.getTile(client.x, client.y);
+                                          }
+                                      }
+                                      if (tile != null) {
+                                          var index1 = layout.tiles.indexOf(tile);
+                                          if (index1 == 0) {
+                                              var index2 = layout.tiles.length-1;
+                                          } else {
+                                              var index2 = index1 - 1;
+                                          } 
+                                          workspace.activeClient = layout.tiles[index2].clients[0];
+                                      }
+                                  } catch(err) {
+                                      print(err, "in focus-previous-tile");
+                                  }
+                              });
+        KWin.registerShortcut("TILING: Swap with next tile",
+                              "Swap with next tile",
+                              "Meta+Shift+]",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null) {
+                                          var client = workspace.activeClient;
+                                          if (client != null) {
+                                              var tile = layout.getTile(client.x, client.y);
+                                          }
+                                      }
+                                      if (tile != null) {
+                                          var index1 = layout.tiles.indexOf(tile);
+                                          if (index1 == layout.tiles.length-1) {
+                                              var index2 = 0;
+                                          } else {
+                                              var index2 = index1 + 1;
+                                          } 
+                                          layout.swapTiles(tile, layout.tiles[index2]);
+                                      }
+                                  } catch(err) {
+                                      print(err, "in swap-with-next-tile");
+                                  }
+                              });
+        KWin.registerShortcut("TILING: Swap with previous tile",
+                              "Swap with previous tile",
+                              "Meta+Shift+[",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null) {
+                                          var client = workspace.activeClient;
+                                          if (client != null) {
+                                              var tile = layout.getTile(client.x, client.y);
+                                          }
+                                      }
+                                      if (tile != null) {
+                                          var index1 = layout.tiles.indexOf(tile);
+                                          if (index1 == 0) {
+                                              var index2 = layout.tiles.length-1;
+                                          } else {
+                                              var index2 = index1 - 1;
+                                          } 
+                                          layout.swapTiles(tile, layout.tiles[index2]);
+                                      }
+                                  } catch(err) {
+                                      print(err, "in swap-with-previous-tile");
+                                  }
+                              });
     }
     // registerUserActionsMenu(function(client) {
     //     return {
