@@ -144,10 +144,10 @@ function TilingManager() {
         self._onTileRemoved(tile);
     });
 
-    // var existingClients = workspace.clientList();
-    // for (var i=0; i<existingClients.length; i++) {
-    //     self.tiles.addClient(existingClients[i]);
-    // }
+    var existingClients = workspace.clientList();
+    for (var i=0; i<existingClients.length; i++) {
+        self.tiles.addClient(existingClients[i]);
+    }
     // Activate the visible layouts
     // Do it after adding the existingClients to prevent unnecessary geometry changes
     this._getLayouts(workspace.currentDesktop, null).forEach(function(layout) {
