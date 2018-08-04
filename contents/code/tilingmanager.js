@@ -26,6 +26,7 @@ Qt.include("layout.js");
 Qt.include("spirallayout.js");
 Qt.include("halflayout.js");
 Qt.include("bladelayout.js");
+Qt.include("i3layout.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
 Qt.include("util.js");
@@ -40,12 +41,14 @@ function TilingManager() {
     /**
      * Default layout type which is selected for new layouts.
      */
-    this.defaultLayout = HalfLayout;
+    //this.defaultLayout = HalfLayout;
+    this.defaultLayout = I3Layout;
 
     /**
      * List of all available layout types.
      */
     this.availableLayouts = [
+        I3Layout,
         HalfLayout,
         BladeLayout,
         SpiralLayout/*,

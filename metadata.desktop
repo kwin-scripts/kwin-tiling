@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Tiling Extension
+Name=Tiling Extension (Experimental)
 Icon=preferences-system-windows-script-test
 
 X-Plasma-API=declarativescript
@@ -8,9 +8,9 @@ X-KWin-Exclude-Listing=false
 
 X-KDE-PluginInfo-Author=Fabian Homborg
 X-KDE-PluginInfo-Email=FHomborg@gmail.com
-X-KDE-PluginInfo-Name=kwin-script-tiling
-X-KDE-PluginKeyword=kwin-script-tiling
-X-KDE-ParentComponents=kwin-script-tiling
+X-KDE-PluginInfo-Name=kwin-script-tiling-i3
+X-KDE-PluginKeyword=kwin-script-tiling-i3
+X-KDE-ParentComponents=kwin-script-tiling-i3
 X-KDE-PluginInfo-Version=2.0.0
 
 X-KDE-PluginInfo-Depends=
