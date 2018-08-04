@@ -163,6 +163,22 @@ Tile.prototype.getActiveClient = function() {
     }
 };
 
+Tile.prototype.getFocusedClient = function() {
+    try {
+        var focused = null;
+        this.clients.forEach(function(client) {
+            print('getFocusedClient: Looking at ' + client.caption);
+            print('getFocusedClient: Is active?' + client.active);
+            if (client.active) {
+                focused = client;
+            }
+        });
+        return focused;
+    } catch(err) {
+        print(err, "in Tile.getFocusedClient");
+    }
+};
+
 /**
  * Synchronizes all custom properties (tileIndex, floating between all clients
  * in the tile).

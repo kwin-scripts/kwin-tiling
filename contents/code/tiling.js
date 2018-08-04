@@ -75,22 +75,65 @@ Tiling.prototype.setLayoutType = function(layoutType) {
     }
 };
 
-Tiling.prototype.addTile = function(tile, x, y) {
+/* The focused tile is the first tile that contains a focused client */
+Tiling.prototype.findFocusedTile = function() {
+    print("findFocusedTile")
     try {
-        this.layout.addTile();
-        // If a position was specified, we insert the tile at the specified position
-        if (x != null && y != null) {
-            var index = this._getTileIndex(x, y);
-            if (index == -1) {
-                this.tiles.push(tile);
-            } else {
-                this.tiles.splice(index, 0, tile);
+        for (var t = 0; t < this.tiles.length; t++) {
+            if (this.tiles[t].getFocusedClient()) {
+                print("findFocusedTile: found tile");
+                print(JSON.stringify(tiles[t]));
+                return tiles[t];
             }
-        } else {
-            if (tile.tileIndex > -1 && tile.tileIndex <= this.tiles.length) {
-                this.tiles.splice(tile.tileIndex, 0, tile);
+        }
+    } catch (err) {
+        print(err, "in Layout.findFocusedTile");
+    }
+};
+
+Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
+    //NOTE: When an x,y value is passed, it means the tile is being moved from somewhere else.
+    //      In order to implement this for I3Layout, we need to make sure the new tile will be
+    //      created as close to the dropping point as possible.
+
+    // WIP: 
+    // We need to do the following changes:
+    // - Make sure the new tile gets always appended at the end if the layout is I3Layout. The
+    //   position is handled by the containerTree, not the position in the tile list. [DONE, TO-TEST]
+    // - Pass the x,y values to I3Layout's addTile method, so it can allocate the most
+    //   convenient tile position [DONE, TO-TEST]
+    // - The allocation algorithm should work similar to a quadtree. We find the container
+    //   of the tile at x,y position, and append a new container to its parent. [TODO]
+    // - When x,y is not specified, we should set it to whatever the focused client is. Failing
+    //   that, we supply nothing. [DONE, TO-TEST]
+
+    try {
+        if (this.layout.isI3Layout) {
+            if (!x  || !y) {
+                print('Last focused client: ' + JSON.stringify(previouslyFocusedClient && previouslyFocusedClient.caption));
+                var focused = previouslyFocusedClient;
+                x = focused && focused.geometry.x + focused.geometry.width/2;
+                y = focused && focused.geometry.y + focused.geometry.height/2;
+            }
+            this.layout.addTile(x,y);
+            this.tiles.push(tile);
+        }
+        else {
+            this.layout.addTile();
+            // If a position was specified, we insert the tile at the specified position
+            if (x != null && y != null) {
+                var index = this._getTileIndex(x, y);
+                if (index == -1) {
+                    this.tiles.push(tile);
+                } else {
+                    this.tiles.splice(index, 0, tile);
+                }
             } else {
-                this.tiles.push(tile);
+                if (tile.tileIndex > -1 && tile.tileIndex <= this.tiles.length) {
+                    this.tiles.splice(tile.tileIndex, 0, tile);
+                } else {
+                    this.tiles.push(tile);
+                }
             }
         }
         for (var i = 0; i < this.tiles.length; i++) {

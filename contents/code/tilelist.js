@@ -39,6 +39,16 @@ function TileList() {
      */
     this.tileRemoved = new Signal();
 
+    /**
+     * Stores the current and last focused windows.
+     * NOTE: We need to keep track of the last focused window
+             because when the addTile function is called, the focused
+             tile has already changed.
+       NOTE 2: Instances of the Tiling class have a direct reference
+               to this field. Do not re-assign it.
+     */
+    this.focusHistory = {};
+
     try {
         this.noBorder = KWin.readConfig("noBorder", false);
     } catch(err) {
@@ -185,9 +195,27 @@ TileList.prototype.connectSignals = function(client) {
             print(err, "in Unminimized");
         }
     });
+    client.activeChanged.connect(function() {
+        try {
+            var focusedClient = null;
+            self.tiles.forEach(function(tile) {
+                tile.clients.forEach(function(client) {
+                    if (client.active) {
+                        focusedClient = client;
+                    }
+                });
+            });
+            if (focusedClient) {
+                self.focusHistory.previous = self.focusHistory.current;
+                self.focusHistory.current = focusedClient;
+                print('Focused:' + self.focusHistory.current.caption);
+            }
+        } catch(err) {
+            print(err, "in activeChanged");
+        }
+    });
     client.tiling_connected2 = true;
 };
-    
 /**
  * Adds another client to the tile list. When this is called, the tile list also
  * adds callback functions to the relevant client signals to trigger tile change

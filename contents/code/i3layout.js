@@ -21,14 +21,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
 Qt.include("layout.js");
+Qt.include("containerTree.js");
+
 /**
- * Class which arranges the windows in a spiral with the largest window filling
- * the left half of the screen.
+ * Class which allows dynamic arrangement of tiles in a similar way as
+ the i3 window manager. The core logic is implemented in the containerTree
+ data structure.
  */
 function I3Layout(screenRectangle) {
     try {
         print("Creating I3Layout");
         Layout.call(this, screenRectangle);
+        // TODO: Read default layout from config file and don't assume horizontal
+        this.containerTree = new ContainerNode('horizontal', screenRectangle);
+        this.isI3Layout = true;
         // TODO
     } catch(err) {
         print(err, "in I3Layout");
@@ -40,33 +46,28 @@ function I3Layout(screenRectangle) {
 I3Layout.prototype = new Layout();
 I3Layout.prototype.constructor = I3Layout;
 
-I3Layout.prototype.addTile = function() {
+I3Layout.prototype.addTile = function(tile) {
     try {
-        if (this.tiles.length == 0) {
-            // The first tile fills the whole screen
-            var rect = util.copyRect(this.screenRectangle);
-            this._createTile(rect);
-            return;
-        } else {
-            // Divide the screen width evenly between full-height tiles
-            var lastRect = this.tiles[0].rectangle;
-            var newRect = Qt.rect(this.screenRectangle.x,
-                                  lastRect.y,
-                                  (this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1), 
-                                  this.screenRectangle.height);
-            // FIXME: Try to keep ratio
-            for (var i = 0; i < this.tiles.length; i++) { 
-                var rect = this.tiles[i].rectangle;
-                rect.x = newRect.x + newRect.width * i;
-                rect.width = newRect.width;
-                this.tiles[i].rectangle = rect;
-            }
-            // Adjust tile's width for rounding errors
-            newRect.x = newRect.x + newRect.width * this.tiles.length;
-            newRect.width = (this.screenRectangle.width + this.screenRectangle.x) - newRect.x;
-            // TODO: Move this before setting ratio to simplify
-            this._createTile(newRect);
-        }
+
+        print("ADDING NEW TILE")
+        print("TREE BEFORE:")
+        print(JSON.stringify(this.containerTree));
+
+        //var focusedTile = this.findFocusedTile();
+        //var focusedParent = this.containerTree.findParentContainer(focusedTile);
+        var focusedParent = this.containerTree;
+
+        var leaf = new LeafNode();
+        focusedParent.addNode(leaf);
+        this._createTile(this.containerTree.rectangle);
+        var tile = this.tiles[this.tiles.length - 1];
+        tile.rectangle = leaf.rectangle;
+        focusedParent.children[focusedParent.children.length - 1] = tile;
+
+        print("TREE AFTER:")
+        print(JSON.stringify(this.containerTree));
+        print("END")
+
     } catch(err) {
         print(err, "in I3Layout.addTile");
     }
@@ -74,30 +75,21 @@ I3Layout.prototype.addTile = function() {
 
 I3Layout.prototype.removeTile = function(tileIndex) {
     try {
+        print("REMOVING TILE")
+        print("TREE BEFORE:")
+        print(JSON.stringify(this.containerTree));
+
         // Remove the array entry
-        var oldrect = this.tiles[tileIndex].rectangle;
+        var toDeleteTile = this.tiles[tileIndex];
+        var container = this.containerTree.findParentContainer(toDeleteTile);
+
+        container.removeNode(toDeleteTile);
         this.tiles.splice(tileIndex, 1);
-        // Update the other tiles
-        if (this.tiles.length == 1) {
-            this.tiles[0].rectangle = util.copyRect(this.screenRectangle);
-        }
-        if (this.tiles.length > 1) {
-            var tileCount = this.tiles.length;
-            var lastRect = this.tiles[0].rectangle;
-            var newRect = Qt.rect(this.screenRectangle.x,
-                                  this.screenRectangle.y,
-                                  this.screenRectangle.width / tileCount,
-                                  this.screenRectangle.height);
-            var lowest = 1;
-            for (var i = 0; i < this.tiles.length; i++) {
-                var rect = this.tiles[i].rectangle;
-                rect.x = newRect.x + newRect.width * i;
-                rect.width = newRect.width;
-                this.tiles[i].rectangle = rect;
-            }
-            // Adjust rightmost tile's height for rounding errors
-            this.tiles[this.tiles.length - 1].rectangle.width = (this.screenRectangle.width + this.screenRectangle.x) - this.tiles[this.tiles.length - 1].rectangle.x;
-        }
+
+        print("TREE AFTER:")
+        print(JSON.stringify(this.containerTree));
+        print("END")
+
     } catch(err) {
         print(err, "in I3Layout.removeTile");
     }

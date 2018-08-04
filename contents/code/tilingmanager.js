@@ -592,6 +592,11 @@ TilingManager.prototype._onTileAdded = function(tile) {
     var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
     var start = KWin.readConfig("placement", 0);
     tileLayouts.forEach(function(layout) {
+        //TODO: XXX: HACK: Options don't work so I put this at the top
+        layout.addTile(tile, self.tiles.focusHistory.previous);
+        return;
+
+
         // Let KWin decide
         if (start == 0) {
             x = tile.originalx;
@@ -608,10 +613,10 @@ TilingManager.prototype._onTileAdded = function(tile) {
             }
         // Start at the end
         } else {
-            layout.addTile(tile);
+            layout.addTile(tile, self.tiles.focusHistory.previous);
             return;
         }
-        layout.addTile(tile, x, y);
+        layout.addTile(tile, self.tiles.focusHistory.previous, x, y);
     });
 };
 
@@ -671,7 +676,7 @@ TilingManager.prototype._onNumberDesktopsChanged = function() {
         onAllDesktops.forEach(function(tile) {
             var layouts = self._getLayouts(i, tile.screen);
             layouts.forEach(function(layout) {
-                layout.addTile(tile);
+                layout.addTile(tile, self.tiles.focusHistory.previous);
             });
         });
     }
@@ -774,7 +779,9 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
                     this._getLayouts(this._currentDesktop, tile._currentScreen)[0];
                 var endLayout = this._getLayouts(this._currentDesktop, client.screen)[0];
                 startLayout.removeTile(tile);
-                endLayout.addTile(tile, windowRect.x + windowRect.width / 2,
+                endLayout.addTile(tile,
+                                  this.tiles.focusHistory.previous,
+                                  windowRect.x + windowRect.width / 2,
                                   windowRect.y + windowRect.height / 2);
             } else {
                 // Transfer the tile to a different location in the same layout
@@ -803,7 +810,8 @@ TilingManager.prototype._changeTileLayouts = function(tile, oldLayouts, newLayou
             }
             if (newLayouts != null) {
                 newLayouts.forEach(function(layout) {
-                    layout.addTile(tile);
+                    layout.addTile(tile,
+                                   this.tiles.focusHistory.previous);
                 });
             }
         } catch(err) {
