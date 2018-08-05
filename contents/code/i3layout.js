@@ -114,9 +114,9 @@ I3Layout.prototype.addTile = function(x, y) {
                    this.state === 'verticalWrap') {
 
             // Wrap mode: wrap selected tile in a new container and append new tile there
-            selectedContainer.removeNode(selectedTile);
             var wrapContainer = new ContainerNode(this.state === 'horizontalWrap' ? 'horizontal' : 'vertical');
             selectedContainer.addNode(wrapContainer, childIndex);
+            selectedContainer.removeNode(selectedTile);
             wrapContainer.addNode(selectedTile, 0);
 
             var leaf = new LeafNode();
