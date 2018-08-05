@@ -44,8 +44,6 @@ function TileList() {
      * NOTE: We need to keep track of the last focused window
              because when the addTile function is called, the focused
              tile has already changed.
-       NOTE 2: Instances of the Tiling class have a direct reference
-               to this field. Do not re-assign it.
      */
     this.focusHistory = {};
 
@@ -92,6 +90,12 @@ function TileList() {
         } else {
             self.addClient(client);
         }
+        // XXX: When a new client is added, activeChanged will be called
+        //      before it even appears in workspace.clientList(), so we
+        //      need to keep track of the focus change here as well.
+        self.focusHistory.previous = self.focusHistory.current;
+        self.focusHistory.current = client;
+        print('Focused:' + self.focusHistory.current.caption);
     });
 };
 
@@ -198,6 +202,11 @@ TileList.prototype.connectSignals = function(client) {
     client.activeChanged.connect(function() {
         try {
             var focusedClient = null;
+            var clients = workspace.clientList();
+            for (var i = 0; i < clients.length; ++i) {
+                if (client.active) focusedClient = client;
+            }
+            /*
             self.tiles.forEach(function(tile) {
                 tile.clients.forEach(function(client) {
                     if (client.active) {
@@ -205,6 +214,7 @@ TileList.prototype.connectSignals = function(client) {
                     }
                 });
             });
+            */
             if (focusedClient) {
                 self.focusHistory.previous = self.focusHistory.current;
                 self.focusHistory.current = focusedClient;

@@ -40,8 +40,8 @@ ContainerNode.prototype.recalculateSize = function() {
 
 };
 
-ContainerNode.prototype.addNode = function(node) {
-    this.children.push(node);
+ContainerNode.prototype.addNode = function(node, index) {
+    this.children.splice(index, 0, node);
     this.recalculateSize();
 };
 

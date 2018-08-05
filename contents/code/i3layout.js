@@ -46,27 +46,61 @@ function I3Layout(screenRectangle) {
 I3Layout.prototype = new Layout();
 I3Layout.prototype.constructor = I3Layout;
 
-I3Layout.prototype.addTile = function(tile) {
+/*
+ * Gets the tile at position x,y
+ */
+I3Layout.prototype.getTileAt = function(x, y) {
+    try {
+        for (var i = 0; i < this.tiles.length; i++) {
+            var tile = this.tiles[i];
+            if (tile.rectangle.x <= x
+                && tile.rectangle.y <= y
+                && tile.rectangle.x + tile.rectangle.width > x
+                && tile.rectangle.y + tile.rectangle.height > y) {
+                return tile;
+            }
+        }
+        return null;
+    } catch(err) {
+        print(err, "in I3Layout._getTileAt");
+    }
+};
+
+I3Layout.prototype.addTile = function(x, y) {
     try {
 
-        print("ADDING NEW TILE")
-        print("TREE BEFORE:")
-        print(JSON.stringify(this.containerTree));
+        print("I3Layout: Request new tile at ("+x+","+y+")");
 
-        //var focusedTile = this.findFocusedTile();
-        //var focusedParent = this.containerTree.findParentContainer(focusedTile);
-        var focusedParent = this.containerTree;
+        //print("ADDING NEW TILE")
+        //print("TREE BEFORE:")
+        //print(JSON.stringify(this.containerTree));
 
+        var selectedContainer = this.containerTree; // The container at x,y
+        var childIndex = this.tiles.length; // The index of the desired tile in the container
+
+        if (x && y) {
+            var focusedTile = this.getTileAt(x,y);
+            if (focusedTile) {
+                selectedContainer = this.containerTree.findParentContainer(focusedTile);
+                print('Focused Container ('+x+','+y+'): '+JSON.stringify(selectedContainer));
+                childIndex = selectedContainer.children.indexOf(focusedTile) + 1;
+                print('Desired child: ' + childIndex);
+
+            }
+        }
+
+        // XXX: Hack. We trick the containerTree into computing the rectangle position
+        //      before we create the tile using a LeafNode dummy value, which is then replaced
         var leaf = new LeafNode();
-        focusedParent.addNode(leaf);
+        selectedContainer.addNode(leaf, childIndex);
         this._createTile(this.containerTree.rectangle);
         var tile = this.tiles[this.tiles.length - 1];
         tile.rectangle = leaf.rectangle;
-        focusedParent.children[focusedParent.children.length - 1] = tile;
+        selectedContainer.children[childIndex] = tile;
 
-        print("TREE AFTER:")
-        print(JSON.stringify(this.containerTree));
-        print("END")
+        //print("TREE AFTER:")
+        //print(JSON.stringify(this.containerTree));
+        //print("END")
 
     } catch(err) {
         print(err, "in I3Layout.addTile");
@@ -75,9 +109,9 @@ I3Layout.prototype.addTile = function(tile) {
 
 I3Layout.prototype.removeTile = function(tileIndex) {
     try {
-        print("REMOVING TILE")
-        print("TREE BEFORE:")
-        print(JSON.stringify(this.containerTree));
+        //print("REMOVING TILE")
+        //print("TREE BEFORE:")
+        //print(JSON.stringify(this.containerTree));
 
         // Remove the array entry
         var toDeleteTile = this.tiles[tileIndex];
@@ -86,9 +120,9 @@ I3Layout.prototype.removeTile = function(tileIndex) {
         container.removeNode(toDeleteTile);
         this.tiles.splice(tileIndex, 1);
 
-        print("TREE AFTER:")
-        print(JSON.stringify(this.containerTree));
-        print("END")
+        //print("TREE AFTER:")
+        //print(JSON.stringify(this.containerTree));
+        //print("END")
 
     } catch(err) {
         print(err, "in I3Layout.removeTile");

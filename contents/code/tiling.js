@@ -109,13 +109,18 @@ Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
 
     try {
         if (this.layout.isI3Layout) {
+            var finalX = x;
+            var finalY = y;
             if (!x  || !y) {
                 print('Last focused client: ' + JSON.stringify(previouslyFocusedClient && previouslyFocusedClient.caption));
                 var focused = previouslyFocusedClient;
-                x = focused && focused.geometry.x + focused.geometry.width/2;
-                y = focused && focused.geometry.y + focused.geometry.height/2;
+                if (focused) print('WIP: ' + JSON.stringify(focused.geometry));
+                if (focused && focused.geometry) {
+                    finalX = focused.geometry.x + focused.geometry.width/2;
+                    finalY = focused.geometry.y + focused.geometry.height/2;
+                }
             }
-            this.layout.addTile(x,y);
+            this.layout.addTile(finalX,finalY);
             this.tiles.push(tile);
         }
         else {
