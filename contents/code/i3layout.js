@@ -32,10 +32,17 @@ function I3Layout(screenRectangle) {
     try {
         print("Creating I3Layout");
         Layout.call(this, screenRectangle);
+
         // TODO: Read default layout from config file and don't assume horizontal
         this.containerTree = new ContainerNode('horizontal', screenRectangle);
+
         this.isI3Layout = true;
-        // TODO
+
+        /* The current state.
+           pseudo-enum: 'normal', 'horizontalWrap', 'verticalWrap'
+           */
+        this.state = 'normal';
+
     } catch(err) {
         print(err, "in I3Layout");
     }
@@ -68,61 +75,91 @@ I3Layout.prototype.getTileAt = function(x, y) {
 
 I3Layout.prototype.addTile = function(x, y) {
     try {
-
-        print("I3Layout: Request new tile at ("+x+","+y+")");
-
-        //print("ADDING NEW TILE")
-        //print("TREE BEFORE:")
-        //print(JSON.stringify(this.containerTree));
-
-        var selectedContainer = this.containerTree; // The container at x,y
-        var childIndex = this.tiles.length; // The index of the desired tile in the container
-
+        // Determine the reference container
+        var selectedContainer = this.containerTree;
+        var selectedTile = null;
+        var childIndex = this.tiles.length;
         if (x && y) {
-            var focusedTile = this.getTileAt(x,y);
-            if (focusedTile) {
-                selectedContainer = this.containerTree.findParentContainer(focusedTile);
-                print('Focused Container ('+x+','+y+'): '+JSON.stringify(selectedContainer));
-                childIndex = selectedContainer.children.indexOf(focusedTile) + 1;
-                print('Desired child: ' + childIndex);
-
+            selectedTile = this.getTileAt(x,y);
+            if (selectedTile) {
+                selectedContainer = this.containerTree.findParentContainer(selectedTile);
+                childIndex = selectedContainer.children.indexOf(selectedTile) + 1;
             }
         }
 
-        // XXX: Hack. We trick the containerTree into computing the rectangle position
-        //      before we create the tile using a LeafNode dummy value, which is then replaced
-        var leaf = new LeafNode();
-        selectedContainer.addNode(leaf, childIndex);
-        this._createTile(this.containerTree.rectangle);
-        var tile = this.tiles[this.tiles.length - 1];
-        tile.rectangle = leaf.rectangle;
-        selectedContainer.children[childIndex] = tile;
+        // We ignore and reset the wrap state if there is no selected tile.
+        if (!selectedTile) this.state = 'normal';
 
-        //print("TREE AFTER:")
-        //print(JSON.stringify(this.containerTree));
-        //print("END")
+        // Also ignore attempts to wrap a container inside a container
+        if (selectedContainer && this.state !== 'normal' && selectedContainer.children.length <= 1) 
+            this.state = 'normal';
+
+        // We also don't want to wrap if the currently selected container is
+        // already in the desired 'direction'
+        if (selectedContainer && ((this.state === 'verticalWrap' && selectedContainer.type === 'vertical') ||
+                                  (this.state === 'horizontalWrap' && selectedContainer.type === 'horizontal')))
+            this.state = 'normal';
+
+        // Create the new tile
+        // TODO: Cleanup: Common parts in both if branches
+        if (this.state === 'normal') {
+            // Normal mode: Append to selectedContainer
+            var leaf = new LeafNode();
+            selectedContainer.addNode(leaf, childIndex);
+            this._createTile(leaf.rectangle);
+            var tile = this.tiles[this.tiles.length - 1];
+            selectedContainer.children[childIndex] = tile;
+        }
+        else if (this.state === 'horizontalWrap' ||
+                   this.state === 'verticalWrap') {
+
+            // Wrap mode: wrap selected tile in a new container and append new tile there
+            selectedContainer.removeNode(selectedTile);
+            var wrapContainer = new ContainerNode(this.state === 'horizontalWrap' ? 'horizontal' : 'vertical');
+            selectedContainer.addNode(wrapContainer, childIndex);
+            wrapContainer.addNode(selectedTile, 0);
+
+            var leaf = new LeafNode();
+            wrapContainer.addNode(leaf, 1);
+            this._createTile(leaf.rectangle);
+            var tile = this.tiles[this.tiles.length - 1];
+            wrapContainer.children[1] = tile;
+        }
+
+        // TODO: Debug code so we can test wrap mode without defining hotkeys
+        if (this.state === 'horizontalWrap') this.state = 'verticalWrap';
+        else this.state = 'horizontalWrap';
+
+        debugPrintTree(this.containerTree);
 
     } catch(err) {
         print(err, "in I3Layout.addTile");
     }
 };
 
+function debugPrintTree(node) {
+    var out = "";
+    out += "(" + node.type + " ";
+    node.children.forEach(function(child) {
+        if (child.children) out += debugPrintTree(child);
+        else out += " [] ";
+    });
+    out += ") ";
+
+    return out;
+}
+
 I3Layout.prototype.removeTile = function(tileIndex) {
     try {
-        //print("REMOVING TILE")
-        //print("TREE BEFORE:")
-        //print(JSON.stringify(this.containerTree));
-
         // Remove the array entry
         var toDeleteTile = this.tiles[tileIndex];
         var container = this.containerTree.findParentContainer(toDeleteTile);
 
         container.removeNode(toDeleteTile);
+        this.containerTree.cleanup();
         this.tiles.splice(tileIndex, 1);
 
-        //print("TREE AFTER:")
-        //print(JSON.stringify(this.containerTree));
-        //print("END")
+        debugPrintTree(this.containerTree);
 
     } catch(err) {
         print(err, "in I3Layout.removeTile");

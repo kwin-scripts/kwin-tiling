@@ -4,6 +4,7 @@ function ContainerNode(type, rect) {
         this.type = type;
         this.rectangle = rect || {};
         this.children = [];
+        this.parent = null;
 
     } catch(err) {
         print(err, "in ContainerNode");
@@ -42,12 +43,40 @@ ContainerNode.prototype.recalculateSize = function() {
 
 ContainerNode.prototype.addNode = function(node, index) {
     this.children.splice(index, 0, node);
+    node.parent = this;
     this.recalculateSize();
 };
 
 ContainerNode.prototype.removeNode = function(node) {
     this.children = this.children.filter(function (x) {return x !== node;});
     this.recalculateSize();
+};
+
+/*
+ * Prunes empty containers and un-wraps single-child containers
+ */
+ContainerNode.prototype.cleanup = function(node) {
+    // Size must be recalculated top-down, not bottom-up
+    this.recalculateSize();
+
+    // Defer node deletion so we don't delete during loop
+    var nodesToRemove = [];
+
+    for (var c = 0; c < this.children.size; ++c) {
+        if (this.children[c].children) {
+            if (this.children[c].children.length == 1) {
+                var grandchild = this.children[c].children[0];
+                this.children[c] = grandchild;
+            } else if (this.children[c].children.length == 0) {
+                nodesToRemove.push(this.children[c]);
+            } else {
+                this.children[c].cleanup();
+            }
+        }
+    }
+    nodesToRemove.forEach(function(nodeToRemove) {
+        this.removeNode(nodeToRemove);
+    });
 };
 
 ContainerNode.prototype.findParentContainer = function(leafNode) {
@@ -67,46 +96,10 @@ ContainerNode.prototype.findParentContainer = function(leafNode) {
     return null;
 };
 
-
-function LeafNode(tileId, rectangle) {
+function LeafNode() {
     try {
-        this.rectangle = rectangle || {};
-        this.tileId = tileId;
+        this.rectangle = {};
     } catch(err) {
         print(err, "in LeafNode");
     }
 }
-
-function debugPrintTree(node) {
-    var out = "";
-    out += "(" + node.type + " ";
-    node.children.forEach(function(child) {
-        if (child.children) out += debugPrintTree(child);
-        else out += " [" + (child.clients && child.clients[0].caption || "") + "] ";
-    });
-    out += ") ";
-
-    return out;
-}
-
-/*
-function Qtrect(x,y,w,h) {
-    return {'x': x, 'y': y, 'width': w, 'height': h};
-}
-
-var root = new ContainerNode('vertical', Qtrect(0,0,1,1));
-var child0 = new ContainerNode('horizontal');
-root.addNode(child0);
-root.addNode(new ContainerNode('horizontal'));
-
-root.children[0].addNode(new LeafNode());
-root.children[0].addNode(new LeafNode);
-root.children[0].addNode(new LeafNode());
-
-root.children[1].addNode(new LeafNode());
-
-root.addNode(new ContainerNode('vertical'));
-
-debugPrintTree(root);
-
-*/
