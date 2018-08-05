@@ -56,24 +56,30 @@ ContainerNode.prototype.removeNode = function(node) {
  * Prunes empty containers and un-wraps single-child containers
  */
 ContainerNode.prototype.cleanup = function(node) {
-    // Size must be recalculated top-down, not bottom-up
-    this.recalculateSize();
+    print('cleanup');
 
     // Defer node deletion so we don't delete during loop
     var nodesToRemove = [];
 
-    for (var c = 0; c < this.children.size; ++c) {
+    // Cleanup is bottom-up, not top-down
+    for (var c = 0; c < this.children.length; ++c) {
+        print('it');
+        if (this.children[c].children) {
+            this.children[c].cleanup();
+        }
+    }
+
+    for (var c = 0; c < this.children.length; ++c) {
         if (this.children[c].children) {
             if (this.children[c].children.length == 1) {
                 var grandchild = this.children[c].children[0];
                 this.children[c] = grandchild;
             } else if (this.children[c].children.length == 0) {
                 nodesToRemove.push(this.children[c]);
-            } else {
-                this.children[c].cleanup();
             }
         }
     }
+
     nodesToRemove.forEach(function(nodeToRemove) {
         this.removeNode(nodeToRemove);
     });

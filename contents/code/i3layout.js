@@ -96,9 +96,9 @@ I3Layout.prototype.addTile = function(x, y) {
 
         // We also don't want to wrap if the currently selected container is
         // already in the desired 'direction'
-        if (selectedContainer && ((this.state === 'verticalWrap' && selectedContainer.type === 'vertical') ||
+        /*if (selectedContainer && ((this.state === 'verticalWrap' && selectedContainer.type === 'vertical') ||
                                   (this.state === 'horizontalWrap' && selectedContainer.type === 'horizontal')))
-            this.state = 'normal';
+            this.state = 'normal';*/
 
         // Create the new tile
         // TODO: Cleanup: Common parts in both if branches
@@ -130,7 +130,7 @@ I3Layout.prototype.addTile = function(x, y) {
         if (this.state === 'horizontalWrap') this.state = 'verticalWrap';
         else this.state = 'horizontalWrap';
 
-        debugPrintTree(this.containerTree);
+        print(debugPrintTree(this.containerTree));
 
     } catch(err) {
         print(err, "in I3Layout.addTile");
@@ -157,9 +157,10 @@ I3Layout.prototype.removeTile = function(tileIndex) {
 
         container.removeNode(toDeleteTile);
         this.containerTree.cleanup();
+        this.containerTree.recalculateSize();
         this.tiles.splice(tileIndex, 1);
 
-        debugPrintTree(this.containerTree);
+        print(debugPrintTree(this.containerTree));
 
     } catch(err) {
         print(err, "in I3Layout.removeTile");

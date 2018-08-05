@@ -75,22 +75,6 @@ Tiling.prototype.setLayoutType = function(layoutType) {
     }
 };
 
-/* The focused tile is the first tile that contains a focused client */
-Tiling.prototype.findFocusedTile = function() {
-    print("findFocusedTile")
-    try {
-        for (var t = 0; t < this.tiles.length; t++) {
-            if (this.tiles[t].getFocusedClient()) {
-                print("findFocusedTile: found tile");
-                print(JSON.stringify(tiles[t]));
-                return tiles[t];
-            }
-        }
-    } catch (err) {
-        print(err, "in Layout.findFocusedTile");
-    }
-};
-
 Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
     //NOTE: When an x,y value is passed, it means the tile is being moved from somewhere else.
     //      In order to implement this for I3Layout, we need to make sure the new tile will be
@@ -112,9 +96,7 @@ Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
             var finalX = x;
             var finalY = y;
             if (!x  || !y) {
-                print('Last focused client: ' + JSON.stringify(previouslyFocusedClient && previouslyFocusedClient.caption));
                 var focused = previouslyFocusedClient;
-                if (focused) print('WIP: ' + JSON.stringify(focused.geometry));
                 if (focused && focused.geometry) {
                     finalX = focused.geometry.x + focused.geometry.width/2;
                     finalY = focused.geometry.y + focused.geometry.height/2;
