@@ -528,6 +528,34 @@ function TilingManager() {
                                       print(err, "in swap-with-previous-tile");
                                   }
                               });
+        KWin.registerShortcut("TILING-I3: Set Wrap Horizontal Mode",
+                              "Set Wrap Horizontal Mode",
+                              "Meta+B",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null && layout.layout.isI3Layout) {
+                                          layout.layout.state = 'horizontalWrap';
+                                      }
+
+                                  } catch(err) {
+                                      print(err, "in i3-layout-set-wrap-horizontal-mode");
+                                  }
+                              });
+        KWin.registerShortcut("TILING-I3: Set Wrap Vertical Mode",
+                              "Set Wrap Vertical Mode",
+                              "Meta+V",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null && layout.layout.isI3Layout) {
+                                          layout.layout.state = 'verticalWrap';
+                                      }
+
+                                  } catch(err) {
+                                      print(err, "in i3-layout-set-wrap-vertical-mode");
+                                  }
+                              });
     }
     // registerUserActionsMenu(function(client) {
     //     return {

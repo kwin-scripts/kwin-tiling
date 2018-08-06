@@ -91,14 +91,18 @@ I3Layout.prototype.addTile = function(x, y) {
         if (!selectedTile) this.state = 'normal';
 
         // Also ignore attempts to wrap a container inside a container
-        if (selectedContainer && this.state !== 'normal' && selectedContainer.children.length <= 1) 
+        if (selectedContainer && this.state !== 'normal' && selectedContainer.children.length <= 1)
             this.state = 'normal';
 
-        // We also don't want to wrap if the currently selected container is
-        // already in the desired 'direction'
-        /*if (selectedContainer && ((this.state === 'verticalWrap' && selectedContainer.type === 'vertical') ||
-                                  (this.state === 'horizontalWrap' && selectedContainer.type === 'horizontal')))
-            this.state = 'normal';*/
+        /*
+          //NOTE: I'll leave this here just in case someone wants to enable it.
+
+          // Don't want to wrap if the currently selected container is already in the same direction
+          if (selectedContainer && ((this.state === 'verticalWrap' && selectedContainer.type === 'vertical') ||
+                                  (this.state === 'horizontalWrap' && selectedContainer.type === 'horizontal'))) {
+              this.state = 'normal';
+          }
+        */
 
         // Create the new tile
         // TODO: Cleanup: Common parts in both if branches
@@ -126,9 +130,7 @@ I3Layout.prototype.addTile = function(x, y) {
             wrapContainer.children[1] = tile;
         }
 
-        // TODO: Debug code so we can test wrap mode without defining hotkeys
-        if (this.state === 'horizontalWrap') this.state = 'verticalWrap';
-        else this.state = 'horizontalWrap';
+        this.state = 'normal';
 
         print(debugPrintTree(this.containerTree));
 
