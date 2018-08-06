@@ -132,7 +132,7 @@ I3Layout.prototype.addTile = function(x, y) {
 
         this.state = 'normal';
 
-        print(debugPrintTree(this.containerTree));
+        // print(debugPrintTree(this.containerTree));
 
     } catch(err) {
         print(err, "in I3Layout.addTile");
@@ -153,7 +153,6 @@ function debugPrintTree(node) {
 
 I3Layout.prototype.removeTile = function(tileIndex) {
     try {
-        // Remove the array entry
         var toDeleteTile = this.tiles[tileIndex];
         var container = this.containerTree.findParentContainer(toDeleteTile);
 

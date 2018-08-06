@@ -1,4 +1,35 @@
+/********************************************************************
+ KWin - the KDE window manager
+ This file is part of the KDE project.
 
+Copyright (C) 2012 Mathias Gottschlag <mgottschlag@gmail.com>
+Copyright (C) 2013-2014 Fabian Homborg <FHomborg@gmail.com>
+Copyright (C) 2018-2018 Setzer22 <jsanchezfsms@gmail.com>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************/
+
+
+/**
+ * This data structure represents a tile tree with horizontal and vertical layouts.
+ * the tree is responsible for recomputing tile sizes when adding/removing nodes and
+ * also implements a cleanup function to ensure the tree shape is always consistent and
+ * intuitive to the user (e.g. don't allow nested containers with a single child). The
+ * tree is meant to store two kinds of nodes, `ContainerNode`s and tiles (the ones from
+ * i3layout.tiles). However, a third node type, LeafNode is implemented as a placeholder
+ * to allocate new tiles when they are created.
+ */
 function ContainerNode(type, rect) {
     try {
         this.type = type;
@@ -11,6 +42,9 @@ function ContainerNode(type, rect) {
     }
 }
 
+/*
+ * Recalculate sizes for this node as a top-down operation
+ */
 ContainerNode.prototype.recalculateSize = function() {
 
     var r = this.rectangle;
@@ -41,12 +75,19 @@ ContainerNode.prototype.recalculateSize = function() {
 
 };
 
+/*
+ * Inserts a new node into the ContanierNode at the specified index position
+ */
 ContainerNode.prototype.addNode = function(node, index) {
     this.children.splice(index, 0, node);
     node.parent = this;
     this.recalculateSize();
 };
 
+/*
+ * Removes the node from the container node
+ * @pre the node must be a direct child of the container node.
+ */
 ContainerNode.prototype.removeNode = function(node) {
     this.children = this.children.filter(function (x) {return x !== node;});
     this.recalculateSize();
@@ -90,6 +131,10 @@ ContainerNode.prototype.cleanup = function(node) {
     });
 };
 
+/*
+ * Search operation on the tree that will recursively locate for a leaf node
+ * and return its parent container.
+ */
 ContainerNode.prototype.findParentContainer = function(leafNode) {
     var found = null;
 
@@ -107,6 +152,9 @@ ContainerNode.prototype.findParentContainer = function(leafNode) {
     return null;
 };
 
+/*
+ * Placeholder class. See description of ContainerNode
+ */
 function LeafNode() {
     try {
         this.rectangle = {};

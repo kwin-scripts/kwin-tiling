@@ -41,9 +41,8 @@ function TileList() {
 
     /**
      * Stores the current and last focused windows.
-     * NOTE: We need to keep track of the last focused window
-             because when the addTile function is called, the focused
-             tile has already changed.
+     * NOTE: We need to keep track of the last focused window because when the addTile
+     * function is called, the focused tile has already changed to the new client.
      */
     this.focusHistory = {};
 
@@ -90,9 +89,8 @@ function TileList() {
         } else {
             self.addClient(client);
         }
-        // NOTE: When a new client is added, activeChanged will be called
-        //       before it even appears in workspace.clientList(), so we
-        //       need to keep track of the focus change here as well.
+        // NOTE: When a new client is added, activeChanged will be called before it even appears
+        // in workspace.clientList(), so we need to keep track of the focus change here as well.
         self.trackFocusChanges(client);
     });
 };

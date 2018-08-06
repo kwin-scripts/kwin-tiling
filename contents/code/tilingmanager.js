@@ -41,8 +41,7 @@ function TilingManager() {
     /**
      * Default layout type which is selected for new layouts.
      */
-    //this.defaultLayout = HalfLayout;
-    this.defaultLayout = I3Layout;
+    this.defaultLayout = HalfLayout;
 
     /**
      * List of all available layout types.
@@ -626,10 +625,13 @@ TilingManager.prototype._onTileAdded = function(tile) {
     var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
     var start = KWin.readConfig("placement", 0);
     tileLayouts.forEach(function(layout) {
-        //TODO: XXX: HACK: Options don't work so I put this at the top
-        layout.addTile(tile, self.tiles.focusHistory.previous);
-        return;
 
+        // For I3Layout start at the end is the only option that makes sense,
+        // so we should ignore the configured value.
+        if (layout.layout.isI3Layout) {
+            layout.addTile(tile, self.tiles.focusHistory.previous);
+            return;
+        }
 
         // Let KWin decide
         if (start == 0) {
