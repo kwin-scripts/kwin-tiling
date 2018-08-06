@@ -54,19 +54,24 @@ ContainerNode.prototype.removeNode = function(node) {
 
 /*
  * Prunes empty containers and un-wraps single-child containers
+ * NOTE: This code could probably be simplified, but it works.
  */
 ContainerNode.prototype.cleanup = function(node) {
-    print('cleanup');
-
     // Defer node deletion so we don't delete during loop
     var nodesToRemove = [];
 
     // Cleanup is bottom-up, not top-down
     for (var c = 0; c < this.children.length; ++c) {
-        print('it');
         if (this.children[c].children) {
             this.children[c].cleanup();
         }
+    }
+
+
+    if (this.children && this.children.length == 1 && this.children[0].children) {
+        this.type = this.children[0].type;
+        this.rectangle = this.children[0].rectangle;
+        this.children = this.children[0].children;
     }
 
     for (var c = 0; c < this.children.length; ++c) {

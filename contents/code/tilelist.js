@@ -90,12 +90,10 @@ function TileList() {
         } else {
             self.addClient(client);
         }
-        // XXX: When a new client is added, activeChanged will be called
-        //      before it even appears in workspace.clientList(), so we
-        //      need to keep track of the focus change here as well.
-        self.focusHistory.previous = self.focusHistory.current;
-        self.focusHistory.current = client;
-        print('Focused:' + self.focusHistory.current.caption);
+        // NOTE: When a new client is added, activeChanged will be called
+        //       before it even appears in workspace.clientList(), so we
+        //       need to keep track of the focus change here as well.
+        self.trackFocusChanges(client);
     });
 };
 
@@ -201,25 +199,7 @@ TileList.prototype.connectSignals = function(client) {
     });
     client.activeChanged.connect(function() {
         try {
-            var focusedClient = null;
-            var clients = workspace.clientList();
-            for (var i = 0; i < clients.length; ++i) {
-                if (client.active) focusedClient = client;
-            }
-            /*
-            self.tiles.forEach(function(tile) {
-                tile.clients.forEach(function(client) {
-                    if (client.active) {
-                        focusedClient = client;
-                    }
-                });
-            });
-            */
-            if (focusedClient) {
-                self.focusHistory.previous = self.focusHistory.current;
-                self.focusHistory.current = focusedClient;
-                print('Focused:' + self.focusHistory.current.caption);
-            }
+            self.trackFocusChanges();
         } catch(err) {
             print(err, "in activeChanged");
         }
@@ -484,5 +464,35 @@ TileList.prototype.toggleNoBorder = function() {
         this.setNoBorder(!this.noBorder);
     } catch (err) {
         print(err, "in TileList.toggleNoBorder");
+    }
+};
+/**
+ * Looks for the new focused window when it has changed and updates the
+ * focusHistory internal variable consistently
+ *
+ * @param client Optional. If the newly focused client is passed, it will
+ *               be set directly. Otherwise the function will look for it
+ */
+TileList.prototype.trackFocusChanges = function(focusedClient) {
+    try {
+        if (!focusedClient) {
+            var clients = workspace.clientList();
+            for (var i = 0; i < clients.length; ++i) {
+                if (clients[i].active) {
+                    focusedClient = clients[i];
+                    break;
+                }
+            }
+            if (!focusedClient && clients.length > 0) {
+                focusedClient = clients[0];
+            }
+        }
+        if (focusedClient) {
+            this.focusHistory.previous = this.focusHistory.current;
+            this.focusHistory.current = focusedClient;
+            //print('Focused:' + focusedClient.caption);
+        }
+    } catch (err) {
+        print(err, "in TileList.trackFocusChanges");
     }
 };

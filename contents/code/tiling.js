@@ -76,30 +76,22 @@ Tiling.prototype.setLayoutType = function(layoutType) {
 };
 
 Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
-    //NOTE: When an x,y value is passed, it means the tile is being moved from somewhere else.
-    //      In order to implement this for I3Layout, we need to make sure the new tile will be
-    //      created as close to the dropping point as possible.
-
-    // WIP: 
-    // We need to do the following changes:
-    // - Make sure the new tile gets always appended at the end if the layout is I3Layout. The
-    //   position is handled by the containerTree, not the position in the tile list. [DONE, TO-TEST]
-    // - Pass the x,y values to I3Layout's addTile method, so it can allocate the most
-    //   convenient tile position [DONE, TO-TEST]
-    // - The allocation algorithm should work similar to a quadtree. We find the container
-    //   of the tile at x,y position, and append a new container to its parent. [TODO]
-    // - When x,y is not specified, we should set it to whatever the focused client is. Failing
-    //   that, we supply nothing. [DONE, TO-TEST]
-
     try {
+        // NOTE: Separate handling is necessary because the
+        // semantics of passing an x,y value are different in I3Layout.
         if (this.layout.isI3Layout) {
             var finalX = x;
             var finalY = y;
             if (!x  || !y) {
                 var focused = previouslyFocusedClient;
                 if (focused && focused.geometry) {
+                    print('Last focused client: ' + focused.caption);
                     finalX = focused.geometry.x + focused.geometry.width/2;
                     finalY = focused.geometry.y + focused.geometry.height/2;
+                    print('Desktop: '+this.desktop +
+                          ', Screen: '+this.screen +
+                          ' FinalX: ' +finalX +
+                          ", FinalY: "+finalY);
                 }
             }
             this.layout.addTile(finalX,finalY);

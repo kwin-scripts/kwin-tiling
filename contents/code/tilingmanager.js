@@ -151,6 +151,12 @@ function TilingManager() {
     for (var i=0; i<existingClients.length; i++) {
         self.tiles.addClient(existingClients[i]);
     }
+
+    // Provide initial values for this.tiles.focusHistory
+    // NOTE: Set twice to make the 'current' and 'previous' values equal
+    this.tiles.trackFocusChanges();
+    this.tiles.trackFocusChanges(this.tiles.focusHistory.current);
+
     // Activate the visible layouts
     // Do it after adding the existingClients to prevent unnecessary geometry changes
     this._getLayouts(workspace.currentDesktop, null).forEach(function(layout) {
