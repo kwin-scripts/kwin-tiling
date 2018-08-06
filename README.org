@@ -16,7 +16,7 @@
 	 Window previews and effects alongside different tiling layouts
    - Does not require the user to delve into scripting to get a sane configuration
 ** Features:
-   - Three layouts, one with support for multiple "master" windows
+   - Four layouts, one with support for multiple "master" windows and another one with dynamic tiling capabilities (similar to i3wm's)
 
    - Support for minimizing and unminimizing windows
 
