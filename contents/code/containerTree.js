@@ -2,8 +2,6 @@
  KWin - the KDE window manager
  This file is part of the KDE project.
 
-Copyright (C) 2012 Mathias Gottschlag <mgottschlag@gmail.com>
-Copyright (C) 2013-2014 Fabian Homborg <FHomborg@gmail.com>
 Copyright (C) 2018-2018 Setzer22 <jsanchezfsms@gmail.com>
 
 This program is free software; you can redistribute it and/or modify

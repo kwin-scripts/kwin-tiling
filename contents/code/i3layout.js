@@ -3,8 +3,8 @@
  KWin - the KDE window manager
  This file is part of the KDE project.
 
-Copyright (C) 2013 Fabian Homborg <FHomborg@gmail.com>
-based on spirallayout.js by Matthias Gottschlag
+Copyright (C) 2018-2018 Setzer22 <jsanchezfsms@gmail.com>
+based on bladelayout.js by Fabian Homborg
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
