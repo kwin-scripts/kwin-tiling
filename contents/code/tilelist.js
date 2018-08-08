@@ -39,6 +39,13 @@ function TileList() {
      */
     this.tileRemoved = new Signal();
 
+    /**
+     * Stores the current and last focused windows.
+     * NOTE: We need to keep track of the last focused window because when the addTile
+     * function is called, the focused tile has already changed to the new client.
+     */
+    this.focusHistory = {};
+
     try {
         this.noBorder = KWin.readConfig("noBorder", false);
     } catch(err) {
@@ -82,6 +89,9 @@ function TileList() {
         } else {
             self.addClient(client);
         }
+        // NOTE: When a new client is added, activeChanged will be called before it even appears
+        // in workspace.clientList(), so we need to keep track of the focus change here as well.
+        self.trackFocusChanges(client);
     });
 };
 
@@ -185,9 +195,15 @@ TileList.prototype.connectSignals = function(client) {
             print(err, "in Unminimized");
         }
     });
+    client.activeChanged.connect(function() {
+        try {
+            self.trackFocusChanges();
+        } catch(err) {
+            print(err, "in activeChanged");
+        }
+    });
     client.tiling_connected2 = true;
 };
-    
 /**
  * Adds another client to the tile list. When this is called, the tile list also
  * adds callback functions to the relevant client signals to trigger tile change
@@ -446,5 +462,35 @@ TileList.prototype.toggleNoBorder = function() {
         this.setNoBorder(!this.noBorder);
     } catch (err) {
         print(err, "in TileList.toggleNoBorder");
+    }
+};
+/**
+ * Looks for the new focused window when it has changed and updates the
+ * focusHistory internal variable consistently
+ *
+ * @param client Optional. If the newly focused client is passed, it will
+ *               be set directly. Otherwise the function will look for it
+ */
+TileList.prototype.trackFocusChanges = function(focusedClient) {
+    try {
+        if (!focusedClient) {
+            var clients = workspace.clientList();
+            for (var i = 0; i < clients.length; ++i) {
+                if (clients[i].active) {
+                    focusedClient = clients[i];
+                    break;
+                }
+            }
+            if (!focusedClient && clients.length > 0) {
+                focusedClient = clients[0];
+            }
+        }
+        if (focusedClient) {
+            this.focusHistory.previous = this.focusHistory.current;
+            this.focusHistory.current = focusedClient;
+            //print('Focused:' + focusedClient.caption);
+        }
+    } catch (err) {
+        print(err, "in TileList.trackFocusChanges");
     }
 };

@@ -26,6 +26,7 @@ Qt.include("layout.js");
 Qt.include("spirallayout.js");
 Qt.include("halflayout.js");
 Qt.include("bladelayout.js");
+Qt.include("i3layout.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
 Qt.include("util.js");
@@ -46,6 +47,7 @@ function TilingManager() {
      * List of all available layout types.
      */
     this.availableLayouts = [
+        I3Layout,
         HalfLayout,
         BladeLayout,
         SpiralLayout/*,
@@ -148,6 +150,12 @@ function TilingManager() {
     for (var i=0; i<existingClients.length; i++) {
         self.tiles.addClient(existingClients[i]);
     }
+
+    // Provide initial values for this.tiles.focusHistory
+    // NOTE: Set twice to make the 'current' and 'previous' values equal
+    this.tiles.trackFocusChanges();
+    this.tiles.trackFocusChanges(this.tiles.focusHistory.current);
+
     // Activate the visible layouts
     // Do it after adding the existingClients to prevent unnecessary geometry changes
     this._getLayouts(workspace.currentDesktop, null).forEach(function(layout) {
@@ -519,6 +527,34 @@ function TilingManager() {
                                       print(err, "in swap-with-previous-tile");
                                   }
                               });
+        KWin.registerShortcut("TILING-I3: Set Wrap Horizontal Mode",
+                              "Set Wrap Horizontal Mode",
+                              "Meta+B",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null && layout.layout.isI3Layout) {
+                                          layout.layout.state = 'horizontalWrap';
+                                      }
+
+                                  } catch(err) {
+                                      print(err, "in i3-layout-set-wrap-horizontal-mode");
+                                  }
+                              });
+        KWin.registerShortcut("TILING-I3: Set Wrap Vertical Mode",
+                              "Set Wrap Vertical Mode",
+                              "Meta+V",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null && layout.layout.isI3Layout) {
+                                          layout.layout.state = 'verticalWrap';
+                                      }
+
+                                  } catch(err) {
+                                      print(err, "in i3-layout-set-wrap-vertical-mode");
+                                  }
+                              });
     }
     // registerUserActionsMenu(function(client) {
     //     return {
@@ -589,6 +625,14 @@ TilingManager.prototype._onTileAdded = function(tile) {
     var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
     var start = KWin.readConfig("placement", 0);
     tileLayouts.forEach(function(layout) {
+
+        // For I3Layout start at the end is the only option that makes sense,
+        // so we should ignore the configured value.
+        if (layout.layout.isI3Layout) {
+            layout.addTile(tile, self.tiles.focusHistory.previous);
+            return;
+        }
+
         // Let KWin decide
         if (start == 0) {
             x = tile.originalx;
@@ -605,10 +649,10 @@ TilingManager.prototype._onTileAdded = function(tile) {
             }
         // Start at the end
         } else {
-            layout.addTile(tile);
+            layout.addTile(tile, self.tiles.focusHistory.previous);
             return;
         }
-        layout.addTile(tile, x, y);
+        layout.addTile(tile, self.tiles.focusHistory.previous, x, y);
     });
 };
 
@@ -668,7 +712,7 @@ TilingManager.prototype._onNumberDesktopsChanged = function() {
         onAllDesktops.forEach(function(tile) {
             var layouts = self._getLayouts(i, tile.screen);
             layouts.forEach(function(layout) {
-                layout.addTile(tile);
+                layout.addTile(tile, self.tiles.focusHistory.previous);
             });
         });
     }
@@ -771,7 +815,9 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
                     this._getLayouts(this._currentDesktop, tile._currentScreen)[0];
                 var endLayout = this._getLayouts(this._currentDesktop, client.screen)[0];
                 startLayout.removeTile(tile);
-                endLayout.addTile(tile, windowRect.x + windowRect.width / 2,
+                endLayout.addTile(tile,
+                                  this.tiles.focusHistory.previous,
+                                  windowRect.x + windowRect.width / 2,
                                   windowRect.y + windowRect.height / 2);
             } else {
                 // Transfer the tile to a different location in the same layout
@@ -800,7 +846,8 @@ TilingManager.prototype._changeTileLayouts = function(tile, oldLayouts, newLayou
             }
             if (newLayouts != null) {
                 newLayouts.forEach(function(layout) {
-                    layout.addTile(tile);
+                    layout.addTile(tile,
+                                   this.tiles.focusHistory.previous);
                 });
             }
         } catch(err) {

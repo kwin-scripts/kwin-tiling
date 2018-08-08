@@ -75,22 +75,44 @@ Tiling.prototype.setLayoutType = function(layoutType) {
     }
 };
 
-Tiling.prototype.addTile = function(tile, x, y) {
+Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
     try {
-        this.layout.addTile();
-        // If a position was specified, we insert the tile at the specified position
-        if (x != null && y != null) {
-            var index = this._getTileIndex(x, y);
-            if (index == -1) {
-                this.tiles.push(tile);
-            } else {
-                this.tiles.splice(index, 0, tile);
+        // NOTE: Separate handling is necessary because the
+        // semantics of passing an x,y value are different in I3Layout.
+        if (this.layout.isI3Layout) {
+            var finalX = x;
+            var finalY = y;
+            if (!x  || !y) {
+                var focused = previouslyFocusedClient;
+                if (focused && focused.geometry) {
+                    print('Last focused client: ' + focused.caption);
+                    finalX = focused.geometry.x + focused.geometry.width/2;
+                    finalY = focused.geometry.y + focused.geometry.height/2;
+                    print('Desktop: '+this.desktop +
+                          ', Screen: '+this.screen +
+                          ' FinalX: ' +finalX +
+                          ", FinalY: "+finalY);
+                }
             }
-        } else {
-            if (tile.tileIndex > -1 && tile.tileIndex <= this.tiles.length) {
-                this.tiles.splice(tile.tileIndex, 0, tile);
+            this.layout.addTile(finalX,finalY);
+            this.tiles.push(tile);
+        }
+        else {
+            this.layout.addTile();
+            // If a position was specified, we insert the tile at the specified position
+            if (x != null && y != null) {
+                var index = this._getTileIndex(x, y);
+                if (index == -1) {
+                    this.tiles.push(tile);
+                } else {
+                    this.tiles.splice(index, 0, tile);
+                }
             } else {
-                this.tiles.push(tile);
+                if (tile.tileIndex > -1 && tile.tileIndex <= this.tiles.length) {
+                    this.tiles.splice(tile.tileIndex, 0, tile);
+                } else {
+                    this.tiles.push(tile);
+                }
             }
         }
         for (var i = 0; i < this.tiles.length; i++) {
