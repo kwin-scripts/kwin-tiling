@@ -36,6 +36,7 @@
    - A hotkey to tile once
 
    - Many bugfixes over mgottschlag's version
+
 ** Installation:
 
    #+BEGIN_SRC bash
@@ -44,7 +45,7 @@
    plasmapkg2 --type kwinscript -i .
    #+END_SRC
 
-** Usage
+** Usage:
    Install
 
    Move windows around and see that they are tiled :-)
@@ -56,7 +57,16 @@
 
    Press Meta-PgUp or Meta-PgDn to switch the layout
 
-   Use the configuration menu (in Systemsettings->Window Behavior->Scripts)
+   Use the configuration menu (in System Settings->Window Management->KWin Scripts)
+
+** Troubleshooting:
+   No configuration option is available for the KWin Scripts entry
+
+   - [[https://github.com/faho/kwin-tiling/issues/79#issuecomment-311465357][As suggested by @BenoitZugmeyer]],
+     #+BEGIN_SRC bash
+     mkdir -p ~/.local/share/kservices5
+     ln -s ~/.local/share/kwin/scripts/kwin-script-tiling/metadata.desktop ~/.local/share/kservices5/kwin-script-tiling.desktop
+     #+END_SRC
 
 ** Known Issues:
    Activities aren't handled at all
@@ -65,12 +75,12 @@
 
    Multimonitor is untested
 
-** Bugs
+** Bugs:
    There is no software without bugs. If you detect one please
    share it. [[https://github.com/faho/kwin-tiling/issues?state=open]]
-   
 
-** Screenshots
+
+** Screenshots:
    Standard layout with two master windows
    [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling01.png]]
    Standard layout with one master
