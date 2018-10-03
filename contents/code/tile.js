@@ -310,6 +310,7 @@ Tile.prototype.setClientGeometry = function(client) {
             }
 
             client.tiling_resize = true;
+            print("Setting client ", client.resourceClass, " from ", client.geometry, " to ", this.rectangle);
             client.geometry = util.copyRect(this.rectangle);
 
             if (changedRect) {

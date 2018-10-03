@@ -84,9 +84,11 @@ function TileList() {
         // change when it is disabled/enabled.
         if (options.useCompositing) {
             client.windowShown.connect(function(client) {
+                print("Adding client ", client.resourceClass, " after windowShown");
                 self.addClient(client);
             });
         } else {
+            print("Adding client ", client.resourceClass, " without windowShown");
             self.addClient(client);
         }
         // NOTE: When a new client is added, activeChanged will be called before it even appears
@@ -220,6 +222,7 @@ TileList.prototype.addClient = function(client) {
         client.keepBelow = false;
         // WARNING: This crashes kwin!
         //client.tiling_floating = true;
+        print("Ignoring client");
         return;
     }
 
@@ -238,6 +241,8 @@ TileList.prototype.addClient = function(client) {
         client.keepBelow = false;
         return;
     }
+
+    print("Actually adding client");
 
     // If the client isn't the current tab, it's added to a tabgroup
     // (because of autogrouping)
