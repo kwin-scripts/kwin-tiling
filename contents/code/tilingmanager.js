@@ -845,9 +845,10 @@ TilingManager.prototype._changeTileLayouts = function(tile, oldLayouts, newLayou
                 });
             }
             if (newLayouts != null) {
+                var self = this;
                 newLayouts.forEach(function(layout) {
                     layout.addTile(tile,
-                                   this.tiles.focusHistory.previous);
+                                   self.tiles.focusHistory.previous);
                 });
             }
         } catch(err) {
