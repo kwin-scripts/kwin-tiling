@@ -555,6 +555,8 @@ function TilingManager() {
                                       print(err, "in i3-layout-set-wrap-vertical-mode");
                                   }
                               });
+
+        workspace.clientMaximizeSet.connect(self.minimizeOthers);
     }
     // registerUserActionsMenu(function(client) {
     //     return {
@@ -569,6 +571,44 @@ function TilingManager() {
     //         }
     //     };
     // });
+};
+
+TilingManager.prototype.minimizeOthers = function(client) {
+    //original code from https://github.com/karakum/kwin-script-onlyOneActiveWindow
+
+    if (client.skipTaskbar || client.modal || client.transient) {
+        return;
+    }
+    var clients = workspace.clientList();
+    var transients = [];
+    for (var i = 0; i < clients.length; i++) {
+        if (clients[i].transient) {
+            transients[clients[i].transientFor] = 1;
+        }
+    }
+
+    if (client.transient) {
+        transients[client.transientFor] = 1;
+    }
+
+    var actives = [];
+    var ai = 0;
+    for (var i = 0; i < clients.length; i++) {
+        if (clients[i].minimizable && transients[clients[i]] != 1 &&
+            clients[i] != client && clients[i].desktop == client.desktop && !( clients[i].skipTaskbar || 
+                clients[i].skipSwitcher || clients[i].skipPager || clients[i].transient || clients[i].modal )) {
+            actives[ai] = clients[i];
+            ai++;
+        }
+    }
+
+    for(var i = 0; i < ai; i++) {
+        actives[i].minimized = true;
+    }
+
+    if(ai == 1) {
+        lastActive = actives[0];
+    }
 };
 
 TilingManager.prototype.resize = function() {
