@@ -202,6 +202,12 @@ TileList.prototype.connectSignals = function(client) {
             print(err, "in activeChanged");
         }
     });
+    client.clientMaximizedStateChanged.connect(function(client, h, v) {
+        var tile = self.getTile(client);
+        if (tile != null) {
+            tile.onClientMaximizedStateChanged(client, h, v);
+        }
+    });
     client.tiling_connected2 = true;
 };
 /**

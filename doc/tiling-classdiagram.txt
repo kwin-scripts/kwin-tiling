@@ -66,6 +66,7 @@ class Tile {
 	+onClientKeepBelowChanged(client)
 	+onClientFullScreenChanged(client)
 	+onClientMinimizedChanged(client)
+	+onClientMaximizedStateChanged(client, h, v)
 	+onClientDesktopChanged(client)
 	+onClientStartUserMovedResized(client)
 	+onClientStepUserMovedResized(client)

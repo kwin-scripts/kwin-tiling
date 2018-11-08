@@ -405,6 +405,27 @@ Tile.prototype.addClient = function(client) {
     }
 };
 
+Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
+    try {
+        // Set keepBelow to keep maximized clients over tiled ones
+        // TODO: We don't distinguish between horizontal and vertical maximization,
+        // also there's no way to find that the _user_ caused this.
+        // So we might want to ignore maximization entirely.
+        if (h || v) {
+            client.keepBelow = false;
+            // We might get a geometryChanged signal before this
+            // so we need to manually maximize the client.
+            client.tiling_resize = true;
+            client.geometry = workspace.clientArea(KWin.MaximizeFullArea, this._currentScreen, this._currentDesktop);
+            client.tiling_resize = false;
+        } else {
+            client.keepBelow = true;
+        }
+    } catch(err) {
+        print(err, "in tile.onClientMaximizedStateChanged");
+    }
+};
+
 Tile.prototype.hasClient = function(client) {
     return (this.clients.indexOf(client) > -1);
 };
