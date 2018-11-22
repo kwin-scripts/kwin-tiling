@@ -212,9 +212,6 @@ Tile.prototype.setClientGeometry = function(client) {
         if (client.deleted) {
             return;
         }
-        if (!client.managed) {
-            return;
-        }
         if (!client.isCurrentTab) {
             return;
         }
@@ -280,33 +277,37 @@ Tile.prototype.setClientGeometry = function(client) {
             // which will then adjust the other clients to match.
             // (it is possible that no perfect fit is possible,
             // which should not cause an infinite loop as all tiles are still marked tiling_resize).
-            if (client.basicUnit.width > 1) {
-                // floor(deltaWidth / basicUnit) gives the delta in basicUnits.
-                // The rest recomputes the width.
-                var newWidth = Math.floor((this.rectangle.width - client.geometry.width) / client.basicUnit.width)
-                    * client.basicUnit.width + client.geometry.width;
-                // If the right edge changed, change the width to match.
-                // If the left edge changed, change that.
-                // Assumption: Either both edges don't change at the same time
-                // or it doesn't matter which we pick.
-                // Not doing this causes corruption (e.g. with a scale of 1.5, unfullscreening vlc).
-                if (client.geometry.x + client.geometry.width != this.rectangle.x + this.rectangle.width) {
-                    this.rectangle.width = newWidth;
-                } else if (client.geometry.x != this.rectangle.x) {
-                    this.rectangle.x = this.rectangle.x + this.rectangle.width - newWidth;
+
+            // basicUnit is apparently not a thing on wayland, so check if it exists.
+            if (client.basicUnit) {
+                if (client.basicUnit.width > 1) {
+                    // floor(deltaWidth / basicUnit) gives the delta in basicUnits.
+                    // The rest recomputes the width.
+                    var newWidth = Math.floor((this.rectangle.width - client.geometry.width) / client.basicUnit.width)
+                        * client.basicUnit.width + client.geometry.width;
+                    // If the right edge changed, change the width to match.
+                    // If the left edge changed, change that.
+                    // Assumption: Either both edges don't change at the same time
+                    // or it doesn't matter which we pick.
+                    // Not doing this causes corruption (e.g. with a scale of 1.5, unfullscreening vlc).
+                    if (client.geometry.x + client.geometry.width != this.rectangle.x + this.rectangle.width) {
+                        this.rectangle.width = newWidth;
+                    } else if (client.geometry.x != this.rectangle.x) {
+                        this.rectangle.x = this.rectangle.x + this.rectangle.width - newWidth;
+                    }
+                    changedRect = true;
                 }
-                changedRect = true;
-            }
-            if (client.basicUnit.height > 1) {
-                // As above, change the edge that changed.
-                var newHeight = Math.floor((this.rectangle.height - client.geometry.height) / client.basicUnit.height)
-                    * client.basicUnit.height + client.geometry.height;
-                if (client.geometry.y + client.geometry.height != this.rectangle.y + this.rectangle.height) {
-                    this.rectangle.height = newHeight;
-                } else if (client.geometry.y != this.rectangle.y) {
-                    this.rectangle.y = this.rectangle.y + this.rectangle.height - newHeight;
+                if (client.basicUnit.height > 1) {
+                    // As above, change the edge that changed.
+                    var newHeight = Math.floor((this.rectangle.height - client.geometry.height) / client.basicUnit.height)
+                        * client.basicUnit.height + client.geometry.height;
+                    if (client.geometry.y + client.geometry.height != this.rectangle.y + this.rectangle.height) {
+                        this.rectangle.height = newHeight;
+                    } else if (client.geometry.y != this.rectangle.y) {
+                        this.rectangle.y = this.rectangle.y + this.rectangle.height - newHeight;
+                    }
+                    changedRect = true;
                 }
-                changedRect = true;
             }
 
             client.tiling_resize = true;
