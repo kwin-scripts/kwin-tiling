@@ -397,7 +397,9 @@ TileList.prototype._removeTile = function(tileIndex) {
 TileList.prototype._isIgnored = function(client) {
     // TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
     // A QLineEdit will backslash-escape ",", so we'll need to split on `\\,`.
-    var floaters = KWin.readConfig("floaters", "").replace(/ /g,"").split("\\,");
+    // We trim whitespace around commas.
+    var floaters = KWin.readConfig("floaters", "").trim().replace(/\s*,\s*/g,",").split("\\,");
+
     if (floaters.indexOf(client.resourceClass.toString()) > -1
         || this.blacklist.indexOf(client.resourceClass.toString()) > -1) {
         return true;
