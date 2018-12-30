@@ -50,7 +50,7 @@ HalfLayout.prototype.addTile = function() {
             util.assertRectInScreen(rect, this.screenRectangle);
             this._createTile(rect);
             return;
-        } 
+        }
         if (this.tiles.length <= this.masterCount) {
             // The second tile fills the right half of the screen
             if (this.tiles.length < this.masterCount) {
@@ -236,9 +236,16 @@ HalfLayout.prototype.decrementMaster = function() {
     } else {
         var oldMWidth = this.getMasterWidth();
     }
-    if (this.tiles.length >= oldC) {
+    if (this.tiles.length > oldC) {
         var newMWidth = oldMWidth / newC;
-        var newSWidth = this.screenRectangle.width - oldMWidth;
+        if(newC == 0) {
+            newMWidth = 0;
+        }
+        var newSWidth = this.screenRectangle.width - (newMWidth * newC);
+        var newSHeight = this.screenRectangle.height / (this.tiles.length - newC);
+    } else if (this.tiles.length == oldC) {
+        var newMWidth = oldMWidth / oldC;
+        var newSWidth = this.screenRectangle.width - (newMWidth * newC);
         var newSHeight = this.screenRectangle.height / (this.tiles.length - newC);
     } else {
         var newMWidth = this.screenRectangle.width / this.tiles.length;
@@ -254,9 +261,11 @@ HalfLayout.prototype.decrementMaster = function() {
         this.tiles[i].rectangle.y = this.screenRectangle.y + (i - newC) * newSHeight;
         this.tiles[i].rectangle.height = newSHeight;
         this.tiles[i].rectangle.width = newSWidth;
-        this.tiles[i].rectangle.x = this.screenRectangle.x + oldMWidth;
+        this.tiles[i].rectangle.x = this.screenRectangle.x + (newMWidth * newC);
         util.assertRectInScreen(this.tiles[i].rectangle, this.screenRectangle);
     }
     this.masterCount--;
-    this.firstWidth = this.getMasterWidth();
+    if(newC != 0) {
+        this.firstWidth = this.getMasterWidth();
+    }
 };
