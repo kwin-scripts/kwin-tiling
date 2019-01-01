@@ -491,7 +491,7 @@ TileList.prototype.trackFocusChanges = function(focusedClient) {
                 focusedClient = clients[0];
             }
         }
-        if (focusedClient && (focusedClient != this.focusHistory.current)) {
+        if (focusedClient && ((focusedClient != this.focusHistory.current) || !this.focusHistory.previous)) {
             this.focusHistory.previous = this.focusHistory.current;
             this.focusHistory.current = focusedClient;
             //print('Focused:' + focusedClient.caption);
