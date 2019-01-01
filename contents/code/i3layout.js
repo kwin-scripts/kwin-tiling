@@ -91,8 +91,12 @@ I3Layout.prototype.addTile = function(x, y) {
         if (!selectedTile) this.state = 'normal';
 
         // Also ignore attempts to wrap a container inside a container
-        if (selectedContainer && this.state !== 'normal' && selectedContainer.children.length <= 1)
+        if (selectedContainer && this.state !== 'normal' && selectedContainer.children.length <= 1) {
+            if (selectedContainer === this.containerTree) {
+                this.containerTree.type = (this.state === 'horizontalWrap' ? 'horizontal' : 'vertical');
+            }
             this.state = 'normal';
+        }
 
         /*
           //NOTE: I'll leave this here just in case someone wants to enable it.
