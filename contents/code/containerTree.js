@@ -41,6 +41,24 @@ function ContainerNode(type, rect) {
 }
 
 /*
+ * Update sizes for this container and all children-containers as a bottom-up operation
+ */
+ContainerNode.prototype.updateContainerSizes = function() {
+
+    this.children.forEach(function (child) {
+        if (child.children) child.updateContainerSizes();
+    });
+
+    if (this.children[0]) {
+        var rect = this.children[0].rectangle;
+        this.children.forEach(function (child) {
+            rect = util.expandRect(rect, child.rectangle);
+        });
+        this.rectangle = util.copyRect(rect);
+    }
+};
+
+/*
  * Recalculate sizes for this node as a top-down operation
  */
 ContainerNode.prototype.recalculateSize = function() {
@@ -79,7 +97,6 @@ ContainerNode.prototype.recalculateSize = function() {
 ContainerNode.prototype.addNode = function(node, index) {
     this.children.splice(index, 0, node);
     node.parent = this;
-    this.recalculateSize();
 };
 
 /*
@@ -88,7 +105,6 @@ ContainerNode.prototype.addNode = function(node, index) {
  */
 ContainerNode.prototype.removeNode = function(node) {
     this.children = this.children.filter(function (x) {return x !== node;});
-    this.recalculateSize();
 };
 
 /*
