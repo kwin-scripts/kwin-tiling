@@ -57,6 +57,7 @@ HalfLayout.prototype.addTile = function() {
                 var newWidth = this.screenRectangle.width / (this.tiles.length + 1);
                 var newSWidth = newWidth;
             } else {
+                this.firstWidth = this.screenRectangle.width / 2;
                 var newWidth = this.firstWidth / (this.tiles.length);
                 var newSWidth = this.screenRectangle.width - this.firstWidth;
             }
@@ -141,7 +142,14 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
             if (this.tiles.length > mC) {
                 // The distance between the right edge of the last master and the left edge of the screen is the width of the master area
                 if(mC > 0){
-                    var mWidth = (this.tiles[mC - 1].rectangle.x + this.tiles[mC - 1].rectangle.width - this.screenRectangle.x) / mC;
+                    if(tileIndex === mC - 1){
+                        var mWidth = (oldrect.x + oldrect.width - this.screenRectangle.x) / mC;
+                    }
+                    else if(tileIndex < mC - 1){
+                        var mWidth = (this.tiles[mC - 2].rectangle.x + this.tiles[mC - 2].rectangle.width - this.screenRectangle.x) / mC;
+                    }else {
+                        var mWidth = (this.tiles[mC - 1].rectangle.x + this.tiles[mC - 1].rectangle.width - this.screenRectangle.x) / mC;
+                    }
                 } else {
                     var mWidth = 0;
                 }
