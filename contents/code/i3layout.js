@@ -108,6 +108,9 @@ I3Layout.prototype.addTile = function(x, y) {
           }
         */
 
+        // update all container sizes according to their children's sizes
+        this.containerTree.updateContainerSizes();
+
         // Create the new tile
         // TODO: Cleanup: Common parts in both if branches
         if (this.state === 'normal') {
@@ -117,12 +120,13 @@ I3Layout.prototype.addTile = function(x, y) {
             this._createTile(leaf.rectangle);
             var tile = this.tiles[this.tiles.length - 1];
             selectedContainer.children[childIndex] = tile;
+            selectedContainer.recalculateSize();
         }
         else if (this.state === 'horizontalWrap' ||
                    this.state === 'verticalWrap') {
 
             // Wrap mode: wrap selected tile in a new container and append new tile there
-            var wrapContainer = new ContainerNode(this.state === 'horizontalWrap' ? 'horizontal' : 'vertical');
+            var wrapContainer = new ContainerNode(this.state === 'horizontalWrap' ? 'horizontal' : 'vertical',util.copyRect(selectedTile.rectangle));
             selectedContainer.addNode(wrapContainer, childIndex);
             selectedContainer.removeNode(selectedTile);
             wrapContainer.addNode(selectedTile, 0);
@@ -132,6 +136,7 @@ I3Layout.prototype.addTile = function(x, y) {
             this._createTile(leaf.rectangle);
             var tile = this.tiles[this.tiles.length - 1];
             wrapContainer.children[1] = tile;
+            wrapContainer.recalculateSize();
         }
 
         this.state = 'normal';
@@ -160,10 +165,12 @@ I3Layout.prototype.removeTile = function(tileIndex) {
         var toDeleteTile = this.tiles[tileIndex];
         var container = this.containerTree.findParentContainer(toDeleteTile);
 
+        this.containerTree.updateContainerSizes();
         container.removeNode(toDeleteTile);
-        this.containerTree.cleanup();
-        this.containerTree.recalculateSize();
         this.tiles.splice(tileIndex, 1);
+        container.recalculateSize();
+
+        this.containerTree.cleanup();
 
         print(debugPrintTree(this.containerTree));
 

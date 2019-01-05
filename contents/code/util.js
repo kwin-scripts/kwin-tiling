@@ -60,6 +60,15 @@ util.intersectRect = function(rect1, rect2) {
     return newRect;
 };
 
+util.expandRect = function(rect1, rect2) {
+    var newRect = Qt.rect(0,0,0,0);
+    newRect.x = Math.min(rect1.x, rect2.x);
+    newRect.y = Math.min(rect1.y, rect2.y);
+    newRect.width = (Math.max(rect1.x + rect1.width, rect2.x + rect2.width) - newRect.x);
+    newRect.height = (Math.max(rect1.y + rect1.height, rect2.y + rect2.height) - newRect.y);
+    return newRect;
+};
+
 util.setX = function(geom, value) {
     geom.width = (geom.width + geom.x) - value;
     geom.x = value;
