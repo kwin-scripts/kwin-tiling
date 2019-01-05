@@ -165,9 +165,6 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
             // Fallthrough for slaves
         }
         if (this.tiles.length > this.masterCount) {
-            if (tileIndex == 0) {
-                this.tiles[0].rectangle = oldrect;
-            }
             var tileCount = this.tiles.length - this.masterCount;
             util.assertTrue(tileCount > 0, "Tilecount is zero");
             var lastRect = this.tiles[0].rectangle;
