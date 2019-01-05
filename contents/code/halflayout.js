@@ -248,7 +248,7 @@ HalfLayout.prototype.decrementMaster = function() {
         var newSWidth = this.screenRectangle.width - (newMWidth * newC);
         var newSHeight = this.screenRectangle.height / (this.tiles.length - newC);
     } else if (this.tiles.length == oldC) {
-        var newMWidth = oldMWidth / oldC;
+        var newMWidth = (this.screenRectangle.width / 2) / newC ;
         var newSWidth = this.screenRectangle.width - (newMWidth * newC);
         var newSHeight = this.screenRectangle.height / (this.tiles.length - newC);
     } else {
