@@ -555,6 +555,20 @@ function TilingManager() {
                                       print(err, "in i3-layout-set-wrap-vertical-mode");
                                   }
                               });
+        KWin.registerShortcut("TILING-I3: Set Normal Mode",
+                              "Set Normal Mode",
+                              "Meta+N",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null && layout.layout.isI3Layout) {
+                                          layout.layout.state = 'normal';
+                                      }
+
+                                  } catch(err) {
+                                      print(err, "in i3-layout-set-normal-mode");
+                                  }
+                              });
     }
     // registerUserActionsMenu(function(client) {
     //     return {
