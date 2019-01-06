@@ -59,36 +59,116 @@ ContainerNode.prototype.updateContainerSizes = function() {
 };
 
 /*
- * Recalculate sizes for this node as a top-down operation
+ * Resize this node and its children as a top-down operation
+ * Keep size ratio of children
  */
-ContainerNode.prototype.recalculateSize = function() {
+ContainerNode.prototype.resizeNode = function(rectAfter) {
 
-    var r = this.rectangle;
+    var rectBefore = this.rectangle;
+    this.rectangle = util.copyRect(rectAfter);
+    var childrenLength = this.children.length;
+
 
     if (this.type === 'horizontal') {
-        var newWidth = r.width / this.children.length;
+
+        var totalWidth = 0;
+        var newWidth = 0;
 
         this.children.forEach(function(child, index) {
-            child.rectangle.x = r.x + index*newWidth;
-            child.rectangle.y = r.y;
-            child.rectangle.width = newWidth;
-            child.rectangle.height = r.height;
-            if (child.children) child.recalculateSize();
+            var newRect = Qt.rect(0, 0, 0, 0);
+            if (index === childrenLength - 1) {
+                newWidth = Math.floor(rectAfter.width - totalWidth);
+            } else {
+                newWidth = Math.floor((child.rectangle.width / rectBefore.width) * rectAfter.width);
+            }
 
+            newRect.x = rectAfter.x + totalWidth;
+            newRect.y = rectAfter.y;
+            newRect.width = newWidth;
+            newRect.height = rectAfter.height;
+            totalWidth += newWidth;
+            if(child.children) child.resizeNode(util.copyRect(newRect));
+            else child.rectangle = util.copyRect(newRect);
         });
 
     } else if (this.type === 'vertical') {
-        var newHeight = r.height / this.children.length;
+
+        var totalHeight = 0;
+        var newHeight = 0;
 
         this.children.forEach(function(child, index) {
-            child.rectangle.x = r.x;
-            child.rectangle.y = r.y + index*newHeight;
-            child.rectangle.width = r.width;
-            child.rectangle.height = newHeight;
-            if (child.children) child.recalculateSize();
+            var newRect = Qt.rect(0, 0, 0, 0);
+            if (index === childrenLength - 1) {
+                newHeight = Math.floor(rectAfter.height - totalHeight);
+            } else {
+                newHeight = Math.floor((child.rectangle.height / rectBefore.height) * rectAfter.height);
+            }
+
+            newRect.x = rectAfter.x;
+            newRect.y = rectAfter.y + totalHeight;
+            newRect.width = rectAfter.width;
+            newRect.height = newHeight;
+            totalHeight += newHeight;
+            if(child.children) child.resizeNode(util.copyRect(newRect));
+            else child.rectangle = util.copyRect(newRect);
         });
     }
+};
 
+/*
+ * Recalculate sizes for this nodes children as a top-down operation
+ * give all children the same size
+ */
+ContainerNode.prototype.recalculateSize = function() {
+
+    var rectBefore = this.rectangle;
+    var childrenLength = this.children.length;
+
+
+    if (this.type === 'horizontal') {
+
+        var totalWidth = 0;
+        var newWidth = 0;
+
+        this.children.forEach(function(child, index) {
+            var newRect = Qt.rect(0, 0, 0, 0);
+            if (index === childrenLength - 1) {
+                newWidth = Math.floor(rectBefore.width - totalWidth);
+            } else {
+                newWidth = Math.floor(rectBefore.width / childrenLength);
+            }
+
+            newRect.x = rectBefore.x + totalWidth;
+            newRect.y = rectBefore.y;
+            newRect.width = newWidth;
+            newRect.height = rectBefore.height;
+            totalWidth += newWidth;
+            if(child.children) child.resizeNode(util.copyRect(newRect));
+            else child.rectangle = util.copyRect(newRect);
+        });
+
+    } else if (this.type === 'vertical') {
+
+        var totalHeight = 0;
+        var newHeight = 0;
+
+        this.children.forEach(function(child, index) {
+            var newRect = Qt.rect(0, 0, 0, 0);
+            if (index === childrenLength - 1) {
+                newHeight = Math.floor(rectBefore.height - totalHeight);
+            } else {
+                newHeight = Math.floor(rectBefore.height / childrenLength);
+            }
+
+            newRect.x = rectBefore.x;
+            newRect.y = rectBefore.y + totalHeight;
+            newRect.width = rectBefore.width;
+            newRect.height = newHeight;
+            totalHeight += newHeight;
+            if(child.children) child.resizeNode(util.copyRect(newRect));
+            else child.rectangle = util.copyRect(newRect);
+        });
+    }
 };
 
 /*
