@@ -44,6 +44,12 @@
    cd kwin-tiling/
    plasmapkg2 --type kwinscript -i .
    #+END_SRC
+   
+   or if updating
+   
+   #+BEGIN_SRC bash
+   plasmapkg2 --type kwinscript -u .
+   #+END_SRC
 
 ** Usage:
    Install
