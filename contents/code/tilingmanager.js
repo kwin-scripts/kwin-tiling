@@ -575,6 +575,37 @@ function TilingManager(timer) {
                                       print(err, "in i3-layout-set-normal-mode");
                                   }
                               });
+        KWin.registerShortcut("TILING: Move Window To New Desktop",
+                              "Move Window To New Desktop",
+                              "Meta+Shift+D",
+                              function() {
+                                  try {
+                                      var client = workspace.activeClient;
+                                      if (client != null) {
+                                          var desktop = 0;
+                                          // find first empty desktop
+                                          for (var i = 1; i <= self.desktopCount; i++) {
+                                              if (self._isDesktopEmpty(i)) {
+                                                  desktop = i;
+                                                  break;
+                                              }
+                                          }
+                                          // if there is none, create a new one
+                                          if (desktop == 0 && self.desktopCount < 20) {
+                                              workspace.desktops += 1;
+                                              desktop = self.desktopCount;
+                                          }
+                                          // move the client and activate the desktop
+                                          if (desktop > 0) {
+                                              client.desktop = desktop;
+                                              workspace.currentDesktop = desktop;
+                                              workspace.activeClient = client;
+                                          }
+                                      }
+                                  } catch(err) {
+                                      print(err, "in move-window-to-new-desktop");
+                                  }
+                              });
     }
     // registerUserActionsMenu(function(client) {
     //     return {
@@ -974,4 +1005,16 @@ TilingManager.prototype._getLayouts = function(desktop, screen) {
         }
     }
     return null;
+};
+
+TilingManager.prototype._isDesktopEmpty = function(desktop) {
+    var clients = workspace.clientList();
+    var empty = true;
+    for (var i = 0; i < clients.length; i++) {
+        if (!clients[i].onAllDesktops && clients[i].desktop == desktop) {
+            empty = false;
+            break;
+        }
+    }
+    return empty;
 };
