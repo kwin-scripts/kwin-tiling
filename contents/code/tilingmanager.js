@@ -738,7 +738,7 @@ TilingManager.prototype._onNumberDesktopsChanged = function() {
     }
     // Remove deleted desktops
     if (this.desktopCount > newDesktopCount) {
-        layouts.length = newDesktopCount;
+        self.layouts.length = newDesktopCount;
     }
     this.desktopCount = newDesktopCount;
 };
