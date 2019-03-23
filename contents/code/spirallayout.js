@@ -30,12 +30,12 @@ function SpiralLayout(screenRectangle) {
     this.master = 0;
 };
 
-SpiralLayout.name = "Spiral";
-// TODO: Add an image for the layout switcher
-SpiralLayout.image = null;
-
 SpiralLayout.prototype = new Layout();
 SpiralLayout.prototype.constructor = SpiralLayout;
+
+SpiralLayout.prototype.name = "Spiral";
+// TODO: Add an image for the layout switcher
+//SpiralLayout.image = null;
 
 SpiralLayout.prototype.addTile = function() {
     if (this.tiles.length == 0) {

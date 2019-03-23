@@ -35,12 +35,12 @@ function HalfLayout(screenRectangle) {
     this.masterCount = 1;
 };
 
-// HalfLayout.name = "Half";
-// // TODO: Add an image for the layout switcher
-// HalfLayout.image = null;
-
 HalfLayout.prototype = new Layout();
 HalfLayout.prototype.constructor = HalfLayout;
+
+HalfLayout.prototype.name = "Half";
+// // TODO: Add an image for the layout switcher
+// HalfLayout.image = null;
 
 HalfLayout.prototype.addTile = function() {
     try {
