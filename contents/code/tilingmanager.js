@@ -95,7 +95,11 @@ function TilingManager() {
      * This is overridden by per-desktop settings
      */
     this.userActive = KWin.readConfig("userActive", true);
-    
+    /**
+     * A signal to be emited on manual layout change
+     */
+    this.layoutChanged = new Signal();
+
     // Read layout configuration
     // Format: desktop:layoutname[,...]
     // Negative desktop number deactivates tiling
@@ -195,6 +199,7 @@ function TilingManager() {
                                   self._switchLayout(workspace.currentDesktop,
                                                      workspace.activeScreen,
                                                      nextIndex);
+                                  self._notifyLayoutChanged();
                               });
         KWin.registerShortcut("TILING: Previous Tiling Layout",
                               "Previous Tiling Layout",
@@ -208,6 +213,7 @@ function TilingManager() {
                                   self._switchLayout(workspace.currentDesktop,
                                                      workspace.activeScreen,
                                                      nextIndex);
+                                  self._notifyLayoutChanged();
                               });
         KWin.registerShortcut("TILING: Toggle Floating",
                               "Toggle Floating",
@@ -888,6 +894,11 @@ TilingManager.prototype._onCurrentDesktopChanged = function() {
         }
     });
 };
+
+TilingManager.prototype._notifyLayoutChanged = function() {
+    var tiling = this._getLayouts(this._currentDesktop, this._currentScreen)[0];
+    this.layoutChanged.emit(tiling.layout);
+}
 
 TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {
     // TODO: Show the layout switcher dialog

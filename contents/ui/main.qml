@@ -35,6 +35,12 @@ Item {
         /* tiling.resized.connect(function() { */
         /*     timer.start(); */
         /* }); */
+        tiling.layoutChanged.connect(function(layout) {
+            if (KWin.readConfig("showLayoutOsd", true) && !layoutOsdLoader.item) {
+                layoutOsdLoader.setSource("layoutosd.qml", {"tiling": tiling});
+                tiling.layoutChanged.emit(layout);
+            }
+        });
     }
 
     /* Timer { */
@@ -42,5 +48,9 @@ Item {
     /*     interval: 1000; running: false; repeat: false */
     /*     onTriggered: tiling.resize(); */
     /* } */
+
+    Loader {
+        id: layoutOsdLoader
+    }
 
 }

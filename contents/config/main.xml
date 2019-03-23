@@ -57,6 +57,10 @@
 		  <label>Should minimum/maximum Size be respected</label>
 		  <default>true</default>
 		</entry>
+		<entry name="showLayoutOsd" type="bool">
+		  <label>Show layout showLayoutOsd</label>
+		  <default>true</default>
+		</entry>
 		<entry name="placement" type="int">
 		  <label>Where new tiles should open</label>
 		  <default>0</default>

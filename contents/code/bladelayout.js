@@ -36,12 +36,12 @@ function BladeLayout(screenRectangle) {
     print("BladeLayout created");
 };
 
-// BladeLayout.name = "Blade";
-// // TODO: Add an image for the layout switcher
-// BladeLayout.image = null;
-
 BladeLayout.prototype = new Layout();
 BladeLayout.prototype.constructor = BladeLayout;
+
+BladeLayout.prototype.name = "Blade";
+// // TODO: Add an image for the layout switcher
+// BladeLayout.image = null;
 
 BladeLayout.prototype.addTile = function() {
     try {

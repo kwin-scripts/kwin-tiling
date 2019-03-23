@@ -53,6 +53,8 @@ function I3Layout(screenRectangle) {
 I3Layout.prototype = new Layout();
 I3Layout.prototype.constructor = I3Layout;
 
+I3Layout.prototype.name = "I3";
+
 /*
  * Gets the tile at position x,y
  */
