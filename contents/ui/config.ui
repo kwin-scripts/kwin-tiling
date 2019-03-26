@@ -75,16 +75,26 @@
         </widget>
        </item>
        <item row="6" column="0">
+        <widget class="QCheckBox" name="kcfg_removeEmptyDesktops">
+         <property name="text">
+          <string>Remove empty desktops</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Placement method</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
+       <item row="9" column="0">
         <widget class="QLineEdit" name="kcfg_layouts"/>
        </item>
-       <item row="7" column="0">
+       <item row="8" column="0">
         <widget class="QComboBox" name="kcfg_placement">
          <item>
           <property name="text">

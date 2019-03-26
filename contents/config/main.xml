@@ -65,5 +65,9 @@
 		  <label>Where new tiles should open</label>
 		  <default>0</default>
 		</entry>
+		<entry name="removeEmptyDesktops" type="bool">
+		  <label>Remove empty desktops</label>
+		  <default>false</default>
+		</entry>
     </group>
 </kcfg>
