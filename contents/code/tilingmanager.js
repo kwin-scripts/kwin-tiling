@@ -100,6 +100,8 @@ function TilingManager(timer) {
      */
     this.layoutChanged = new Signal();
 
+    this._compacting = false;
+
     // Read layout configuration
     // Format: desktop:layoutname[,...]
     // Negative desktop number deactivates tiling
@@ -185,6 +187,11 @@ function TilingManager(timer) {
     });
     workspace.currentDesktopChanged.connect(function() {
         self._onCurrentDesktopChanged();
+    });
+    workspace.clientRemoved.connect(function(client) {
+        if (KWin.readConfig("removeEmptyDesktops", false)) {
+            self._removeEmptyDesktops();
+        }
     });
     // Register keyboard shortcuts
     // KWin versions before 5.8.3 do not have this and will crash if we try to call it
@@ -833,7 +840,7 @@ TilingManager.prototype._onTileScreenChanged = function(tile, oldScreen, newScre
 
 TilingManager.prototype._onTileDesktopChanged = function(tile, oldDesktop, newDesktop) {
         try {
-            if (oldDesktop == newDesktop) {
+            if (oldDesktop == newDesktop || this._compacting) {
                 return;
             }
             var client = tile.clients[0];
@@ -1021,4 +1028,59 @@ TilingManager.prototype._isDesktopEmpty = function(desktop) {
         }
     }
     return empty;
+};
+
+TilingManager.prototype._compactDesktops = function() {
+    this._compacting = true;
+    for (var destination = 1; destination < this.desktopCount; destination++) {
+        if (!this._isDesktopEmpty(destination)) {
+            continue;
+        }
+
+        for (var source = destination + 1; source <= this.desktopCount; source++) {
+            if (this._isDesktopEmpty(source)) {
+                continue;
+            }
+            console.log("moving from to ", source, destination);
+            var i;
+            for (i = 0; i < this.layouts[destination - 1].length; i++) {
+                this.layouts[source - 1][i].deactivate();
+                this.layouts[destination - 1][i].deactivate();
+                var oldLayout = this.layouts[destination - 1][i];
+                this.layouts[destination - 1][i] = this.layouts[source - 1][i];
+                this.layouts[source - 1][i] = oldLayout;
+                this.layouts[destination - 1][i].desktop = destination;
+                this.layouts[source - 1][i].desktop = source;
+            }
+            var clients = workspace.clientList();
+            for (var i = 0; i < clients.length; i++) {
+                var cl = clients[i];
+                if (!cl.onAllDesktops && cl.desktop == source) {
+                    cl.desktop = destination;
+                }
+            }
+            for (i = 0; i < this.layouts[destination - 1].length; i++) {
+                this.layouts[source - 1][i].activate();
+                this.layouts[destination - 1][i].activate();
+            }
+            break;
+        }
+    }
+    this._compacting = false;
+}
+
+TilingManager.prototype._removeEmptyDesktops = function() {
+    var clients = workspace.clientList();
+
+    this._compactDesktops();
+
+    // Desktop 0 is a special desktop for unmapped clients
+    // Desktop 1 is not a good candidate for removal
+    for (var i = this.desktopCount; i > 1; i--) {
+        if (this._isDesktopEmpty(i)) {
+            workspace.desktops -= 1;
+        } else {
+            break;
+        }
+    }
 };
