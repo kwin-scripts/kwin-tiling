@@ -151,6 +151,7 @@ TileList.prototype.connectSignals = function(client) {
         var tile = getTile(client);
         if (tile != null) {
             timer.tile = tile;
+            timer.client = client;
             timer.start();
         }
     });
@@ -507,6 +508,6 @@ TileList.prototype.trackFocusChanges = function(focusedClient) {
 
 TileList.prototype.updateGeometry = function() {
     if (this.timer.tile) {
-        this.timer.tile.onClientGeometryChanged();
+        this.timer.tile.onClientGeometryChanged(this.timer.client);
     }
 }
