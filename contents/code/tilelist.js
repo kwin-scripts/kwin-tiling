@@ -147,7 +147,13 @@ TileList.prototype.connectSignals = function(client) {
     client.geometryShapeChanged.connect(function() {
         var tile = getTile(client);
         if (tile != null) {
-            tile.onClientGeometryChanged(client);
+            var timer = new QTimer();
+            timer.interval = 1;
+            timer.singleShot = true;
+            timer.timeout.connect(this, function(){
+                tile.onClientGeometryChanged(client);
+            });
+            timer.start();
         }
     });
     // Do not use clientRemoved as it is called after FFM selects a new active client
