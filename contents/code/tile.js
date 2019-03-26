@@ -111,6 +111,7 @@ function Tile(firstClient, tileIndex) {
         if (KWin.readConfig("noBorder", false)) {
             firstClient.noBorder = true;
         }
+        this.maximized = false;
         this.clients.push(firstClient);
         this.syncCustomProperties();
     } catch(err) {
@@ -196,6 +197,9 @@ Tile.prototype.setClientGeometry = function(client) {
             return;
         }
         if (client.fullScreen) {
+            return;
+        }
+        if (this.maximized) {
             return;
         }
         if (!this.hasClient(client)) {
@@ -419,7 +423,9 @@ Tile.prototype.onClientMaximizedStateChanged = function(client, h, v) {
             client.tiling_resize = true;
             client.geometry = workspace.clientArea(KWin.MaximizeFullArea, this._currentScreen, this._currentDesktop);
             client.tiling_resize = false;
+            this.maximized = true;
         } else {
+            this.maximized = false;
             client.keepBelow = true;
         }
     } catch(err) {
