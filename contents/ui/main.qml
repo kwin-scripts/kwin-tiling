@@ -59,6 +59,7 @@ Item {
         interval: 1
         onTriggered: tiling.tiles.updateGeometry();
         property variant tile
+        property variant client
     }
 
 }
