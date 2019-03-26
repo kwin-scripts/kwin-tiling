@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * done here as well.
  * @class
  */
-function TileList() {
+function TileList(timer) {
     /**
      * List of currently existing tiles.
      */
@@ -65,6 +65,9 @@ function TileList() {
         "wine",
         "yakuake",
     ]
+
+    // we use this timer to update client geometry asynchronously
+    this.timer = timer;
 
     // We connect to the global workspace callbacks which are triggered when
     // clients are added in order to be able to keep track of the
@@ -147,7 +150,8 @@ TileList.prototype.connectSignals = function(client) {
     client.geometryShapeChanged.connect(function() {
         var tile = getTile(client);
         if (tile != null) {
-            tile.onClientGeometryChanged(client);
+            timer.tile = tile;
+            timer.start();
         }
     });
     // Do not use clientRemoved as it is called after FFM selects a new active client
@@ -500,3 +504,9 @@ TileList.prototype.trackFocusChanges = function(focusedClient) {
         print(err, "in TileList.trackFocusChanges");
     }
 };
+
+TileList.prototype.updateGeometry = function() {
+    if (this.timer.tile) {
+        this.timer.tile.onClientGeometryChanged();
+    }
+}

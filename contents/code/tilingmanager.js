@@ -37,7 +37,7 @@ Qt.include("util.js");
  * and implements all keyboard shortcuts.
  * @class
  */
-function TilingManager() {
+function TilingManager(timer) {
     /**
      * Default layout type which is selected for new layouts.
      */
@@ -77,7 +77,7 @@ function TilingManager() {
     /**
      * List of all tiles in the system.
      */
-    this.tiles = new TileList();
+    this.tiles = new TileList(timer);
     /**
      * Current screen, needed to be able to track screen changes.
      */

@@ -30,7 +30,7 @@ Item {
     Component.onCompleted: {
         console.log("Starting tiling");
         // Initialize tiling
-        tiling = new Tiling.TilingManager();
+        tiling = new Tiling.TilingManager(timer);
         // Attach resized here so we can give it a timer (since QTimer isn't exported to QML)
         /* tiling.resized.connect(function() { */
         /*     timer.start(); */
@@ -51,6 +51,14 @@ Item {
 
     Loader {
         id: layoutOsdLoader
+    }
+
+    Timer {
+        id: timer
+        repeat: false
+        interval: 1
+        onTriggered: tiling.tiles.updateGeometry();
+        property variant tile
     }
 
 }
