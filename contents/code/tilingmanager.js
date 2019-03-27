@@ -709,8 +709,7 @@ TilingManager.prototype._onTileRemoved = function(tile) {
 
 TilingManager.prototype._onNumberDesktopsChanged = function() {
     var self = this;
-    var newDesktopCount =
-        workspace.desktopGridWidth * workspace.desktopGridHeight;
+    var newDesktopCount = workspace.desktops;
     var onAllDesktops = this.tiles.tiles.filter(function(tile) {
         return tile.desktop == -1;
     });
