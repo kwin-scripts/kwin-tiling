@@ -145,11 +145,16 @@ TileList.prototype.connectSignals = function(client) {
     // (from a cursory reading of the KWin source code)
     // so use geometryShapeChanged
     client.geometryShapeChanged.connect(function() {
-        var tile = getTile(client);
-        if (tile != null) {
-            timer.tile = tile;
-            timer.client = client;
-            timer.start();
+        // Only fire this if _we_ aren't the ones resizing.
+        // Otherwise we end up in a loop.
+        // If we do resize the rectangle again, we fire tile.resizingEnded, which should be enough.
+        if (!client.tiling_resize) {
+            var tile = getTile(client);
+            if (tile != null) {
+                timer.tile = tile;
+                timer.client = client;
+                timer.start();
+            }
         }
     });
     // Do not use clientRemoved as it is called after FFM selects a new active client
