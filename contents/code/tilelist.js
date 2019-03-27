@@ -66,8 +66,9 @@ function TileList(timer) {
         "yakuake",
     ]
 
-    // we use this timer to update client geometry asynchronously
+    // we use this timer and the array to update client geometry asynchronously
     this.timer = timer;
+    this._scheduledUpdates = new Array();
 
     // We connect to the global workspace callbacks which are triggered when
     // clients are added in order to be able to keep track of the
@@ -151,9 +152,9 @@ TileList.prototype.connectSignals = function(client) {
         if (!client.tiling_resize) {
             var tile = getTile(client);
             if (tile != null) {
-                timer.tile = tile;
-                timer.client = client;
-                timer.start();
+                self.timer.stop();
+                self._scheduledUpdates.push({tile: tile, client: client});
+                self.timer.start();
             }
         }
     });
@@ -449,7 +450,9 @@ TileList.prototype.trackFocusChanges = function(focusedClient) {
 };
 
 TileList.prototype.updateGeometry = function() {
-    if (this.timer.tile) {
-        this.timer.tile.onClientGeometryChanged(this.timer.client);
+    while (this._scheduledUpdates.length > 0) {
+        this._scheduledUpdates[0].tile.onClientGeometryChanged(
+            this._scheduledUpdates[0].client);
+        this._scheduledUpdates.shift();
     }
 }
