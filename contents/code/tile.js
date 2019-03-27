@@ -202,12 +202,6 @@ Tile.prototype.setClientGeometry = function(client) {
             print("Wrong tile called");
             return;
         }
-        // Don't resize when we aren't the current desktop
-        // or on all desktops
-        if (this._currentDesktop != workspace.currentDesktop
-            && this._currentDesktop != -1) {
-            return;
-        }
         // These two should never be reached
         if (client.deleted) {
             return;
