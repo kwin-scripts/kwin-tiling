@@ -141,9 +141,6 @@ TileList.prototype.connectSignals = function(client) {
             tile.onClientGeometryChanged(client);
         }
     });
-    client.tabGroupChanged.connect(function() {
-        self._onClientTabGroupChanged(client);
-    });
     // geometryChanged fires also on maximizedStateChanged and stepUserMovedResized
     // (from a cursory reading of the KWin source code)
     // so use geometryShapeChanged
@@ -248,22 +245,7 @@ TileList.prototype.addClient = function(client) {
         return;
     }
 
-    // If the client isn't the current tab, it's added to a tabgroup
-    // (because of autogrouping)
-    // HACK: Find it by comparing rectangles (yes, really)
-    if (client.isCurrentTab == false) {
-        for (var i = 0; i < this.tiles.length; i++) {
-            if (util.compareRect(this.tiles[i].rectangle, client.geometry) == true) {
-                if (this.tiles[i]._currentDesktop == util.getClientDesktop(client)
-                    && this.tiles[i]._currentScreen  == client.screen) {
-                    this.tiles[i].addClient(client);
-                    break;
-                }
-            }
-        }
-    } else {
-        this._addTile(client);
-    }
+    this._addTile(client);
     client.tiling_floating = false;
 };
 
@@ -319,51 +301,6 @@ TileList.prototype.removeClient = function(client) {
                 tile.removeClient(client);
             }
         }
-};
-
-TileList.prototype._onClientTabGroupChanged = function(client) {
-    try {
-        // FIXME: This is a huge kludge as kwin doesn't actually export the tabgroup
-        // For starters, this only works because we ignore geometryChanged for clients that aren't the current tab
-        var index = this._indexWithClient(client);
-        if (client.isCurrentTab == false) {
-            var tabGroup = null;
-            for (var i = 0; i < this.tiles.length; i++) {
-                // We don't set geometry if the client isn't currentTab, so find its tabgroup by place
-                var rect  = this.tiles[i].rectangle;
-                if (util.compareRect(rect, client.geometry) == true) {
-                    // TODO: Is this necessary or is desktopChanged always called before tabgroupchanged?
-                    if (this.tiles[i]._currentDesktop == util.getClientDesktop(client)) {
-                        tabGroup = this.tiles[i];
-                        break;
-                    }
-                }
-            }
-            if (index > -1) {
-                this.tiles[index].removeClient(client);
-                if (this.tiles[index].clients.length < 1) {
-                    this._removeTile(index);
-                }
-            }
-            if (tabGroup != this.tiles[index]) {
-                tabGroup.addClient(client);
-            } else {
-                tabGroup.removeClient(client);
-                if (tabGroup.clients.length < 1) {
-                    this._removeTile(this.tiles.indexOf(tabGroup));
-                }
-            }
-        } else {
-            if (index > -1) {
-                if (this.tiles[index].clients.length > 1) {
-                    this.tiles[index].removeClient(client);
-                    this.addClient(client);
-                }
-            }
-        }
-    } catch(err) {
-        print(err, "in TileList._onClientTabGroupChanged");
-    }
 };
 
 TileList.prototype._addTile = function(client) {

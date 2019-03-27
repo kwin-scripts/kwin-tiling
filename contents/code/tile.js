@@ -154,9 +154,7 @@ Tile.prototype.getActiveClient = function() {
     try {
         var active = null;
         this.clients.forEach(function(client) {
-            if (client.isCurrentTab) {
-                active = client;
-            }
+            active = client;
         });
         return active;
     } catch(err) {
@@ -176,8 +174,6 @@ Tile.prototype.syncCustomProperties = function() {
         }
         if (client) {
             client.tiling_tileIndex = this.tileIndex;
-            client.syncTabGroupFor("tiling_tileIndex", true);
-            client.syncTabGroupFor("tiling_floating", true);
         }
     } catch(err) {
         print(err, "in Tile.syncCustomProperties");
@@ -214,9 +210,6 @@ Tile.prototype.setClientGeometry = function(client) {
         }
         // These two should never be reached
         if (client.deleted) {
-            return;
-        }
-        if (!client.isCurrentTab) {
             return;
         }
         if (client.move
@@ -334,9 +327,6 @@ Tile.prototype.setClientGeometry = function(client) {
 
 Tile.prototype.onClientDesktopChanged = function(client) {
     try {
-        if (!client.isCurrentTab) {
-            return;
-        }
         var oldDesktop = this._currentDesktop;
         this._currentDesktop = util.getClientDesktop(client);
         this.desktopChanged.emit(oldDesktop, this._currentDesktop);
