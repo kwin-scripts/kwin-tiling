@@ -1075,6 +1075,16 @@ TilingManager.prototype._removeEmptyDesktops = function() {
     for (var i = this.desktopCount; i > 1; i--) {
         if (this._isDesktopEmpty(i)) {
             workspace.desktops -= 1;
+            if (!workspace.activeClient) {
+                var master = this._getMaster(this._currentScreen, this._currentDesktop);
+                if (master) {
+                    var client = master.getActiveClient();
+                    if (!client) {
+                        client = master.clients[0];
+                    }
+                    workspace.activeClient = client;
+                }
+            }
         } else {
             break;
         }
