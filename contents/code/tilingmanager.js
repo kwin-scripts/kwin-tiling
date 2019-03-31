@@ -785,14 +785,18 @@ TilingManager.prototype._onScreenResized = function(screen) {
 };
 
 TilingManager.prototype._onTileScreenChanged = function(tile, oldScreen, newScreen) {
+    if (oldScreen == newScreen) {
+        return;
+    }
     // If a tile is moved by the user, screen changes are handled in the move
     // callbacks below
     if (this._moving) {
         return;
     }
     // Use tile desktop for the onAllDesktops case
-    var oldLayouts = this._getLayouts(tile.desktop, oldScreen);
-    var newLayouts = this._getLayouts(tile.desktop, newScreen);
+    var desktop = tile.getDesktop();
+    var oldLayouts = this._getLayouts(desktop, oldScreen);
+    var newLayouts = this._getLayouts(desktop, newScreen);
     this._changeTileLayouts(tile, oldLayouts, newLayouts);
     };
 
