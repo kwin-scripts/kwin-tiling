@@ -187,6 +187,12 @@ TileList.prototype.connectSignals = function(client) {
             tile.onClientDesktopChanged(client);
         }
     });
+    client.screenChanged.connect(function() {
+        var tile = getTile(client);
+        if (tile != null) {
+            tile.onClientScreenChanged(client);
+        }
+    });
     client.clientMinimized.connect(function(client) {
         try {
             self.untileClient(client);

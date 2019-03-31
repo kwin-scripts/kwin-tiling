@@ -329,6 +329,16 @@ Tile.prototype.onClientDesktopChanged = function(client) {
     }
 };
 
+Tile.prototype.onClientScreenChanged = function(client) {
+    try {
+        var oldScreen = this._currentScreen;
+        this._currentScreen = client.screen;
+        this.screenChanged.emit(oldScreen, this._currentScreen);
+    } catch(err) {
+        print(err, "in Tile.onClientScreenChanged");
+    }
+};
+
 Tile.prototype.onClientStartUserMovedResized = function(client) {
     // Let client stay above the other tilers so the user sees the move
     client.keepBelow = false;
@@ -421,3 +431,6 @@ Tile.prototype.hasClient = function(client) {
     return (this.clients.indexOf(client) > -1);
 };
 
+Tile.prototype.getDesktop = function() {
+    return this._currentDesktop;
+}
