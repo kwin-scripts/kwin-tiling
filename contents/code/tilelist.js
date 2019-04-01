@@ -216,6 +216,24 @@ TileList.prototype.connectSignals = function(client) {
     });
     client.activeChanged.connect(function() {
         try {
+            // Make sure the newly active client is not covered by
+            // a maximized one.
+            if (client.setMaximize != null && client.active == true) {
+                var screen = client.screen;
+                var desktop = client.desktop;
+                self.tiles.forEach(function(t) {
+                    var tileDesktop = t.getDesktop();
+                    if (t.maximized == true && t.getScreen() == screen &&
+                       (tileDesktop == desktop || tileDesktop == -1)) {
+                            for (var i = 0; i < t.clients.length; i++) {
+                                if (t.clients[i] === client) {
+                                    continue;
+                                }
+                                t.clients[i].setMaximize(false, false);
+                            }
+                    }
+                });
+            }
             self.trackFocusChanges();
             if (client.active == true) {
                 self.activeClientChanged.emit(client);
@@ -265,6 +283,25 @@ TileList.prototype.addClient = function(client) {
        || client.minimized) {
         client.keepBelow = false;
         return;
+    }
+
+    if (client.setMaximize != null) {
+        // Unmaximize the new client.
+        client.setMaximize(false, false);
+
+        // Unmaximize the active client if there is already maximized one
+        // on the same desktop.
+        var screen = client.screen;
+        var desktop = client.desktop;
+        this.tiles.forEach(function(t) {
+            var tileDesktop = t.getDesktop();
+            if (t.maximized == true && t.getScreen() == screen &&
+               (tileDesktop == desktop || tileDesktop == -1)) {
+                    for (var i = 0; i < t.clients.length; i++) {
+                        t.clients[i].setMaximize(false, false);
+                    }
+            }
+        });
     }
 
     this._addTile(client);
