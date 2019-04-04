@@ -152,6 +152,11 @@ function TilingManager(timer) {
         self._onTileRemoved(tile);
     });
 
+    // We use this to track current screen
+    this.tiles.activeClientChanged.connect(function(client) {
+        self._currentScreen = client.screen;
+    });
+
     var existingClients = workspace.clientList();
     for (var i=0; i<existingClients.length; i++) {
         self.tiles.addClient(existingClients[i]);

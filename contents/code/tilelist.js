@@ -38,6 +38,10 @@ function TileList(timer) {
      * Signal which is triggered whenever a tile is removed from the list.
      */
     this.tileRemoved = new Signal();
+    /**
+     * Signal which is triggered whenever a new client is activated.
+     */
+    this.activeClientChanged = new Signal();
 
     /**
      * Stores the current and last focused windows.
@@ -192,6 +196,9 @@ TileList.prototype.connectSignals = function(client) {
         if (tile != null) {
             tile.onClientScreenChanged(client);
         }
+        if (client.active == true) {
+            self.activeClientChanged.emit(client);
+        }
     });
     client.clientMinimized.connect(function(client) {
         try {
@@ -210,6 +217,9 @@ TileList.prototype.connectSignals = function(client) {
     client.activeChanged.connect(function() {
         try {
             self.trackFocusChanges();
+            if (client.active == true) {
+                self.activeClientChanged.emit(client);
+            }
         } catch(err) {
             print(err, "in activeChanged");
         }
