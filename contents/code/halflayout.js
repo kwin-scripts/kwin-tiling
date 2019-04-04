@@ -201,7 +201,7 @@ HalfLayout.prototype.increaseMaster = function() {
             var rightEdge = util.getR(rightEdgeRect);
         }
         if (this.masterCount < this.tiles.length) {
-            var newWidth = (rightEdge) / (oldC + 1);
+            var newWidth = (rightEdge - this.screenRectangle.x) / (oldC + 1);
         } else if (this.masterCount == this.tiles.length) {
             var newWidth = (this.screenRectangle.width) / (this.masterCount);
         } else {
@@ -225,7 +225,7 @@ HalfLayout.prototype.increaseMaster = function() {
     }
     var newHeight = (this.screenRectangle.y + this.screenRectangle.height) / (this.tiles.length - (this.master + this.masterCount));
     for (var i = this.master + this.masterCount; i < this.tiles.length; i++) {
-        this.tiles[i].rectangle.x = this.getMasterWidth();
+        this.tiles[i].rectangle.x = this.screenRectangle.x + this.getMasterWidth();
         this.tiles[i].rectangle.width = this.screenRectangle.width - this.getMasterWidth();
         this.tiles[i].rectangle.height = newHeight;
         this.tiles[i].rectangle.y = this.screenRectangle.y + (i - (this.master + this.masterCount)) * newHeight;
