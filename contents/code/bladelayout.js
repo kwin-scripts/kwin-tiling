@@ -52,20 +52,19 @@ BladeLayout.prototype.addTile = function() {
             return;
         } else {
             // Divide the screen width evenly between full-height tiles
-            var lastRect = this.tiles[0].rectangle;
-            var newRect = Qt.rect(this.screenRectangle.x,
-                                  lastRect.y,
-                                  (this.screenRectangle.width + this.screenRectangle.x) / (this.tiles.length + 1), 
+            var tileWidth = Math.floor(this.screenRectangle.width / (this.tiles.length + 1));
+            var newRect = Qt.rect(this.screenRectangle.x + this.tiles.length * tileWidth,
+                                  this.screenRectangle.y,
+                                  tileWidth, 
                                   this.screenRectangle.height);
             // FIXME: Try to keep ratio
             for (var i = 0; i < this.tiles.length; i++) { 
                 var rect = this.tiles[i].rectangle;
-                rect.x = newRect.x + newRect.width * i;
-                rect.width = newRect.width;
+                rect.x = this.screenRectangle.x + tileWidth * i;
+                rect.width = tileWidth;
                 this.tiles[i].rectangle = rect;
             }
             // Adjust tile's width for rounding errors
-            newRect.x = newRect.x + newRect.width * this.tiles.length;
             newRect.width = (this.screenRectangle.width + this.screenRectangle.x) - newRect.x;
             // TODO: Move this before setting ratio to simplify
             this._createTile(newRect);
