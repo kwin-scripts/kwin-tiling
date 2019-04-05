@@ -249,7 +249,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING: Toggle Border for all",
                               "Toggle Border for all",
-                              "Meta+Shift+U",
+                              "",
                               function() {
                                   self.tiles.toggleNoBorder();
                               });
@@ -287,7 +287,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING: Tile now",
                               "Tile now",
-                              "Meta+t",
+                              "",
                               function() {
                                   var currentScreen = workspace.activeScreen;
                                   var currentDesktop = workspace.currentDesktop - 1;
@@ -447,7 +447,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING: Focus next tile",
                               "Focus next tile",
-                              "Meta+]",
+                              "",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
@@ -472,7 +472,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING: Focus previous tile",
                               "Focus previous tile",
-                              "Meta+[",
+                              "",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
@@ -497,7 +497,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING: Swap with next tile",
                               "Swap with next tile",
-                              "Meta+Shift+]",
+                              "",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
@@ -522,7 +522,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING: Swap with previous tile",
                               "Swap with previous tile",
-                              "Meta+Shift+[",
+                              "",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
@@ -547,7 +547,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING-I3: Set Wrap Horizontal Mode",
                               "Set Wrap Horizontal Mode",
-                              "Meta+B",
+                              "",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
@@ -561,7 +561,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING-I3: Set Wrap Vertical Mode",
                               "Set Wrap Vertical Mode",
-                              "Meta+V",
+                              "",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
@@ -575,7 +575,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING-I3: Set Normal Mode",
                               "Set Normal Mode",
-                              "Meta+N",
+                              "",
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
