@@ -204,7 +204,7 @@ function TilingManager(timer) {
     if (KWin.registerShortcut) {
         KWin.registerShortcut("TILING: Next Tiling Layout",
                               "Next Tiling Layout",
-                              "Meta+PgDown",
+                              "Meta+Shift+PgDown",
                               function() {
                                   var currentLayout = self._getCurrentLayoutType();
                                   var nextIndex = (currentLayout.index + 1) % self.availableLayouts.length;
@@ -215,7 +215,7 @@ function TilingManager(timer) {
                               });
         KWin.registerShortcut("TILING: Previous Tiling Layout",
                               "Previous Tiling Layout",
-                              "Meta+PgUp",
+                              "Meta+Shift+PgUp",
                               function() {
                                   var currentLayout = self._getCurrentLayoutType();
                                   var nextIndex = currentLayout.index - 1;
