@@ -299,15 +299,15 @@ function TilingManager(timer) {
                               "Meta+Shift+M",
                               function() {
                                   try {
-                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
-                                      if (layout != null) {
-                                          var client = workspace.activeClient;
-                                          if (client != null) {
-                                              var tile = layout.getTile(client.x, client.y);
+                                      var client = workspace.activeClient;
+                                      if (client != null) {
+                                          var tile = self.tiles.getTile(client);
+                                          if (tile != null) {
+                                              var layout = self.layouts[tile.getDesktop() - 1][tile.getScreen()];
+                                              if (layout != null) {
+                                                  layout.swapTiles(tile, layout.tiles[0]);
+                                              }
                                           }
-                                      }
-                                      if (tile != null) {
-                                          layout.swapTiles(tile, layout.tiles[0]);
                                       }
                                   } catch(err) {
                                       print(err, "in swap-window-with-master");
