@@ -961,6 +961,9 @@ TilingManager.prototype._changeTileLayouts = function(tile, oldLayouts, newLayou
             if (newLayouts != null) {
                 var self = this;
                 newLayouts.forEach(function(layout) {
+                    layout.tiles.forEach(function(t) {
+                        t.unmaximize();
+                    });
                     layout.addTile(tile,
                                    self.tiles.focusHistory.previous);
                 });

@@ -112,6 +112,7 @@ function Tile(firstClient, tileIndex) {
             firstClient.noBorder = true;
         }
         this.maximized = false;
+        this._canSetMaximize = (firstClient.setMaximize != null);
         this.clients.push(firstClient);
         this.syncCustomProperties();
     } catch(err) {
@@ -437,4 +438,12 @@ Tile.prototype.getDesktop = function() {
 
 Tile.prototype.getScreen = function() {
     return this._currentScreen;
+}
+
+Tile.prototype.unmaximize = function() {
+    if (this._canSetMaximize == true && this.maximized == true) {
+        this.clients.forEach(function(c) {
+            c.setMaximize(false, false);
+        });
+    }
 }
