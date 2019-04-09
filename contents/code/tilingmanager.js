@@ -455,7 +455,6 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           }
                                       }
                                       if (tile != null) {
-                                          var maximized = tile.maximized;
                                           var index1 = layout.tiles.indexOf(tile);
                                           if (index1 == layout.tiles.length-1) {
                                               var index2 = 0;
@@ -464,10 +463,6 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           }
                                           var activateClient = layout.tiles[index2].clients[0];
                                           workspace.activeClient = activateClient;
-                                          if (maximized == true && activateClient != null &&
-                                              activateClient.setMaximize != null) {
-                                              activateClient.setMaximize(true, true);
-                                          }
                                       }
                                   } catch(err) {
                                       print(err, "in focus-next-tile");
@@ -486,7 +481,6 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           }
                                       }
                                       if (tile != null) {
-                                          var maximized = tile.maximized;
                                           var index1 = layout.tiles.indexOf(tile);
                                           if (index1 == 0) {
                                               var index2 = layout.tiles.length-1;
@@ -495,10 +489,6 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           }
                                           var activateClient = layout.tiles[index2].clients[0];
                                           workspace.activeClient = activateClient;
-                                          if (maximized == true && activateClient != null &&
-                                              activateClient.setMaximize != null) {
-                                              activateClient.setMaximize(true, true);
-                                          }
                                       }
                                   } catch(err) {
                                       print(err, "in focus-previous-tile");

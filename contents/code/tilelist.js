@@ -231,6 +231,7 @@ TileList.prototype.connectSignals = function(client) {
                                 }
                                 t.clients[i].setMaximize(false, false);
                             }
+                            client.setMaximize(true, true);
                     }
                 });
             }
