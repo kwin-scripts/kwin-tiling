@@ -618,6 +618,16 @@ function TilingManager(timer) {
                                       print(err, "in move-window-to-new-desktop");
                                   }
                               });
+        KWin.registerShortcut("TILING: Dump Clients",
+                              "Dump Clients",
+                              "Meta+Shift+Escape",
+                              function() {
+                                  try {
+                                      self._dumpClients();
+                                  } catch(err) {
+                                      print(err, "in dump-clients");
+                                  }
+                              });
     }
     // registerUserActionsMenu(function(client) {
     //     return {
@@ -1099,3 +1109,18 @@ TilingManager.prototype._removeEmptyDesktops = function() {
         }
     }
 };
+
+TilingManager.prototype._dumpClients = function() {
+    for (var i = 0; i < this.layouts.length; i++) {
+        print("Desktop", i);
+        for(var j = 0; j < this.layouts[i].length; j++) {
+            print("  Screen", j);
+            for (var k = 0; k < this.layouts[i][j].tiles.length; k++) {
+                print("    Tile", k);
+                this.layouts[i][j].tiles[k].clients.forEach(function(c) {
+                    print("      ", c.resourceClass.toString(), '- "' + c.caption + '"');
+                });
+            }
+        }
+    }
+}
