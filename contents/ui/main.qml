@@ -45,7 +45,7 @@ Item {
 
     Timer {
         id: timerResize
-        interval: 100
+        interval: 500
         running: false
         repeat: false
         property variant screen
