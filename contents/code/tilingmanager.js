@@ -1111,16 +1111,21 @@ TilingManager.prototype._removeEmptyDesktops = function() {
 };
 
 TilingManager.prototype._dumpClients = function() {
+    // We build up the dump string to only call `print()` once,
+    // to make it clear that this is one call.
+    // Especiallly in the journal, this would have each line prefixed with time/date, pid and such.
+    var outp = "";
     for (var i = 0; i < this.layouts.length; i++) {
-        print("Desktop", i);
+        outp += "Desktop " + i + "\n";
         for(var j = 0; j < this.layouts[i].length; j++) {
-            print("  Screen", j);
+            outp += " Screen " + j + "\n";
             for (var k = 0; k < this.layouts[i][j].tiles.length; k++) {
-                print("    Tile", k);
+                outp += "  Tile " + k + "\n";
                 this.layouts[i][j].tiles[k].clients.forEach(function(c) {
-                    print("      ", c.resourceClass.toString(), '- "' + c.caption + '"');
+                    outp += "    " + c.resourceClass.toString() + '- "' + c.caption + '"\n';
                 });
             }
         }
     }
+    print(outp);
 }
