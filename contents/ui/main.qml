@@ -30,11 +30,7 @@ Item {
     Component.onCompleted: {
         console.log("Starting tiling");
         // Initialize tiling
-        tiling = new Tiling.TilingManager(timer);
-        // Attach resized here so we can give it a timer (since QTimer isn't exported to QML)
-        /* tiling.resized.connect(function() { */
-        /*     timer.start(); */
-        /* }); */
+        tiling = new Tiling.TilingManager(timerResize, timerGeometryChanged);
         tiling.layoutChanged.connect(function(layout) {
             if (KWin.readConfig("showLayoutOsd", true) && !layoutOsdLoader.item) {
                 layoutOsdLoader.setSource("layoutosd.qml", {"tiling": tiling});
@@ -43,18 +39,21 @@ Item {
         });
     }
 
-    /* Timer { */
-    /*     id: timer */
-    /*     interval: 1000; running: false; repeat: false */
-    /*     onTriggered: tiling.resize(); */
-    /* } */
-
     Loader {
         id: layoutOsdLoader
     }
 
     Timer {
-        id: timer
+        id: timerResize
+        interval: 100
+        running: false
+        repeat: false
+        property variant screen
+        onTriggered: tiling.resize();
+    }
+
+    Timer {
+        id: timerGeometryChanged
         repeat: false
         interval: 1
         onTriggered: tiling.tiles.updateGeometry();

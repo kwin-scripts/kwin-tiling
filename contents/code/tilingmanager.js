@@ -37,7 +37,7 @@ Qt.include("util.js");
  * and implements all keyboard shortcuts.
  * @class
  */
-function TilingManager(timer) {
+function TilingManager(timerResize, timerGeometryChanged) {
     /**
      * Default layout type which is selected for new layouts.
      */
@@ -77,7 +77,7 @@ function TilingManager(timer) {
     /**
      * List of all tiles in the system.
      */
-    this.tiles = new TileList(timer);
+    this.tiles = new TileList(timerGeometryChanged);
     /**
      * Current screen, needed to be able to track screen changes.
      */
@@ -101,6 +101,8 @@ function TilingManager(timer) {
     this.layoutChanged = new Signal();
 
     this._compacting = false;
+
+    this._timerResize = timerResize;
 
     // Read layout configuration
     // Format: desktop:layoutname[,...]
@@ -181,14 +183,9 @@ function TilingManager(timer) {
         self._onNumberScreensChanged();
     });
 
-    // HACK: Signal to send to QML so we can get a timer
-    this.resized = new Signal();
     workspace.screenResized.connect(function(screen) {
-        try {
-            self.resized.emit();
-        } catch(err) {
-            print(err);
-        }
+        self._timerResize.screen = screen;
+        self._timerResize.start();
     });
     workspace.currentDesktopChanged.connect(function() {
         self._onCurrentDesktopChanged();
@@ -645,7 +642,7 @@ function TilingManager(timer) {
 };
 
 TilingManager.prototype.resize = function() {
-    this._onScreenResized();
+    this._onScreenResized(this._timerResize.screen);
 };
 
 TilingManager.prototype._createDefaultLayouts = function(desktop) {
