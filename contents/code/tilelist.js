@@ -357,6 +357,9 @@ TileList.prototype._removeTile = function(tileIndex) {
  * Application workarounds should be put here
  */
 TileList.prototype._isIgnored = function(client) {
+    if (client.tiling_floating == true) {
+        return true;
+    }
     // TODO: Add regex and more options (by title/caption, override a floater, maybe even a complete scripting language / code)
     // A QLineEdit will backslash-escape ",", so we'll need to split on `\\,`.
     // We trim whitespace around commas, and we lowercase it because kwin lowercases the resourceClass.
