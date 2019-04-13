@@ -38,6 +38,7 @@ SpiralLayout.prototype.name = "Spiral";
 //SpiralLayout.image = null;
 
 SpiralLayout.prototype.addTile = function() {
+    this._applyGravity();
     if (this.tiles.length == 0) {
         // The first tile fills the whole screen
         var rect = Qt.rect(this.screenRectangle.x,
@@ -80,6 +81,7 @@ SpiralLayout.prototype.addTile = function() {
         this.tiles[this.tiles.length - 1].rectangle = lastRect;
         this._createTile(newRect);
     }
+    this._unapplyGravity();
     //var lastRect = this.tiles[this.tiles.length - 1].rectangle;
 };
 

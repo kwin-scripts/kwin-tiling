@@ -45,20 +45,22 @@ BladeLayout.prototype.name = "Blade";
 
 BladeLayout.prototype.addTile = function() {
     try {
+        this._applyGravity();
         if (this.tiles.length == 0) {
             // The first tile fills the whole screen
             var rect = util.copyRect(this.screenRectangle);
             this._createTile(rect);
+            this._unapplyGravity();
             return;
         } else {
             // Divide the screen width evenly between full-height tiles
             var tileWidth = Math.floor(this.screenRectangle.width / (this.tiles.length + 1));
             var newRect = Qt.rect(this.screenRectangle.x + this.tiles.length * tileWidth,
                                   this.screenRectangle.y,
-                                  tileWidth, 
+                                  tileWidth,
                                   this.screenRectangle.height);
             // FIXME: Try to keep ratio
-            for (var i = 0; i < this.tiles.length; i++) { 
+            for (var i = 0; i < this.tiles.length; i++) {
                 var rect = this.tiles[i].rectangle;
                 rect.x = this.screenRectangle.x + tileWidth * i;
                 rect.width = tileWidth;
@@ -68,6 +70,7 @@ BladeLayout.prototype.addTile = function() {
             newRect.width = (this.screenRectangle.width + this.screenRectangle.x) - newRect.x;
             // TODO: Move this before setting ratio to simplify
             this._createTile(newRect);
+            this._unapplyGravity();
         }
     } catch(err) {
         print(err, "in BladeLayout.addTile");
@@ -76,6 +79,7 @@ BladeLayout.prototype.addTile = function() {
 
 BladeLayout.prototype.removeTile = function(tileIndex) {
     try {
+        this._applyGravity();
         // Remove the array entry
         var oldrect = this.tiles[tileIndex].rectangle;
         this.tiles.splice(tileIndex, 1);
@@ -100,6 +104,7 @@ BladeLayout.prototype.removeTile = function(tileIndex) {
             // Adjust rightmost tile's height for rounding errors
             this.tiles[this.tiles.length - 1].rectangle.width = (this.screenRectangle.width + this.screenRectangle.x) - this.tiles[this.tiles.length - 1].rectangle.x;
         }
+        this._unapplyGravity();
     } catch(err) {
         print(err, "in BladeLayout.removeTile");
     }

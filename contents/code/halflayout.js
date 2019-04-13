@@ -44,11 +44,13 @@ HalfLayout.prototype.name = "Half";
 
 HalfLayout.prototype.addTile = function() {
     try {
+        this._applyGravity();
         if (this.tiles.length == 0) {
             // The first tile fills the whole screen
             var rect = util.copyRect(this.screenRectangle);
             util.assertRectInScreen(rect, this.screenRectangle);
             this._createTile(rect);
+            this._unapplyGravity();
             return;
         }
         if (this.tiles.length <= this.masterCount) {
@@ -73,6 +75,7 @@ HalfLayout.prototype.addTile = function() {
                                   this.screenRectangle.height);
             util.assertRectInScreen(newRect, this.screenRectangle);
             this._createTile(newRect);
+            this._unapplyGravity();
             return;
         }
         if (this.tiles.length > this.masterCount) {
@@ -98,6 +101,7 @@ HalfLayout.prototype.addTile = function() {
             newRect.height = (this.screenRectangle.y + this.screenRectangle.height) - newRect.y;
             util.assertRectInScreen(newRect, this.screenRectangle);
             this._createTile(newRect);
+            this._unapplyGravity();
         }
     } catch(err) {
         print(err, "in HalfLayout.addTile");
@@ -132,6 +136,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
             print("Removing invalid tileindex");
             return;
         }
+        this._applyGravity();
         this.tiles.splice(tileIndex, 1);
         // Update the other tiles
         if (this.tiles.length == 1) {
@@ -184,6 +189,7 @@ HalfLayout.prototype.removeTile = function(tileIndex) {
             this.tiles[lowest].rectangle.height = (this.screenRectangle.y + this.screenRectangle.height) - this.tiles[lowest].rectangle.y;
             util.assertTrue(this.tiles[lowest].rectangle.height > 0, "Lowest rect has zero height");
         }
+        this._unapplyGravity();
     } catch(err) {
         print(err, "in HalfLayout.removeTile");
     }
@@ -195,6 +201,7 @@ HalfLayout.prototype.increaseMaster = function() {
     if (this.tiles.length == 0) {
         return;
     }
+    this._applyGravity();
     if (this.masterCount > 1) {
         if (this.tiles.length >= this.master + oldC && oldC > 0) {
             var rightEdgeRect = this.tiles[this.master + oldC - 1].rectangle;
@@ -205,6 +212,7 @@ HalfLayout.prototype.increaseMaster = function() {
         } else if (this.masterCount == this.tiles.length) {
             var newWidth = (this.screenRectangle.width) / (this.masterCount);
         } else {
+            this._unapplyGravity();
             return;
         }
         for (var i = this.master; i < Math.min(this.master + oldC,this.tiles.length); i++) {
@@ -231,6 +239,7 @@ HalfLayout.prototype.increaseMaster = function() {
         this.tiles[i].rectangle.y = this.screenRectangle.y + (i - (this.master + this.masterCount)) * newHeight;
     }
     this.firstWidth = this.getMasterWidth();
+    this._unapplyGravity();
 };
 
 HalfLayout.prototype.decrementMaster = function() {
@@ -239,6 +248,7 @@ HalfLayout.prototype.decrementMaster = function() {
     if (this.masterCount == 0) {
         return;
     }
+    this._applyGravity();
     // Explicitly allow usage without master - it's effectively a different layout
     if (this.masterCount == 1) {
         var oldMWidth = 0;
@@ -279,4 +289,5 @@ HalfLayout.prototype.decrementMaster = function() {
     } else {
         this.firstWidth = this.screenRectangle.width / 2;
     }
+    this._unapplyGravity();
 };
