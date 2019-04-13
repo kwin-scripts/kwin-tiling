@@ -69,5 +69,9 @@
 		  <label>Remove empty desktops</label>
 		  <default>false</default>
 		</entry>
+		<entry name="autorotatePortrait" type="bool">
+		  <label>Tile vertically on portrait oriented displays</label>
+		  <default>false</default>
+		</entry>
     </group>
 </kcfg>
