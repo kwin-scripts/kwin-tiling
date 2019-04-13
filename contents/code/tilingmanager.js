@@ -625,6 +625,35 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                       print(err, "in dump-clients");
                                   }
                               });
+        KWin.registerShortcut("TILING: Cycle Rotations",
+                              "Cycle Rotations",
+                              "Meta+Shift+R",
+                              function() {
+                                  try {
+                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      if (layout != null) {
+                                          var grav = layout.layout.getGravity();
+                                          switch (grav) {
+                                              case Gravity.Bottom:
+                                                  var newGrav = Gravity.Right;
+                                                  break;
+                                              case Gravity.Right:
+                                                  var newGrav = Gravity.Top;
+                                                  break;
+                                              case Gravity.Top:
+                                                  var newGrav = Gravity.Left;
+                                                  break;
+                                              case Gravity.Left:
+                                                  var newGrav = Gravity.Bottom;
+                                                  break;
+                                          }
+                                          layout.layout.setGravity(newGrav);
+                                          layout.resetTileSizes();
+                                      }
+                                  } catch(err) {
+                                      print(err, "in cycle-rotations");
+                                  }
+                              });
     }
     // registerUserActionsMenu(function(client) {
     //     return {
