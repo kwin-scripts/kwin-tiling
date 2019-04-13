@@ -27,6 +27,23 @@ var Direction = {
     Right : 3
 };
 
+var Gravity = {
+    Bottom : 0,
+    Right : 1,
+    Top : 2,
+    Left : 3
+};
+
+/**
+ * Generic rotation matrix is [[cos(x), -sin(x)], [sin(x), cos(x)]].
+ * The following are premultiplied rotation matrices we are going to use.
+ */
+var RotationMatrix = {
+    rot90  : [[ 0,-1],[ 1, 0]],
+    rot180 : [[-1, 0],[ 0,-1]],
+    rot270 : [[ 0, 1],[-1, 0]]
+}
+
 /**
  * Base class for all tiling layouts.
  * @class
@@ -53,6 +70,11 @@ Layout.prototype.construct = function(screenRectangle) {
 };
 Layout.prototype.constructor = Layout;
 Layout.prototype.name = "Wurst";
+
+Layout.prototype._gravity = Gravity.Bottom;
+Layout.prototype._gravityApplied = false;
+Layout.prototype._gravityDX = 0;
+Layout.prototype._gravityDY = 0;
 
 Layout.prototype.setLayoutArea = function(newArea) {
     try {
@@ -198,4 +220,99 @@ Layout.prototype._createTile = function(rect) {
     } catch(err) {
         print(err, "in Layout._createTile");
     }
+};
+
+Layout.prototype.setGravity = function(grav) {
+    if(grav == this._gravity) {
+        return;
+    }
+    this._gravity = grav;
+};
+
+Layout.prototype.getGravity = function() {
+    return this._gravity;
+}
+
+Layout.prototype._rotate = function(mRot) {
+    if(this._gravityApplied == false) {
+        this.screenRectangle.x -= this._gravityDX;
+        this.screenRectangle.y -= this._gravityDY;
+    }
+    var mScreen = util.rectToMatrix(this.screenRectangle);
+    var mTransformed = util.multiplyRectMatrices(mScreen, mRot);
+    var rectScreenTransformed = util.matrixToRect(mTransformed);
+    if(this._gravityApplied == true) {
+        rectScreenTransformed.x += this._gravityDX;
+        rectScreenTransformed.y += this._gravityDY;
+    }
+    util.setRect(this.screenRectangle, rectScreenTransformed);
+    for (var i = 0; i < this.tiles.length; i++) {
+        var rectTile = this.tiles[i].rectangle;
+        if(this._gravityApplied == false) {
+            rectTile.x -= this._gravityDX;
+            rectTile.y -= this._gravityDY;
+        }
+        var mTile = util.rectToMatrix(rectTile);
+        var mTileTransformed = util.multiplyRectMatrices(mTile, mRot);
+        var rectTileTransformed = util.matrixToRect(mTileTransformed);
+        if(this._gravityApplied == true) {
+            rectTileTransformed.x += this._gravityDX;
+            rectTileTransformed.y += this._gravityDY;
+        }
+        util.setRect(this.tiles[i].rectangle, rectTileTransformed);
+    }
+}
+
+Layout.prototype._applyGravity = function() {
+    if (this._gravityApplied == true) {
+        return;
+    }
+    if (this._gravity == Gravity.Bottom) {
+        this._gravityApplied = true;
+        return;
+    }
+    switch (this._gravity) {
+        case Gravity.Right:
+            var mRot = RotationMatrix.rot90;
+            break;
+        case Gravity.Top:
+            var mRot = RotationMatrix.rot180;
+            break;
+        case Gravity.Left:
+            var mRot = RotationMatrix.rot270;
+            break;
+        default:
+            print("Unknown gravity in Layout._applyGravity");
+            return;
+    }
+    this._gravityDX = Math.floor(this.screenRectangle.x + this.screenRectangle.width / 2);
+    this._gravityDY = Math.floor(this.screenRectangle.y + this.screenRectangle.height / 2);
+    this._rotate(mRot);
+    this._gravityApplied = true;
+};
+
+Layout.prototype._unapplyGravity = function() {
+    if (this._gravityApplied == false) {
+        return;
+    }
+    if (this._gravity == Gravity.Bottom) {
+        this._gravityApplied = false;
+        return;
+    }
+    switch (this._gravity) {
+        case Gravity.Right:
+            var mRot = RotationMatrix.rot270;
+            break;
+        case Gravity.Top:
+            var mRot = RotationMatrix.rot180;
+            break;
+        case Gravity.Left:
+            var mRot = RotationMatrix.rot90;
+            break;
+        default:
+            print("Unknown gravity in Layout._unapplyGravity");
+            return;
+    }
+    this._rotate(mRot);
+    this._gravityApplied = false;
 };

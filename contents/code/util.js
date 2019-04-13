@@ -98,6 +98,41 @@ util.getB = function(geom) {
     return (geom.y + geom.height);
 };
 
+util.rectToMatrix = function(rect) {
+    return [[rect.x, rect.y],[rect.x + rect.width, rect.y + rect.height]];
+};
+
+util.matrixToRect = function(m) {
+    var newRect = Qt.rect(m[0][0], m[0][1], 0, 0);
+    newRect.width = m[1][0] - newRect.x;
+    newRect.height = m[1][1] - newRect.y;
+    // normalize
+    if (newRect.width < 0) {
+        newRect.x += newRect.width;
+        newRect.width *= -1;
+    }
+    if (newRect.height < 0) {
+        newRect.y += newRect.height;
+        newRect.height *= -1;
+    }
+    return newRect;
+};
+
+util.multiplyRectMatrices = function(m1, m2) {
+    var res = new Array();
+    for (var i = 0; i < 2; i++) {
+        res[i] = new Array();
+        for (var j = 0; j < 2; j++) {
+            var val = 0;
+            for (var k = 0; k < 2; k++) {
+                val += m1[i][k] * m2[k][j];
+            }
+            res[i][j] = val;
+        }
+    }
+    return res;
+};
+
 /**
  * Utility function which returns the area on the selected screen/desktop which
  * is filled by the layout for that screen.
