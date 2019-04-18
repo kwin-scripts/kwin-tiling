@@ -281,17 +281,18 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "Meta+Shift+f11",
                               function() {
                                   var currentScreen = workspace.activeScreen;
-                                  var currentDesktop = workspace.currentDesktop - 1;
-                                  self.layouts[currentDesktop][currentScreen].toggleUserActive();
+                                  var currentDesktop = workspace.currentDesktop;
+                                  self._getLayouts(currentDesktop, currentScreen)[0].toggleUserActive();
                               });
         KWin.registerShortcut("TILING: Tile now",
                               "TILING: Tile now",
                               "",
                               function() {
                                   var currentScreen = workspace.activeScreen;
-                                  var currentDesktop = workspace.currentDesktop - 1;
-                                  self.layouts[currentDesktop][currentScreen].toggleUserActive();
-                                  self.layouts[currentDesktop][currentScreen].toggleUserActive();
+                                  var currentDesktop = workspace.currentDesktop;
+                                  var layout = self._getLayouts(currentDesktop, currentScreen)[0];
+                                  layout.toggleUserActive();
+                                  layout.toggleUserActive();
                               });
         KWin.registerShortcut("TILING: Swap Window With Master",
                               "TILING: Swap Window With Master",
@@ -302,7 +303,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                       if (client != null) {
                                           var tile = self.tiles.getTile(client);
                                           if (tile != null) {
-                                              var layout = self.layouts[tile.getDesktop() - 1][tile.getScreen()];
+                                              var layout = self._getLayouts(tile.getDesktop(), tile.getScreen())[0];
                                               if (layout != null) {
                                                   layout.swapTiles(tile, layout.tiles[0]);
                                               }
@@ -335,7 +336,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           geom.x = screenRectangle.x;
                                           geom.width = geom.width - 2 * delta;
                                       }
-                                      self.layouts[tile.getDesktop() - 1][tile.getScreen()].resizeTileTo(tile, geom);
+                                      self._getLayouts(tile.getDesktop(), tile.getScreen())[0].resizeTileTo(tile, geom);
                                   } catch(err) {
                                       print(err, "in resize-window-to-the-left");
                                   }
@@ -363,7 +364,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           geom.x = geom.x + delta;
                                           geom.width = (screenRectangle.x + screenRectangle.width) - geom.x;
                                       }
-                                      self.layouts[tile.getDesktop() - 1][tile.getScreen()].resizeTileTo(tile, geom);
+                                      self._getLayouts(tile.getDesktop(), tile.getScreen())[0].resizeTileTo(tile, geom);
                                   } catch(err) {
                                       print(err, "in resize-window-to-the-left");
                                   }
@@ -391,7 +392,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           geom.y = screenRectangle.y;
                                           geom.height = geom.height - 2 * delta;
                                       }
-                                      self.layouts[tile.getDesktop() - 1][tile.getScreen()].resizeTileTo(tile, geom);
+                                      self._getLayouts(tile.getDesktop(), tile.getScreen())[0].resizeTileTo(tile, geom);
                                   } catch(err) {
                                       print(err, "in resize-window-to-the-left");
                                   }
@@ -419,7 +420,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           geom.y = geom.y + delta;
                                           geom.height = (screenRectangle.y + screenRectangle.height) - geom.y;
                                       }
-                                      self.layouts[tile.getDesktop() - 1][tile.getScreen()].resizeTileTo(tile, geom);
+                                      self._getLayouts(tile.getDesktop(), tile.getScreen())[0].resizeTileTo(tile, geom);
                                   } catch(err) {
                                       print(err, "in resize-window-to-the-left");
                                   }
@@ -429,7 +430,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "Meta+*",
                               function() {
                                   try {
-                                      self.layouts[self._currentDesktop - 1][self._currentScreen].increaseMaster();
+                                      self._getLayouts(self._currentDesktop, self._currentScreen)[0].increaseMaster();
                                   } catch(err) {
                                       print(err, "in Increase-Number-Of-Masters");
                                   }
@@ -439,7 +440,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "Meta+_",
                               function() {
                                   try {
-                                      self.layouts[self._currentDesktop - 1][self._currentScreen].decrementMaster();
+                                      self._getLayouts(self._currentDesktop, self._currentScreen)[0].decrementMaster();
                                   } catch(err) {
                                       print(err, "in Decrease-Number-Of-Masters");
                                   }
@@ -449,7 +450,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "",
                               function() {
                                   try {
-                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      var layout = self._getLayouts(workspace.currentDesktop, workspace.activeScreen)[0];
                                       if (layout != null) {
                                           var client = workspace.activeClient;
                                           if (client != null) {
@@ -475,7 +476,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "",
                               function() {
                                   try {
-                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      var layout = self._getLayouts(workspace.currentDesktop, workspace.activeScreen)[0];
                                       if (layout != null) {
                                           var client = workspace.activeClient;
                                           if (client != null) {
@@ -501,7 +502,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "",
                               function() {
                                   try {
-                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      var layout = self._getLayouts(workspace.currentDesktop, workspace.activeScreen)[0];
                                       if (layout != null) {
                                           var client = workspace.activeClient;
                                           if (client != null) {
@@ -526,7 +527,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "",
                               function() {
                                   try {
-                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      var layout = self._getLayouts(workspace.currentDesktop, workspace.activeScreen)[0];
                                       if (layout != null) {
                                           var client = workspace.activeClient;
                                           if (client != null) {
@@ -551,7 +552,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "",
                               function() {
                                   try {
-                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      var layout = self._getLayouts(workspace.currentDesktop, workspace.activeScreen)[0];
                                       if (layout != null && layout.layout.isI3Layout) {
                                           layout.layout.state = 'horizontalWrap';
                                       }
@@ -565,7 +566,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "",
                               function() {
                                   try {
-                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      var layout = self._getLayouts(workspace.currentDesktop, workspace.activeScreen)[0];
                                       if (layout != null && layout.layout.isI3Layout) {
                                           layout.layout.state = 'verticalWrap';
                                       }
@@ -579,7 +580,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "",
                               function() {
                                   try {
-                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      var layout = self._getLayouts(workspace.currentDesktop, workspace.activeScreen)[0];
                                       if (layout != null && layout.layout.isI3Layout) {
                                           layout.layout.state = 'normal';
                                       }
@@ -634,7 +635,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               "Meta+Shift+R",
                               function() {
                                   try {
-                                      var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
+                                      var layout = self._getLayouts(workspace.currentDesktop, workspace.activeScreen)[0];
                                       if (layout != null && layout.layout.supportsRotation) {
                                           var grav = layout.layout.getGravity();
                                           switch (grav) {
@@ -1096,16 +1097,16 @@ TilingManager.prototype._compactDesktops = function() {
             if (this._isDesktopEmpty(source)) {
                 continue;
             }
-            console.log("moving from to ", source, destination);
-            var i;
-            for (i = 0; i < this.layouts[destination - 1].length; i++) {
-                this.layouts[source - 1][i].deactivate();
-                this.layouts[destination - 1][i].deactivate();
-                var oldLayout = this.layouts[destination - 1][i];
-                this.layouts[destination - 1][i] = this.layouts[source - 1][i];
-                this.layouts[source - 1][i] = oldLayout;
-                this.layouts[destination - 1][i].desktop = destination;
-                this.layouts[source - 1][i].desktop = source;
+            var destinationLayouts = this._getLayouts(destination, null);
+            var sourceLayouts = this._getLayouts(source, null);
+            for (var i = 0; i < destinationLayouts.length; i++) {
+                sourceLayouts[i].deactivate();
+                destinationLayouts[i].deactivate();
+                var oldLayout = destinationLayouts[i];
+                destinationLayouts[i] = sourceLayouts[i];
+                sourceLayouts[i] = oldLayout;
+                destinationLayouts[i].desktop = destination;
+                sourceLayouts[i].desktop = source;
             }
             var clients = workspace.clientList();
             for (var i = 0; i < clients.length; i++) {
@@ -1114,9 +1115,9 @@ TilingManager.prototype._compactDesktops = function() {
                     cl.desktop = destination;
                 }
             }
-            for (i = 0; i < this.layouts[destination - 1].length; i++) {
-                this.layouts[source - 1][i].activate();
-                this.layouts[destination - 1][i].activate();
+            for (i = 0; i < destinationLayouts.length; i++) {
+                sourceLayouts[i].activate();
+                destinationLayouts[i].activate();
             }
             break;
         }
@@ -1155,13 +1156,14 @@ TilingManager.prototype._dumpClients = function() {
     // to make it clear that this is one call.
     // Especiallly in the journal, this would have each line prefixed with time/date, pid and such.
     var outp = "";
-    for (var i = 0; i < this.layouts.length; i++) {
+    for (var i = 1; i <= this.desktopCount; i++) {
         outp += "Desktop " + i + "\n";
-        for(var j = 0; j < this.layouts[i].length; j++) {
+        for(var j = 0; j < this.screenCount; j++) {
             outp += " Screen " + j + "\n";
-            for (var k = 0; k < this.layouts[i][j].tiles.length; k++) {
+            var layout = this._getLayouts(i, j)[0];
+            for (var k = 0; k < layout.tiles.length; k++) {
                 outp += "  Tile " + k + "\n";
-                this.layouts[i][j].tiles[k].clients.forEach(function(c) {
+                layout.tiles[k].clients.forEach(function(c) {
                     outp += "    " + c.resourceClass.toString() + '- "' + c.caption + '"\n';
                 });
             }
