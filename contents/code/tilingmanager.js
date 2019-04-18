@@ -73,7 +73,8 @@ function TilingManager(timerResize, timerGeometryChanged) {
      * Array containing a list of layouts for every desktop. Each of the lists
      * has one element per screen.
      */
-    this.layouts = [];
+    this.layouts = {};
+    this.layouts[workspace.currentActivity] = [];
     /**
      * List of all tiles in the system.
      */
@@ -140,9 +141,10 @@ function TilingManager(timerResize, timerGeometryChanged) {
         this.layoutConfig.push(desktoplayout);
     }
 
+    this.currentActivity = workspace.currentActivity;
     // Create the various layouts, one for every desktop
     for (var i = 0; i < this.desktopCount; i++) {
-        this._createDefaultLayouts(i);
+        this._createDefaultLayouts(this.currentActivity, i);
     }
 
     var self = this;
@@ -679,11 +681,12 @@ TilingManager.prototype.resize = function() {
     this._onScreenResized(this._timerResize.screen);
 };
 
-TilingManager.prototype._createDefaultLayouts = function(desktop) {
+TilingManager.prototype._createDefaultLayouts = function(activity, desktop) {
     var screenLayouts = [];
     var layout = this.defaultLayout;
     var tiling = false;
     var userConfig = false;
+    var layouts = this.layouts[activity];
     for (var i = 0; i < this.layoutConfig.length; i++) {
         if (this.layoutConfig[i].desktop == desktop) {
             userConfig = true;
@@ -698,7 +701,7 @@ TilingManager.prototype._createDefaultLayouts = function(desktop) {
         // or the desktop has been set to tile (in which case the default is irrelevant)
         screenLayouts[j].userActive = (this.userActive == true && userConfig == false) || (tiling == true);
     }
-    this.layouts[desktop] = screenLayouts;
+    layouts[desktop] = screenLayouts;
 };
 
 TilingManager.prototype._getCurrentLayoutType = function() {
@@ -811,7 +814,7 @@ TilingManager.prototype._onNumberDesktopsChanged = function() {
     }
     // Add new desktops
     for (var i = this.desktopCount; i < newDesktopCount; i++) {
-        this._createDefaultLayouts(i);
+        this._createDefaultLayouts(this.currentActivity, i);
         onAllDesktops.forEach(function(tile) {
             var layouts = self._getLayouts(i, tile.screen);
             layouts.forEach(function(layout) {
@@ -821,7 +824,7 @@ TilingManager.prototype._onNumberDesktopsChanged = function() {
     }
     // Remove deleted desktops
     if (this.desktopCount > newDesktopCount) {
-        self.layouts.length = newDesktopCount;
+        self.layouts[this.currentActivity].length = newDesktopCount;
     }
     this.desktopCount = newDesktopCount;
 };
@@ -831,10 +834,10 @@ TilingManager.prototype._onNumberScreensChanged = function() {
     if (this.screenCount < workspace.numScreens) {
         for (var i = 0; i < this.desktopCount; i++) {
             for (var j = this.screenCount; j < workspace.numScreens; j++) {
-                this.layouts[i][j] = new Tiling(this.defaultLayout, i, j);
+                this.layouts[this.currentActivity][i][j] = new Tiling(this.defaultLayout, i, j);
                 // Activate the new layout if necessary
                 if (i == workspace.currentDesktop - 1) {
-                    this.layouts[i][j].activate();
+                    this.layouts[this.currentActivity][i][j].activate();
                 }
             }
         }
@@ -842,7 +845,7 @@ TilingManager.prototype._onNumberScreensChanged = function() {
     // Remove deleted screens
     if (this.screenCount > workspace.numScreens) {
         for (var i = 0; i < this.desktopCount; i++) {
-            this.layouts[i].length = workspace.numScreens;
+            this.layouts[this.currentActivity][i].length = workspace.numScreens;
         }
     }
     this.screenCount = workspace.numScreens;
@@ -1051,11 +1054,16 @@ TilingManager.prototype._moveTile = function(direction) {
  * FIXME: Add a function to _set_ the layouts
  */
 TilingManager.prototype._getLayouts = function(desktop, screen) {
+    return this._getActivityLayouts(this.currentActivity, desktop, screen);
+};
+
+TilingManager.prototype._getActivityLayouts = function(activity, desktop, screen) {
+    var layouts = this.layouts[activity];
     if (desktop > 0) {
         if (screen != null) {
-            return [this.layouts[desktop - 1][screen]];
+            return [layouts[desktop - 1][screen]];
         } else {
-            return this.layouts[desktop - 1];
+            return layouts[desktop - 1];
         }
     } else if (desktop == 0) {
         print("Invalid desktop 0");
@@ -1064,11 +1072,11 @@ TilingManager.prototype._getLayouts = function(desktop, screen) {
         if (screen != null) {
             var result = [];
             for (var i = 0; i < this.desktopCount; i++) {
-                result.push(this.layouts[i][screen]);
+                result.push(layouts[i][screen]);
             }
             return result;
         } else {
-            return this.layouts;
+            return layouts;
         }
     }
     return null;
