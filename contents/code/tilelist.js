@@ -171,6 +171,12 @@ TileList.prototype.connectSignals = function(client) {
             tile.onClientFinishUserMovedResized(client);
         }
     });
+    client.activitiesChanged.connect(function(client) {
+        var tile = getTile(client);
+        if (tile != null) {
+            tile.onClientActivitiesChanged(client);
+        }
+    });
     client.desktopChanged.connect(function() {
         var tile = getTile(client);
         if (tile != null) {

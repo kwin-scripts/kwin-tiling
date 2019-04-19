@@ -65,6 +65,12 @@ function Tile(firstClient, tileIndex) {
          */
         this.desktopChanged = new Signal();
         /**
+         * Signal which is triggered whenever the tile's presence across
+         * activities changes. Two parameters are passed to the handlers, the
+         * tile's current desktop and the tile's current screen.
+         */
+        this.activitiesChanged = new Signal();
+        /**
          * List of the clients in this tile.
          */
         this.clients = [];
@@ -93,6 +99,8 @@ function Tile(firstClient, tileIndex) {
          * parameter.
          */
         this._currentDesktop = util.getClientDesktop(firstClient);
+
+        this._activities = Array.from(firstClient.activities);
 
         this.rectangle = null;
 
@@ -320,6 +328,29 @@ Tile.prototype.setClientGeometry = function(client) {
     }
 };
 
+Tile.prototype.onClientActivitiesChanged = function(client) {
+    try {
+        var activities = Array.from(client.activities);
+        var emit = false;
+        if (this._activities.length == activities.length) {
+            for (var i = 0; i < activities.length; i++) {
+                if (!this._activities.includes(activities[i])) {
+                    emit = true;
+                    break;
+                }
+            }
+        } else {
+            emit = true;
+        }
+        if (emit) {
+            this._activities = activities;
+            this.activitiesChanged.emit();
+        }
+    } catch(err) {
+        print(err, "in Tile.onClientActivitiesChanged");
+    }
+};
+
 Tile.prototype.onClientDesktopChanged = function(client) {
     try {
         var oldDesktop = this._currentDesktop;
@@ -432,13 +463,17 @@ Tile.prototype.hasClient = function(client) {
     return (this.clients.indexOf(client) > -1);
 };
 
+Tile.prototype.getActivities = function() {
+    return Array.from(this._activities);
+};
+
 Tile.prototype.getDesktop = function() {
     return this._currentDesktop;
-}
+};
 
 Tile.prototype.getScreen = function() {
     return this._currentScreen;
-}
+};
 
 Tile.prototype.unmaximize = function() {
     if (this._canSetMaximize == true && this.maximized == true) {
@@ -446,10 +481,14 @@ Tile.prototype.unmaximize = function() {
             c.setMaximize(false, false);
         });
     }
-}
+};
 
 Tile.prototype.setKeepBelow = function(setting) {
     this.clients.forEach(function(c) {
         c.keepBelow = setting;
     });
-}
+};
+
+Tile.prototype.onAllActivities = function() {
+    return this._activities.length == 0;
+};
