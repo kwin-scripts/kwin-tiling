@@ -30,7 +30,8 @@ function HalfLayout(screenRectangle) {
     } catch(err) {
         print(err, "in HalfLayout");
     }
-    this.firstWidth = this.screenRectangle.width / 2;
+    this.masterRatio = 100 / KWin.readConfig("halfLayoutMasterRatio", 50);
+    this.firstWidth = this.screenRectangle.width / this.masterRatio;
     this.master = 0;
     this.masterCount = 1;
 };
@@ -59,7 +60,7 @@ HalfLayout.prototype.addTile = function() {
                 var newWidth = this.screenRectangle.width / (this.tiles.length + 1);
                 var newSWidth = newWidth;
             } else {
-                this.firstWidth = this.screenRectangle.width / 2;
+                this.firstWidth = this.screenRectangle.width / this.masterRatio;
                 var newWidth = this.firstWidth / (this.tiles.length);
                 var newSWidth = this.screenRectangle.width - this.firstWidth;
             }
@@ -263,7 +264,7 @@ HalfLayout.prototype.decrementMaster = function() {
         var newSWidth = this.screenRectangle.width - (newMWidth * newC);
         var newSHeight = this.screenRectangle.height / (this.tiles.length - newC);
     } else if (this.tiles.length == oldC) {
-        var newMWidth = (this.screenRectangle.width / 2) / newC ;
+        var newMWidth = (this.screenRectangle.width / this.masterRatio) / newC ;
         var newSWidth = this.screenRectangle.width - (newMWidth * newC);
         var newSHeight = this.screenRectangle.height / (this.tiles.length - newC);
     } else {
@@ -287,7 +288,7 @@ HalfLayout.prototype.decrementMaster = function() {
     if(newC != 0) {
         this.firstWidth = this.getMasterWidth();
     } else {
-        this.firstWidth = this.screenRectangle.width / 2;
+        this.firstWidth = this.screenRectangle.width / this.masterRatio;
     }
     this._unapplyGravity();
 };

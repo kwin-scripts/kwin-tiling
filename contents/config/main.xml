@@ -72,6 +72,9 @@
 		<entry name="autorotatePortrait" type="bool">
 		  <label>Tile vertically on portrait oriented displays</label>
 		  <default>false</default>
+		<entry name="halfLayoutMasterRatio" type="int">
+		  <label>Default Half Layout master ratio</label>
+		  <default>50</default>
 		</entry>
     </group>
 </kcfg>
