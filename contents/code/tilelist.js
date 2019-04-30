@@ -216,15 +216,27 @@ TileList.prototype.connectSignals = function(client) {
     });
     client.activeChanged.connect(function() {
         try {
-            // Make sure the newly active client is not covered by
-            // a maximized one.
-            if (client.setMaximize != null && client.active == true) {
-                var screen = client.screen;
-                var desktop = client.desktop;
-                self.tiles.forEach(function(t) {
-                    var tileDesktop = t.getDesktop();
-                    if (t.maximized == true && t.getScreen() == screen &&
-                       (tileDesktop == desktop || tileDesktop == -1)) {
+            self.trackFocusChanges();
+            if (client.active == true) {
+                self.activeClientChanged.emit(client);
+            }
+        } catch(err) {
+            print(err, "in activeChanged - focus tracking");
+        }
+    });
+    if (client.setMaximize != null) {
+        client.activeChanged.connect(function() {
+            try {
+                // Make sure the newly active client is not covered by
+                // a maximized one.
+                if (client.active == true) {
+                    var screen = client.screen;
+                    var desktop = client.desktop;
+                    self.tiles.forEach(function(t) {
+                        var tileDesktop = t.getDesktop();
+                        if (t.maximized == true && t.getScreen() == screen &&
+                            (tileDesktop == desktop || tileDesktop == -1))
+                        {
                             for (var i = 0; i < t.clients.length; i++) {
                                 if (t.clients[i] === client) {
                                     continue;
@@ -232,17 +244,14 @@ TileList.prototype.connectSignals = function(client) {
                                 t.clients[i].setMaximize(false, false);
                             }
                             client.setMaximize(true, true);
-                    }
-                });
+                        }
+                    });
+                }
+            } catch(err) {
+                print(err, "in activeChanged - setMaximize");
             }
-            self.trackFocusChanges();
-            if (client.active == true) {
-                self.activeClientChanged.emit(client);
-            }
-        } catch(err) {
-            print(err, "in activeChanged");
-        }
-    });
+        });
+    }
     client.clientMaximizedStateChanged.connect(function(client, h, v) {
         var tile = self.getTile(client);
         if (tile != null) {
