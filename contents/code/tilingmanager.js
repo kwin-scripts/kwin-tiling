@@ -200,7 +200,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
     // So just check if the function is available
     if (KWin.registerShortcut) {
         KWin.registerShortcut("TILING: Next Tiling Layout",
-                              "Next Tiling Layout",
+                              "TILING: Next Tiling Layout",
                               "Meta+Shift+PgDown",
                               function() {
                                   var currentLayout = self._getCurrentLayoutType();
@@ -211,7 +211,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   self._notifyLayoutChanged();
                               });
         KWin.registerShortcut("TILING: Previous Tiling Layout",
-                              "Previous Tiling Layout",
+                              "TILING: Previous Tiling Layout",
                               "Meta+Shift+PgUp",
                               function() {
                                   var currentLayout = self._getCurrentLayoutType();
@@ -225,7 +225,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   self._notifyLayoutChanged();
                               });
         KWin.registerShortcut("TILING: Toggle Floating",
-                              "Toggle Floating",
+                              "TILING: Toggle Floating",
                               "Meta+F",
                               function() {
                                   var client = workspace.activeClient;
@@ -245,37 +245,37 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Toggle Border for all",
-                              "Toggle Border for all",
+                              "TILING: Toggle Border for all",
                               "",
                               function() {
                                   self.tiles.toggleNoBorder();
                               });
         KWin.registerShortcut("TILING: Move Window Left",
-                              "Move Window Left",
+                              "TILING: Move Window Left",
                               "Meta+Shift+H",
                               function() {
                                   self._moveTile(Direction.Left);
                               });
         KWin.registerShortcut("TILING: Move Window Right",
-                              "Move Window Right",
+                              "TILING: Move Window Right",
                               "Meta+Shift+L",
                               function() {
                                   self._moveTile(Direction.Right);
                               });
         KWin.registerShortcut("TILING: Move Window Up",
-                              "Move Window Up",
+                              "TILING: Move Window Up",
                               "Meta+Shift+K",
                               function() {
                                   self._moveTile(Direction.Up);
                               });
         KWin.registerShortcut("TILING: Move Window Down",
-                              "Move Window Down",
+                              "TILING: Move Window Down",
                               "Meta+Shift+J",
                               function() {
                                   self._moveTile(Direction.Down);
                               });
         KWin.registerShortcut("TILING: Toggle Tiling",
-                              "Toggle Tiling",
+                              "TILING: Toggle Tiling",
                               "Meta+Shift+f11",
                               function() {
                                   var currentScreen = workspace.activeScreen;
@@ -283,7 +283,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   self.layouts[currentDesktop][currentScreen].toggleUserActive();
                               });
         KWin.registerShortcut("TILING: Tile now",
-                              "Tile now",
+                              "TILING: Tile now",
                               "",
                               function() {
                                   var currentScreen = workspace.activeScreen;
@@ -292,7 +292,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   self.layouts[currentDesktop][currentScreen].toggleUserActive();
                               });
         KWin.registerShortcut("TILING: Swap Window With Master",
-                              "Swap Window With Master",
+                              "TILING: Swap Window With Master",
                               "Meta+Shift+M",
                               function() {
                                   try {
@@ -311,7 +311,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Resize Active Window To The Left",
-                              "Resize Active Window To The Left",
+                              "TILING: Resize Active Window To The Left",
                               "Meta+Alt+H",
                               function() {
                                   try {
@@ -339,7 +339,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Resize Active Window To The Right",
-                              "Resize Active Window To The Right",
+                              "TILING: Resize Active Window To The Right",
                               "Meta+Alt+L",
                               function() {
                                   try {
@@ -367,7 +367,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Resize Active Window To The Top",
-                              "Resize Active Window To The Top",
+                              "TILING: Resize Active Window To The Top",
                               "Meta+Alt+K",
                               function() {
                                   try {
@@ -395,7 +395,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Resize Active Window To The Bottom",
-                              "Resize Active Window To The Bottom",
+                              "TILING: Resize Active Window To The Bottom",
                               "Meta+Alt+J",
                               function() {
                                   try {
@@ -423,7 +423,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Increase Number Of Masters",
-                              "Increase Number Of Masters",
+                              "TILING: Increase Number Of Masters",
                               "Meta+*",
                               function() {
                                   try {
@@ -433,7 +433,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Decrease Number Of Masters",
-                              "Decrease Number Of Masters",
+                              "TILING: Decrease Number Of Masters",
                               "Meta+_",
                               function() {
                                   try {
@@ -443,7 +443,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Focus next tile",
-                              "Focus next tile",
+                              "TILING: Focus next tile",
                               "",
                               function() {
                                   try {
@@ -469,7 +469,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Focus previous tile",
-                              "Focus previous tile",
+                              "TILING: Focus previous tile",
                               "",
                               function() {
                                   try {
@@ -495,7 +495,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Swap with next tile",
-                              "Swap with next tile",
+                              "TILING: Swap with next tile",
                               "",
                               function() {
                                   try {
@@ -520,7 +520,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Swap with previous tile",
-                              "Swap with previous tile",
+                              "TILING: Swap with previous tile",
                               "",
                               function() {
                                   try {
@@ -545,7 +545,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING-I3: Set Wrap Horizontal Mode",
-                              "Set Wrap Horizontal Mode",
+                              "TILING-I3: Set Wrap Horizontal Mode",
                               "",
                               function() {
                                   try {
@@ -559,7 +559,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING-I3: Set Wrap Vertical Mode",
-                              "Set Wrap Vertical Mode",
+                              "TILING-I3: Set Wrap Vertical Mode",
                               "",
                               function() {
                                   try {
@@ -573,7 +573,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING-I3: Set Normal Mode",
-                              "Set Normal Mode",
+                              "TILING-I3: Set Normal Mode",
                               "",
                               function() {
                                   try {
@@ -587,7 +587,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Move Window To New Desktop",
-                              "Move Window To New Desktop",
+                              "TILING: Move Window To New Desktop",
                               "Meta+Shift+D",
                               function() {
                                   try {
@@ -618,7 +618,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Dump Clients",
-                              "Dump Clients",
+                              "TILING: Dump Clients",
                               "Meta+Shift+Escape",
                               function() {
                                   try {
@@ -628,7 +628,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   }
                               });
         KWin.registerShortcut("TILING: Cycle Rotations",
-                              "Cycle Rotations",
+                              "TILING: Cycle Rotations",
                               "Meta+Shift+R",
                               function() {
                                   try {

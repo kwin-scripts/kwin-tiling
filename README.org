@@ -61,7 +61,7 @@
    Declare shortcuts (in Systemsettings->Shortcuts_and_Gestures->Global_Keyboard_Shortcuts)
    for resize, minimize and maximize operations.
 
-   Press Meta-PgUp or Meta-PgDn to switch the layout
+   Press Meta-Shift-PgUp or Meta-Shift-PgDn to switch the layout
 
    Use the configuration menu (in System Settings->Window Management->KWin Scripts)
 
