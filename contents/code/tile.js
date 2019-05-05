@@ -434,3 +434,7 @@ Tile.prototype.hasClient = function(client) {
 Tile.prototype.getDesktop = function() {
     return this._currentDesktop;
 }
+
+Tile.prototype.getScreen = function() {
+    return this._currentScreen;
+}
