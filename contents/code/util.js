@@ -175,6 +175,49 @@ util.assertRectInScreen = function(rect, screenRectangle) {
                     util.getB(rect) <= util.getB(screenRectangle), "Rectangle not in screen");
 };
 
+/**
+ * This is not completely trivial since clientArea reports screen areas
+ * without panel areas. I know of no way to get the full screen geometry.
+ * Therefore I do a search for the screen with minimal distance in given direction.
+ */
+util.nextScreenInDirection = function(curScreen, desktop, direction) {
+    var curScreenRect = workspace.clientArea(KWin.ScreenArea, curScreen, desktop);
+    var targetScreen = null;
+    // choose this small enough to not jump to wrong screens
+    // and big enough to skip panels
+    var minDist = 200;
+
+    // assumes a fully horizontal screen setup
+    if (direction == Direction.Left) {
+        for (var i=0; i<workspace.numScreens; i++) {
+            var screenRect = workspace.clientArea(KWin.ScreenArea, i, desktop);
+
+            var dist = Math.abs(curScreenRect.x - util.getR(screenRect));
+            if (dist < minDist) {
+                targetScreen = i;
+                minDist = dist;
+            }
+        }
+    } else if (direction == Direction.Right) {
+        for (var i=0; i<workspace.numScreens; i++) {
+            var screenRect = workspace.clientArea(KWin.ScreenArea, i, desktop);
+
+            var dist = Math.abs(util.getR(curScreenRect) - screenRect.x);
+            if (dist < minDist) {
+                targetScreen = i;
+                minDist = dist;
+            }
+        }
+        // } else if (direction == Direction.Up) {
+        // } else if (direction == Direction.Down) {
+    } else {
+        print("Wrong direction in util.nextScreenInDirection");
+        return;
+    }
+
+    return targetScreen;
+};
+
 util.middlex = function(rect) {
     return rect.x + (rect.width / 2);
 };

@@ -1027,6 +1027,13 @@ TilingManager.prototype._moveTile = function(direction) {
     var nextTile = layout.getTile(x, y);
     if (nextTile != null) {
         layout.swapTiles(activeTile, nextTile);
+    } else {
+        // No tile to swap. Move to next screen in direction
+        var targetScreen = util.nextScreenInDirection(this._currentScreen, desktop, direction);
+        if (targetScreen != null) {
+            var targetRect = workspace.clientArea(KWin.ScreenArea, targetScreen, desktop);
+            client.geometry = targetRect;
+        }
     }
 };
 
