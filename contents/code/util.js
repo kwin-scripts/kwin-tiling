@@ -176,8 +176,8 @@ util.assertRectInScreen = function(rect, screenRectangle) {
 };
 
 /**
- * This is not completely trivial since clientArea reports screen areas
- * without panel areas. I know of no way to get the full screen geometry.
+ * workspace.clientArea leaves holes for panels.
+ * Also there could be gaps between screens.
  * Therefore I do a search for the screen with minimal distance in given direction.
  */
 util.nextScreenInDirection = function(curScreen, desktop, direction) {
@@ -187,32 +187,32 @@ util.nextScreenInDirection = function(curScreen, desktop, direction) {
     // and big enough to skip panels
     var minDist = 200;
 
-    // assumes a fully horizontal screen setup
-    if (direction == Direction.Left) {
-        for (var i=0; i<workspace.numScreens; i++) {
-            var screenRect = workspace.clientArea(KWin.ScreenArea, i, desktop);
+    // assumes a fully horizontal or vertical screen setup
+    for (var i=0; i<workspace.numScreens; i++) {
+        var screenRect = workspace.clientArea(KWin.ScreenArea, i, desktop);
 
-            var dist = Math.abs(curScreenRect.x - util.getR(screenRect));
-            if (dist < minDist) {
-                targetScreen = i;
-                minDist = dist;
-            }
+        switch (direction) {
+            case Direction.Left:
+                var dist = Math.abs(curScreenRect.x - util.getR(screenRect));
+                break;
+            case Direction.Right:
+                var dist = Math.abs(util.getR(curScreenRect) - screenRect.x);
+                break;
+            case Direction.Up:
+                var dist = Math.abs(curScreenRect.y - util.getB(screenRect));
+                break;
+            case Direction.Down:
+                var dist = Math.abs(util.getB(curScreenRect) - screenRect.y);
+                break;
+            default:
+                print("Wrong direction in util.nextScreenInDirection");
+                return;
         }
-    } else if (direction == Direction.Right) {
-        for (var i=0; i<workspace.numScreens; i++) {
-            var screenRect = workspace.clientArea(KWin.ScreenArea, i, desktop);
 
-            var dist = Math.abs(util.getR(curScreenRect) - screenRect.x);
-            if (dist < minDist) {
-                targetScreen = i;
-                minDist = dist;
-            }
+        if (dist < minDist) {
+            targetScreen = i;
+            minDist = dist;
         }
-        // } else if (direction == Direction.Up) {
-        // } else if (direction == Direction.Down) {
-    } else {
-        print("Wrong direction in util.nextScreenInDirection");
-        return;
     }
 
     return targetScreen;
