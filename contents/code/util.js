@@ -183,9 +183,21 @@ util.assertRectInScreen = function(rect, screenRectangle) {
 util.nextScreenInDirection = function(curScreen, desktop, direction) {
     var curScreenRect = workspace.clientArea(KWin.ScreenArea, curScreen, desktop);
     var targetScreen = null;
-    // choose this small enough to not jump to wrong screens
-    // and big enough to skip panels
-    var minDist = 200;
+
+    // Limit jump distance
+    switch (direction) {
+        case Direction.Left:
+        case Direction.Right:
+            var minDist = curScreenRect.width / 2;
+            break;
+        case Direction.Up:
+        case Direction.Down:
+            var minDist = curScreenRect.height / 2;
+            break;
+        default:
+            print("Wrong direction in util.nextScreenInDirection");
+            return;
+    }
 
     // assumes a fully horizontal or vertical screen setup
     for (var i=0; i<workspace.numScreens; i++) {
@@ -204,9 +216,6 @@ util.nextScreenInDirection = function(curScreen, desktop, direction) {
             case Direction.Down:
                 var dist = Math.abs(util.getB(curScreenRect) - screenRect.y);
                 break;
-            default:
-                print("Wrong direction in util.nextScreenInDirection");
-                return;
         }
 
         if (dist < minDist) {
