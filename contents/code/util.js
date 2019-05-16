@@ -175,6 +175,58 @@ util.assertRectInScreen = function(rect, screenRectangle) {
                     util.getB(rect) <= util.getB(screenRectangle), "Rectangle not in screen");
 };
 
+/**
+ * workspace.clientArea leaves holes for panels.
+ * Also there could be gaps between screens.
+ * Therefore I do a search for the screen with minimal distance in given direction.
+ */
+util.nextScreenInDirection = function(curScreen, desktop, direction) {
+    var curScreenRect = workspace.clientArea(KWin.ScreenArea, curScreen, desktop);
+    var targetScreen = null;
+
+    // Limit jump distance
+    switch (direction) {
+        case Direction.Left:
+        case Direction.Right:
+            var minDist = curScreenRect.width / 2;
+            break;
+        case Direction.Up:
+        case Direction.Down:
+            var minDist = curScreenRect.height / 2;
+            break;
+        default:
+            print("Wrong direction in util.nextScreenInDirection");
+            return;
+    }
+
+    // assumes a fully horizontal or vertical screen setup
+    for (var i=0; i<workspace.numScreens; i++) {
+        var screenRect = workspace.clientArea(KWin.ScreenArea, i, desktop);
+
+        switch (direction) {
+            case Direction.Left:
+                var dist = Math.abs(curScreenRect.x - util.getR(screenRect));
+                break;
+            case Direction.Right:
+                var dist = Math.abs(util.getR(curScreenRect) - screenRect.x);
+                break;
+            case Direction.Up:
+                var dist = Math.abs(curScreenRect.y - util.getB(screenRect));
+                break;
+            case Direction.Down:
+                var dist = Math.abs(util.getB(curScreenRect) - screenRect.y);
+                break;
+        }
+
+        if (dist < minDist) {
+            targetScreen = i;
+            minDist = dist;
+        }
+    }
+
+    return targetScreen;
+};
+
 util.middlex = function(rect) {
     return rect.x + (rect.width / 2);
 };
