@@ -65,6 +65,38 @@
 
    Use the configuration menu (in System Settings->Window Management->KWin Scripts)
 
+** Comprehesive list of keyboard shorcuts:
+
+| Shortcut                           | Default Binding   |
+|------------------------------------|-------------------|
+| Next Tiling Layout                 | Meta+Shift+PgDown |
+| Previous Tiling Layout             | Meta+Shift+PgUp   |
+| Toggle Floating                    | Meta+F            |
+| Toggle Border for all              |                   |
+| Move Window Left                   | Meta+Shift+H      |
+| Move Window Right                  | Meta+Shift+L      |
+| Move Window Up                     | Meta+Shift+K      |
+| Move Window Down                   | Meta+Shift+J      |
+| Toggle Tiling                      | Meta+Shift+f11    |
+| Tile now                           |                   |
+| Swap Window With Master            | Meta+Shift+M      |
+| Resize Active Window To The Left   | Meta+Alt+H        |
+| Resize Active Window To The Right  | Meta+Alt+L        |
+| Resize Active Window To The Top    | Meta+Alt+K        |
+| Resize Active Window To The Bottom | Meta+Alt+J        |
+| Increase Number Of Masters         | Meta+*            |
+| Decrease Number Of Masters         | Meta+_            |
+| Focus next tile                    |                   |
+| Focus previous tile                |                   |
+| Swap with next tile                |                   |
+| Swap with previous tile            |                   |
+| I3: Set Wrap Horizontal Mode       |                   |
+| I3: Set Wrap Vertical Mode         |                   |
+| I3: Set Normal Mode                |                   |
+| Move Window To New Desktop         | Meta+Shift+D      |
+| Dump Clients                       | Meta+Shift+Escape |
+| Cycle Rotations                    | Meta+Shift+R      |
+
 ** Troubleshooting:
    No configuration option is available for the KWin Scripts entry
 
