@@ -221,9 +221,37 @@ TileList.prototype.connectSignals = function(client) {
                 self.activeClientChanged.emit(client);
             }
         } catch(err) {
-            print(err, "in activeChanged");
+            print(err, "in activeChanged - focus tracking");
         }
     });
+    if (client.setMaximize != null) {
+        client.activeChanged.connect(function() {
+            try {
+                // Make sure the newly active client is not covered by
+                // a maximized one.
+                if (client.active == true) {
+                    var screen = client.screen;
+                    var desktop = client.desktop;
+                    self.tiles.forEach(function(t) {
+                        var tileDesktop = t.getDesktop();
+                        if (t.maximized == true && t.getScreen() == screen &&
+                            (tileDesktop == desktop || tileDesktop == -1))
+                        {
+                            for (var i = 0; i < t.clients.length; i++) {
+                                if (t.clients[i] === client) {
+                                    continue;
+                                }
+                                t.clients[i].setMaximize(false, false);
+                            }
+                            client.setMaximize(true, true);
+                        }
+                    });
+                }
+            } catch(err) {
+                print(err, "in activeChanged - setMaximize");
+            }
+        });
+    }
     client.clientMaximizedStateChanged.connect(function(client, h, v) {
         var tile = self.getTile(client);
         if (tile != null) {
@@ -265,6 +293,25 @@ TileList.prototype.addClient = function(client) {
        || client.minimized) {
         client.keepBelow = false;
         return;
+    }
+
+    if (client.setMaximize != null) {
+        // Unmaximize the new client.
+        client.setMaximize(false, false);
+
+        // Unmaximize the active client if there is already maximized one
+        // on the same desktop.
+        var screen = client.screen;
+        var desktop = client.desktop;
+        this.tiles.forEach(function(t) {
+            var tileDesktop = t.getDesktop();
+            if (t.maximized == true && t.getScreen() == screen &&
+               (tileDesktop == desktop || tileDesktop == -1)) {
+                    for (var i = 0; i < t.clients.length; i++) {
+                        t.clients[i].setMaximize(false, false);
+                    }
+            }
+        });
     }
 
     this._addTile(client);

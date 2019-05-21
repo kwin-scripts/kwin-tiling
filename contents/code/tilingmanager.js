@@ -333,7 +333,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           geom.x = screenRectangle.x;
                                           geom.width = geom.width - 2 * delta;
                                       }
-                                      self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
+                                      self.layouts[tile.getDesktop() - 1][tile.getScreen()].resizeTileTo(tile, geom);
                                   } catch(err) {
                                       print(err, "in resize-window-to-the-left");
                                   }
@@ -361,7 +361,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           geom.x = geom.x + delta;
                                           geom.width = (screenRectangle.x + screenRectangle.width) - geom.x;
                                       }
-                                      self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
+                                      self.layouts[tile.getDesktop() - 1][tile.getScreen()].resizeTileTo(tile, geom);
                                   } catch(err) {
                                       print(err, "in resize-window-to-the-left");
                                   }
@@ -389,7 +389,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           geom.y = screenRectangle.y;
                                           geom.height = geom.height - 2 * delta;
                                       }
-                                      self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
+                                      self.layouts[tile.getDesktop() - 1][tile.getScreen()].resizeTileTo(tile, geom);
                                   } catch(err) {
                                       print(err, "in resize-window-to-the-left");
                                   }
@@ -417,7 +417,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                           geom.y = geom.y + delta;
                                           geom.height = (screenRectangle.y + screenRectangle.height) - geom.y;
                                       }
-                                      self.layouts[tile._currentDesktop - 1][tile._currentScreen].resizeTileTo(tile, geom);
+                                      self.layouts[tile.getDesktop() - 1][tile.getScreen()].resizeTileTo(tile, geom);
                                   } catch(err) {
                                       print(err, "in resize-window-to-the-left");
                                   }
@@ -451,7 +451,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                       if (layout != null) {
                                           var client = workspace.activeClient;
                                           if (client != null) {
-                                              var tile = layout.getTile(client.x, client.y);
+                                              var tile = self.tiles.getTile(client);
                                           }
                                       }
                                       if (tile != null) {
@@ -460,8 +460,9 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                               var index2 = 0;
                                           } else {
                                               var index2 = index1 + 1;
-                                          } 
-                                          workspace.activeClient = layout.tiles[index2].clients[0];
+                                          }
+                                          var activateClient = layout.tiles[index2].clients[0];
+                                          workspace.activeClient = activateClient;
                                       }
                                   } catch(err) {
                                       print(err, "in focus-next-tile");
@@ -476,7 +477,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                       if (layout != null) {
                                           var client = workspace.activeClient;
                                           if (client != null) {
-                                              var tile = layout.getTile(client.x, client.y);
+                                              var tile = self.tiles.getTile(client);
                                           }
                                       }
                                       if (tile != null) {
@@ -485,8 +486,9 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                               var index2 = layout.tiles.length-1;
                                           } else {
                                               var index2 = index1 - 1;
-                                          } 
-                                          workspace.activeClient = layout.tiles[index2].clients[0];
+                                          }
+                                          var activateClient = layout.tiles[index2].clients[0];
+                                          workspace.activeClient = activateClient;
                                       }
                                   } catch(err) {
                                       print(err, "in focus-previous-tile");
@@ -510,7 +512,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                               var index2 = 0;
                                           } else {
                                               var index2 = index1 + 1;
-                                          } 
+                                          }
                                           layout.swapTiles(tile, layout.tiles[index2]);
                                       }
                                   } catch(err) {
@@ -535,7 +537,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                               var index2 = layout.tiles.length-1;
                                           } else {
                                               var index2 = index1 - 1;
-                                          } 
+                                          }
                                           layout.swapTiles(tile, layout.tiles[index2]);
                                       }
                                   } catch(err) {
@@ -721,7 +723,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
         self._onTileResized(tile);
     });
     // Add the tile to the layouts
-    var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
+    var tileLayouts = this._getLayouts(tile.getDesktop(), tile.getScreen());
     var start = KWin.readConfig("placement", 0);
     tileLayouts.forEach(function(layout) {
 
@@ -756,7 +758,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
 };
 
 TilingManager.prototype._onTileResized = function(tile) {
-    var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
+    var tileLayouts = this._getLayouts(tile.getDesktop(), tile.getScreen());
     tileLayouts.forEach(function(layout) {
         layout.resizeTile(tile);
     });
@@ -777,7 +779,7 @@ TilingManager.prototype._getMaster = function(screen, desktop) {
 
 TilingManager.prototype._onTileRemoved = function(tile) {
     try {
-        var tileLayouts = this._getLayouts(tile._currentDesktop, tile._currentScreen);
+        var tileLayouts = this._getLayouts(tile.getDesktop(), tile.getScreen());
         tileLayouts.forEach(function(layout) {
             layout.removeTile(tile);
         });
@@ -914,7 +916,7 @@ TilingManager.prototype._onTileMovingEnded = function(tile) {
             if (tile._currentScreen != client.screen) {
                 // Transfer the tile from one layout to another layout
                 var startLayout =
-                    this._getLayouts(this._currentDesktop, tile._currentScreen)[0];
+                    this._getLayouts(this._currentDesktop, tile.getScreen())[0];
                 var endLayout = this._getLayouts(this._currentDesktop, client.screen)[0];
                 startLayout.removeTile(tile);
                 endLayout.addTile(tile,
@@ -949,6 +951,9 @@ TilingManager.prototype._changeTileLayouts = function(tile, oldLayouts, newLayou
             if (newLayouts != null) {
                 var self = this;
                 newLayouts.forEach(function(layout) {
+                    layout.tiles.forEach(function(t) {
+                        t.unmaximize();
+                    });
                     layout.addTile(tile,
                                    self.tiles.focusHistory.previous);
                 });
