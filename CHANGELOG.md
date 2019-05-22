@@ -1,3 +1,15 @@
+version ?.?:
+===========
+
+- Some shortcuts are now not bound by default, to focus on the core feature set
+- The default layout switching shortcuts have been changed to Meta+Shift+PgUp/PgDown
+- Floating windows are remembered across layout switches
+- Better support for screen resizing and rotation
+- Support for rotating layouts
+- Improved handling for maximized clients (requires KWin >= 5.16!)
+- Move window left/right now moves the client to another screen if necessary
+- The default split ratio for HalfLayout is now configurable
+
 version 2.1:
 ===========
 
