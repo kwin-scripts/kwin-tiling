@@ -1,4 +1,4 @@
-version ?.?:
+version 2.2:
 ===========
 
 - Some shortcuts are now not bound by default, to focus on the core feature set
