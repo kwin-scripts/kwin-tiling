@@ -58,6 +58,7 @@ function TileList(timer) {
 
     // A hardcoded list of clients that should never be tiled
     this.blacklist = [
+        "kcalc",
         "klipper",
         "krunner",
         "ksmserver",
