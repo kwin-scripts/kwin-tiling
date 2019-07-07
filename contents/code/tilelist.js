@@ -426,6 +426,14 @@ TileList.prototype._isIgnored = function(client) {
         return true;
     }
 
+    // KFind is annoying. It sets the window type to dialog (which is arguably wrong) and more importantly sets
+    // the transient_for property for some bogus "Qt Client Leader Window".
+    //
+    // So we whitelist it here - this still allows blacklisting it via class.
+    if (client.resourceClass.toString() == "kfind") {
+        return false;
+    }
+
     // Transient windows are usually dialogs and such for other windows.
     // Usually, they should also have type = dialog, but often (eclipse and inkscape),
     // they do not. So we should rather ignore them than display them wrong or have them close when they lose focus because we moved them (and FFM was in effect).
