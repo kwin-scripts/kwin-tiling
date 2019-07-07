@@ -415,14 +415,17 @@ TileList.prototype._isIgnored = function(client) {
 
     if (floaters.indexOf(client.resourceClass.toString()) > -1
         || this.blacklist.indexOf(client.resourceClass.toString()) > -1) {
+        print("Ignoring client because of blacklist: ", client.resourceClass.toString());
         return true;
     }
     // HACK: Steam doesn't set the windowtype properly
     // Everything that isn't captioned "Steam" should be a dialog - these resize worse than the main window does
     // With the exception of course of the class-less update/start dialog with the caption "Steam" (*Sigh*)
     if (client.resourceClass.toString() == "steam" && client.caption != "Steam") {
+        print("Ignoring client because of steam workaround 1: ", client.resourceClass.toString());
         return true;
     } else if (client.resourceClass.toString() != "steam" && client.caption == "Steam") {
+        print("Ignoring client because of steam workaround 2: ", client.resourceClass.toString());
         return true;
     }
 
@@ -438,6 +441,7 @@ TileList.prototype._isIgnored = function(client) {
     // Usually, they should also have type = dialog, but often (eclipse and inkscape),
     // they do not. So we should rather ignore them than display them wrong or have them close when they lose focus because we moved them (and FFM was in effect).
     if (client.transient == true) {
+        print("Ignoring client because it's transient: ", client.resourceClass.toString());
         return true;
     }
 
@@ -456,6 +460,7 @@ TileList.prototype._isIgnored = function(client) {
         client.notification == true ||
         client.comboBox == true ||
         client.dndIcon == true) {
+        print("Ignoring client because of window type: ", client.resourceClass.toString());
         return true;
     }
 
