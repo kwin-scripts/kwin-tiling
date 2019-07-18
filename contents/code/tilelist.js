@@ -69,6 +69,7 @@ function TileList(timer) {
         "plugin-container",
         "wine",
         "yakuake",
+        "gcr-prompter",
     ]
 
     // we use this timer and the array to update client geometry asynchronously
