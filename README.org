@@ -103,9 +103,3 @@
      ln -s ~/.local/share/kwin/scripts/kwin-script-tiling/metadata.desktop ~/.local/share/kservices5/kwin-script-tiling.desktop
      #+END_SRC
 
-** Known Issues:
-   Activities aren't handled at all
-
-   Clients with min/maxSize may not tile properly
-
-   Multimonitor is untested
