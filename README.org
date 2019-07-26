@@ -2,9 +2,6 @@
 
   Tiling script for kwin, based on [[https://github.com/mgottschlag/kwin-tiling][Mathias Gottschlag's version]]
 
-  NOTE: This is the Plasma 5 version.
-  For the Plasma 1/KWin 4 version, see the Plasma1 branch
-
 ** Goals:
    The purpose of this is to create a userfriendly tiling solution that
 
@@ -40,7 +37,7 @@
 ** Installation:
 
    #+BEGIN_SRC bash
-   git clone https://github.com/faho/kwin-tiling.git
+   git clone https://github.com/kwin-scripts/kwin-tiling.git
    cd kwin-tiling/
    plasmapkg2 --type kwinscript -i .
    #+END_SRC
@@ -112,18 +109,3 @@
    Clients with min/maxSize may not tile properly
 
    Multimonitor is untested
-
-** Bugs:
-   There is no software without bugs. If you detect one please
-   share it. [[https://github.com/faho/kwin-tiling/issues?state=open]]
-
-
-** Screenshots:
-   Standard layout with two master windows
-   [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling01.png]]
-   Standard layout with one master
-   [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling02.png]]
-   Contrived example with four always-shown panels
-   [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling03.png]]
-   Configuration
-   [[https://github.com/faho/faho.github.io/raw/master/img/kwin-tiling04.png]]
