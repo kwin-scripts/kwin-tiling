@@ -105,9 +105,6 @@ function Tile(firstClient, tileIndex) {
         this.screenGapSizeRight = KWin.readConfig("screenGapSizeRight", 0);
         this.screenGapSizeTop = KWin.readConfig("screenGapSizeTop", 0);
         this.screenGapSizeBottom = KWin.readConfig("screenGapSizeBottom", 0);
-        // Do this manually instead of calling "addClient" to not try to resize
-        // because we don't have a rectangle at this point
-        firstClient.keepBelow = true;
         if (KWin.readConfig("noBorder", false)) {
             firstClient.noBorder = true;
         }
@@ -221,6 +218,9 @@ Tile.prototype.setClientGeometry = function(client) {
             return;
         }
         if (this.rectangle) {
+            // We set keepBelow here to keep tiling clients below,
+            // also because that allows us to not set it for floating ones.
+            client.keepBelow = true;
             if (client.screen != this._currentScreen) {
                 this._currentScreen = client.screen;
             }
@@ -446,4 +446,10 @@ Tile.prototype.unmaximize = function() {
             c.setMaximize(false, false);
         });
     }
+}
+
+Tile.prototype.setKeepBelow = function(setting) {
+    this.clients.forEach(function(c) {
+        c.keepBelow = setting;
+    });
 }

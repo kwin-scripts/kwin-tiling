@@ -180,6 +180,10 @@ Tiling.prototype.activate = function() {
 
 Tiling.prototype.deactivate = function() {
     this.active = false;
+    // Unset keepBelow so they handle like true floating clients.
+    for (var i = 0; i < this.layout.tiles.length; i++) {
+        this.tiles[i].setKeepBelow(false);
+    }
 };
 
 Tiling.prototype.toggleActive = function() {
