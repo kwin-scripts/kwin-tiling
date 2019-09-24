@@ -58,6 +58,8 @@ function TileList(timer) {
 
     // A hardcoded list of clients that should never be tiled
     this.blacklist = [
+        // If a class is empty, chances are it doesn't behave properly in other ways as well
+        "",
         "kcalc",
         "klipper",
         "krunner",
