@@ -432,6 +432,13 @@ TileList.prototype._isIgnored = function(client) {
         return true;
     }
 
+    // HACK: Firefox' secondary windows, downloads and such, are normal windows with a class of "firefox".
+    // They have a *name* of "places" though, so we can hopefully detect them that way.
+    if (client.resourceClass.toString() == "firefox" && client.resourceName == "places") {
+        print("Ignoring client because of firefox workaround", client.resourceName);
+        return true;
+    }
+
     // KFind is annoying. It sets the window type to dialog (which is arguably wrong) and more importantly sets
     // the transient_for property for some bogus "Qt Client Leader Window".
     //
