@@ -1,3 +1,8 @@
+version 2.3:
+- Workarounds for clients with empty class, firefox' secondary windows (downloads etc), 
+  kfind, kcalc and evolution's gpg keyphrase entry dialog
+- Smart window placement for floating windows should now work better
+
 version 2.2:
 ===========
 
