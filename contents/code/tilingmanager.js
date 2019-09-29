@@ -633,7 +633,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                               function() {
                                   try {
                                       var layout = self.layouts[workspace.currentDesktop - 1][workspace.activeScreen];
-                                      if (layout != null) {
+                                      if (layout != null && layout.layout.supportsRotation) {
                                           var grav = layout.layout.getGravity();
                                           switch (grav) {
                                               case Gravity.Bottom:

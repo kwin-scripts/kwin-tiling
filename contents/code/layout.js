@@ -79,6 +79,7 @@ Layout.prototype._gravity = Gravity.Bottom;
 Layout.prototype._gravityApplied = false;
 Layout.prototype._gravityDX = 0;
 Layout.prototype._gravityDY = 0;
+Layout.prototype.supportsRotation = false;
 
 Layout.prototype.setLayoutArea = function(newArea) {
     try {

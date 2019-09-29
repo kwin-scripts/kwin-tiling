@@ -34,6 +34,7 @@ SpiralLayout.prototype = new Layout();
 SpiralLayout.prototype.constructor = SpiralLayout;
 
 SpiralLayout.prototype.name = "Spiral";
+SpiralLayout.prototype.supportsRotation = true;
 // TODO: Add an image for the layout switcher
 //SpiralLayout.image = null;
 

@@ -40,6 +40,7 @@ HalfLayout.prototype = new Layout();
 HalfLayout.prototype.constructor = HalfLayout;
 
 HalfLayout.prototype.name = "Half";
+HalfLayout.prototype.supportsRotation = true;
 // // TODO: Add an image for the layout switcher
 // HalfLayout.image = null;
 

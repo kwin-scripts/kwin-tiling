@@ -40,6 +40,8 @@ BladeLayout.prototype = new Layout();
 BladeLayout.prototype.constructor = BladeLayout;
 
 BladeLayout.prototype.name = "Blade";
+BladeLayout.prototype.supportsRotation = true;
+
 // // TODO: Add an image for the layout switcher
 // BladeLayout.image = null;
 
