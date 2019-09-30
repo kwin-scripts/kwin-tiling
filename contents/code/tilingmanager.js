@@ -30,7 +30,7 @@ Qt.include("i3layout.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
 Qt.include("util.js");
-
+Qt.include("ignored.js");
 
 /**
  * Class which manages all layouts, connects the various signals and handlers
@@ -191,7 +191,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
         self._onCurrentDesktopChanged();
     });
     workspace.clientRemoved.connect(function(client) {
-        if (KWin.readConfig("removeEmptyDesktops", false)) {
+        if (KWin.readConfig("removeEmptyDesktops", false) && !ignored.isIgnored(client)) {
             self._removeEmptyDesktops();
         }
     });
