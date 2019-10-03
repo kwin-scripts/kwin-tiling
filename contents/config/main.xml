@@ -69,6 +69,10 @@
 		  <label>Remove empty desktops</label>
 		  <default>false</default>
 		</entry>
+		<entry name="minDesktopsToKeep" type="int">
+		  <label>Minimum number of desktops to keep</label>
+		  <default>1</default>
+		</entry>
 		<entry name="autorotatePortrait" type="bool">
 		  <label>Tile vertically on portrait oriented displays</label>
 		  <default>false</default>

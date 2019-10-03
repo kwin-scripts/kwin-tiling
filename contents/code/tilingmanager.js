@@ -191,7 +191,9 @@ function TilingManager(timerResize, timerGeometryChanged) {
         self._onCurrentDesktopChanged();
     });
     workspace.clientRemoved.connect(function(client) {
-        if (KWin.readConfig("removeEmptyDesktops", false) && !ignored.isIgnored(client)) {
+        if (KWin.readConfig("removeEmptyDesktops", false) && !ignored.isIgnored(client) &&
+            self.desktopCount > KWin.readConfig("minDesktopsToKeep", 1))
+        {
             self._removeEmptyDesktops();
         }
     });
