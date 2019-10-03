@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>412</width>
-    <height>388</height>
+    <height>412</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
@@ -37,74 +37,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="kcfg_noBorder">
-         <property name="text">
-          <string>Remove window borders on tiled windows</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QCheckBox" name="kcfg_userActive">
-         <property name="text">
-          <string>Tiling enabled by default</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QCheckBox" name="kcfg_respectMinMax">
-         <property name="text">
-          <string>Respect minimum/maximum Size</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QCheckBox" name="kcfg_showLayoutOsd">
-         <property name="text">
-          <string>Show layout OSD</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QCheckBox" name="kcfg_removeEmptyDesktops">
-         <property name="text">
-          <string>Remove empty desktops</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QCheckBox" name="kcfg_autorotatePortrait">
-         <property name="text">
-          <string>Tile vertically on portrait oriented displays</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Placement method</string>
-         </property>
-        </widget>
-       </item>
        <item row="10" column="0">
-        <widget class="QLineEdit" name="kcfg_layouts"/>
-       </item>
-       <item row="9" column="0">
         <widget class="QComboBox" name="kcfg_placement">
          <item>
           <property name="text">
@@ -123,12 +56,138 @@
          </item>
         </widget>
        </item>
+       <item row="5" column="0">
+        <widget class="QCheckBox" name="kcfg_showLayoutOsd">
+         <property name="text">
+          <string>Show layout OSD</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Excluded window classes</string>
          </property>
         </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="kcfg_respectMinMax">
+         <property name="text">
+          <string>Respect minimum/maximum Size</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="kcfg_userActive">
+         <property name="text">
+          <string>Tiling enabled by default</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Placement method</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="kcfg_noBorder">
+         <property name="text">
+          <string>Remove window borders on tiled windows</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QCheckBox" name="kcfg_autorotatePortrait">
+         <property name="text">
+          <string>Tile vertically on portrait oriented displays</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QCheckBox" name="kcfg_removeEmptyDesktops">
+         <property name="text">
+          <string>Remove empty desktops</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLineEdit" name="kcfg_layouts"/>
+       </item>
+       <item row="7" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_12">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Number of desktops to keep:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="kcfg_minDesktopsToKeep">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="suffix">
+            <string/>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>12</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>26</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -280,13 +339,60 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KEditListWidget</class>
-   <extends>QWidget</extends>
-   <header>keditlistwidget.h</header>
-  </customwidget>
- </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>kcfg_floaters</tabstop>
+  <tabstop>kcfg_noBorder</tabstop>
+  <tabstop>kcfg_userActive</tabstop>
+  <tabstop>kcfg_respectMinMax</tabstop>
+  <tabstop>kcfg_showLayoutOsd</tabstop>
+  <tabstop>kcfg_removeEmptyDesktops</tabstop>
+  <tabstop>kcfg_minDesktopsToKeep</tabstop>
+  <tabstop>kcfg_autorotatePortrait</tabstop>
+  <tabstop>kcfg_placement</tabstop>
+  <tabstop>kcfg_layouts</tabstop>
+  <tabstop>kcfg_fullscreenGaps</tabstop>
+  <tabstop>kcfg_screenGapSizeLeft</tabstop>
+  <tabstop>kcfg_screenGapSizeRight</tabstop>
+  <tabstop>kcfg_screenGapSizeTop</tabstop>
+  <tabstop>kcfg_screenGapSizeBottom</tabstop>
+  <tabstop>kcfg_windowsGapSizeWidth</tabstop>
+  <tabstop>kcfg_windowsGapSizeHeight</tabstop>
+  <tabstop>kcfg_halfLayoutMasterRatio</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>kcfg_removeEmptyDesktops</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_minDesktopsToKeep</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>225</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>267</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_removeEmptyDesktops</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_12</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
