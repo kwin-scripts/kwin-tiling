@@ -131,10 +131,10 @@ function TilingManager(timerResize, timerGeometryChanged) {
         }
         if (desktop == 0) {
             this.defaultLayout = l;
+            continue;
         }
-        desktop = desktop;
         var desktoplayout = {};
-        desktoplayout.desktop = desktop;
+        desktoplayout.desktop = desktop - 1;
         desktoplayout.layout = l;
         desktoplayout.tiling = tiling;
         this.layoutConfig.push(desktoplayout);
