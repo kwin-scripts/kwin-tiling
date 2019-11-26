@@ -51,6 +51,8 @@
 ** Usage:
    Install
 
+   Activate the script using ~kcmshell5 kwinscripts~
+
    Move windows around and see that they are tiled :-)
 
    Resize windows to resize the tiles
