@@ -256,7 +256,11 @@ Tiling.prototype.resizeTile = function(tile){
         if (tile != null) {
             var tileIndex = tile.tileIndex;
             var client = tile.clients[0];
-            this.layout.resizeTile(tileIndex, client.geometry);
+            var geometry = Qt.rect(client.geometry.x - this.windowsGapSizeWidth,
+                client.geometry.y - this.windowsGapSizeHeight,
+                client.geometry.width + this.windowsGapSizeWidth * 2,
+                client.geometry.height + this.windowsGapSizeHeight * 2);
+            this.layout.resizeTile(tileIndex, geometry);
             this._updateAllTiles();
         }
     } catch(err) {
@@ -268,7 +272,10 @@ Tiling.prototype.resizeTileTo = function(tile,geometry) {
     try {
         if (tile != null && geometry != null) {
             var tileIndex = tile.tileIndex;
-            var client = tile.clients[0];
+            geometry = Qt.rect(geometry.x - this.windowsGapSizeWidth,
+                geometry.y - this.windowsGapSizeHeight,
+                geometry.width + this.windowsGapSizeWidth * 2,
+                geometry.height + this.windowsGapSizeHeight * 2);
             this.layout.resizeTile(tileIndex, geometry);
             this._updateAllTiles();
         }
