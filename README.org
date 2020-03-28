@@ -3,7 +3,7 @@
   Tiling script for kwin, based on [[https://github.com/mgottschlag/kwin-tiling][Mathias Gottschlag's version]]
 
 ** Goals:
-   The purpose of this is to create a userfriendly tiling solution that
+   The purpose of this is to create a user-friendly tiling solution that
 
    - Integrates well with KDE Plasma
 
@@ -64,7 +64,7 @@
 
    Use the configuration menu (in System Settings->Window Management->KWin Scripts)
 
-** Comprehesive list of keyboard shorcuts:
+** Comprehensive list of keyboard shorcuts:
 
 | Shortcut                           | Default Binding   |
 |------------------------------------|-------------------|
