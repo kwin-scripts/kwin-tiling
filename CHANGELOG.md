@@ -1,3 +1,11 @@
+version 2.4:
+============
+- Initial support for activities! They're like virtual desktops, but different! I think.
+- An off-by-one error in layout configuration was fixed.
+- The script no longer attempts to rotate layouts that can't.
+- An option to always keep a minimum number of desktops open has been added.
+- Desktop compaction will now no longer be triggered when an ignored client is removed.
+
 version 2.3:
 ============
 - Workarounds for clients with empty class, firefox' secondary windows (downloads etc), 
