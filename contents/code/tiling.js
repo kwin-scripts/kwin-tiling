@@ -235,7 +235,7 @@ Tiling.prototype._getTileIndex = function(x, y) {
             // but this would break if we'd ask about x=screenRect.x or similar and sG is larger than wG
             var realrect = Qt.rect(tile.rectangle.x - this.windowsGapSizeWidth,
                                    tile.rectangle.y - this.windowsGapSizeHeight,
-                                   tile.rectangle.width + this.windowsGapSizeHeight * 2,
+                                   tile.rectangle.width + this.windowsGapSizeWidth * 2,
                                    tile.rectangle.height + this.windowsGapSizeHeight * 2);
             realrect = util.intersectRect(this.screenRectangle, realrect);
             if (tile.rectangle.x <= x
@@ -255,8 +255,12 @@ Tiling.prototype.resizeTile = function(tile){
     try {
         if (tile != null) {
             var tileIndex = tile.tileIndex;
-            var client = tile.clients[0];
-            this.layout.resizeTile(tileIndex, client.geometry);
+            var geometry = tile.clients[0].geometry;
+            var tileRect = Qt.rect(geometry.x - this.windowsGapSizeWidth,
+                geometry.y - this.windowsGapSizeHeight,
+                geometry.width + this.windowsGapSizeWidth * 2,
+                geometry.height + this.windowsGapSizeHeight * 2);
+            this.layout.resizeTile(tileIndex, tileRect);
             this._updateAllTiles();
         }
     } catch(err) {
@@ -264,12 +268,15 @@ Tiling.prototype.resizeTile = function(tile){
     }
 };
 
-Tiling.prototype.resizeTileTo = function(tile,geometry) {
+Tiling.prototype.resizeTileTo = function(tile, geometry) {
     try {
         if (tile != null && geometry != null) {
             var tileIndex = tile.tileIndex;
-            var client = tile.clients[0];
-            this.layout.resizeTile(tileIndex, geometry);
+            var tileRect = Qt.rect(geometry.x - this.windowsGapSizeWidth,
+                geometry.y - this.windowsGapSizeHeight,
+                geometry.width + this.windowsGapSizeWidth * 2,
+                geometry.height + this.windowsGapSizeHeight * 2);
+            this.layout.resizeTile(tileIndex, tileRect);
             this._updateAllTiles();
         }
     } catch(err) {
