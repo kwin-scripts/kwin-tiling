@@ -25,6 +25,7 @@ var ignored = {};
 ignored._blacklist = [
     // If a class is empty, chances are it doesn't behave properly in other ways as well
     "",
+    "lattedock",
     "kcalc",
     "klipper",
     "krunner",
