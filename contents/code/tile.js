@@ -120,6 +120,11 @@ function Tile(firstClient, tileIndex) {
         this._canSetMaximize = (firstClient.setMaximize != null);
         this.clients.push(firstClient);
         this.syncCustomProperties();
+
+        // Set when this tile is removed as a guard,
+        // so we don't accidentally do anything after,
+        // like resize or keepBelow clients.
+        this.removed = false;
     } catch(err) {
         print(err, "in Tile");
     }
@@ -218,7 +223,7 @@ Tile.prototype.setClientGeometry = function(client) {
             || !client.moveable) {
             return;
         }
-        if (this._moving || this._resizing) {
+        if (this._moving || this._resizing || this.removed) {
             return;
         }
         // This client is bogus
