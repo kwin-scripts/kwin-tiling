@@ -240,23 +240,6 @@ util.assertTrue = function(condition, message) {
         print(message);
     }
 };
-// readConfig moved to KWin.readConfig for KWin 5
-if(KWin.readConfig == null) {
-    print("Setting readConfig to KWin.readConfig");
-    KWin.readConfig = readConfig;
-} else {
-    print("We're running under KWin 5");
-}
-
-// HACK: KWin 5.2 (at least) will sometimes give us client.desktop == workspace.desktops
-// (i.e. a desktop number that is too large)
-// when a client is on all desktops
-util.getClientDesktop = function(client) {
-    if (client.onAllDesktops == true) {
-        return -1;
-    }
-    return client.desktop;
-}
 
 /**
  * Array.from() polyfill from https://vanillajstoolkit.com/polyfills/arrayfrom/

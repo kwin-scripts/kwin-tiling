@@ -98,7 +98,7 @@ function Tile(firstClient, tileIndex) {
          * Stores the current desktop as this is needed as a desktopChanged
          * parameter.
          */
-        this._currentDesktop = util.getClientDesktop(firstClient);
+        this._currentDesktop = firstClient.desktop;
 
         this._activities = Array.from(firstClient.activities);
 
@@ -357,7 +357,7 @@ Tile.prototype.onClientActivitiesChanged = function(client) {
 Tile.prototype.onClientDesktopChanged = function(client) {
     try {
         var oldDesktop = this._currentDesktop;
-        this._currentDesktop = util.getClientDesktop(client);
+        this._currentDesktop = client.desktop;
         this.desktopChanged.emit(oldDesktop, this._currentDesktop);
     } catch(err) {
         print(err, "in Tile.onClientDesktopChanged");
