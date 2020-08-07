@@ -65,22 +65,7 @@ function TileList(timer) {
     // new tiles
     var self = this;
     workspace.clientAdded.connect(function(client) {
-        // TODO: When compositing is on,
-        // we need to delay first tiling until the window is shown
-        // otherwise we end up with artifacts.
-        // However, we can only determine what the option is set to on start
-        // neither of (options.):
-        // - "useCompositing"
-        // - "compositingMode"
-        // - "compositingInitialized"
-        // change when it is disabled/enabled.
-        if (options.useCompositing) {
-            client.windowShown.connect(function(client) {
-                self.addClient(client);
-            });
-        } else {
-            self.addClient(client);
-        }
+        self.addClient(client);
         // NOTE: When a new client is added, activeChanged will be called before it even appears
         // in workspace.clientList(), so we need to keep track of the focus change here as well.
         self.trackFocusChanges(client);
