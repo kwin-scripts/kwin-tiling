@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 var ignored = {};
 
 // A hardcoded list of clients that should never be tiled
-ignored._blacklist = [
+ignored._ignoredlist = [
     // If a class is empty, chances are it doesn't behave properly in other ways as well
     "",
     "lattedock",
@@ -55,8 +55,8 @@ ignored.isIgnored = function(client) {
     var floaters = KWin.readConfig("floaters", "").toLowerCase().trim().replace(/\s*,\s*/g,",").split("\\,");
 
     if (floaters.indexOf(client.resourceClass.toString()) > -1
-        || ignored._blacklist.indexOf(client.resourceClass.toString()) > -1) {
-        print("Ignoring client because of blacklist: ", client.resourceClass.toString());
+        || ignored._ignoredlist.indexOf(client.resourceClass.toString()) > -1) {
+        print("Ignoring client because of ignoredlist: ", client.resourceClass.toString());
         return true;
     }
     // HACK: Steam doesn't set the windowtype properly
@@ -80,7 +80,7 @@ ignored.isIgnored = function(client) {
     // KFind is annoying. It sets the window type to dialog (which is arguably wrong) and more importantly sets
     // the transient_for property for some bogus "Qt Client Leader Window".
     //
-    // So we whitelist it here - this still allows blacklisting it via class.
+    // So we whitelist it here - this still allows listing it via class.
     if (client.resourceClass.toString() == "kfind") {
         return false;
     }
