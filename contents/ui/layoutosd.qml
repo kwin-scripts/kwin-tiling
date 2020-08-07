@@ -72,7 +72,7 @@ PlasmaCore.Dialog {
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.NoWrap
                 elide: Text.ElideRight
-                text: "Layout"
+                text: ""
             }
         }
 
@@ -95,7 +95,12 @@ PlasmaCore.Dialog {
     Component.onCompleted: {
         tiling.layoutChanged.connect(function(layout) {
             if (KWin.readConfig("showLayoutOsd", true)) {
-                dialogItem.show(layout.name);
+                dialogItem.show(layout.name + "Layout");
+            }
+        });
+        tiling.tilingChanged.connect(function(userActive) {
+            if (KWin.readConfig("showLayoutOsd", true)) {
+                dialogItem.show("Tiling " + (userActive ? "enabled" : "disabled"));
             }
         });
         KWin.registerWindow(dialog);

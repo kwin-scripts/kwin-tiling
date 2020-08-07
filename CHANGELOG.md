@@ -1,3 +1,8 @@
+version 2.5:
+============
+- On-screen-display for toggling tiling state
+- Fix for floating windows going behind the tiled ones (#218)
+
 version 2.4:
 ============
 - Initial support for activities! They're like virtual desktops, but different! I think.

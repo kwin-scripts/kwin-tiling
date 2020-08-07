@@ -101,6 +101,10 @@ function TilingManager(timerResize, timerGeometryChanged) {
      * A signal to be emited on manual layout change
      */
     this.layoutChanged = new Signal();
+    /**
+     * A signal to be emited on manual layout change
+     */
+    this.tilingChanged = new Signal();
 
     this._compacting = false;
 
@@ -289,6 +293,7 @@ function TilingManager(timerResize, timerGeometryChanged) {
                                   var currentScreen = workspace.activeScreen;
                                   var currentDesktop = workspace.currentDesktop;
                                   self._getLayouts(currentDesktop, currentScreen)[0].toggleUserActive();
+                                  self._notifyTilingChanged();
                               });
         KWin.registerShortcut("TILING: Tile now",
                               "TILING: Tile now",
@@ -1053,6 +1058,11 @@ TilingManager.prototype._onCurrentDesktopChanged = function() {
 TilingManager.prototype._notifyLayoutChanged = function() {
     var tiling = this._getLayouts(this._currentDesktop, this._currentScreen)[0];
     this.layoutChanged.emit(tiling.layout);
+}
+
+TilingManager.prototype._notifyTilingChanged = function() {
+    var tiling = this._getLayouts(this._currentDesktop, this._currentScreen)[0];
+    this.tilingChanged.emit(tiling.userActive);
 }
 
 TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {

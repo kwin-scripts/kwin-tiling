@@ -37,6 +37,12 @@ Item {
                 tiling.layoutChanged.emit(layout);
             }
         });
+        tiling.tilingChanged.connect(function(userActive) {
+            if (KWin.readConfig("showLayoutOsd", true) && !layoutOsdLoader.item) {
+                layoutOsdLoader.setSource("layoutosd.qml", {"tiling": tiling});
+                tiling.tilingChanged.emit(userActive);
+            }
+        });
     }
 
     Loader {
