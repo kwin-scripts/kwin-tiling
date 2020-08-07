@@ -121,10 +121,8 @@ function Tile(firstClient, tileIndex) {
         this.clients.push(firstClient);
         this.syncCustomProperties();
 
-        // Set when this tile is removed as a guard,
-        // so we don't accidentally do anything after,
-        // like resize or keepBelow clients.
-        this.removed = false;
+        // Whether this tile should *do* anything
+        this.active = true;
     } catch(err) {
         print(err, "in Tile");
     }
@@ -223,7 +221,7 @@ Tile.prototype.setClientGeometry = function(client) {
             || !client.moveable) {
             return;
         }
-        if (this._moving || this._resizing || this.removed) {
+        if (this._moving || this._resizing || !this.active) {
             return;
         }
         // This client is bogus

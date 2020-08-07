@@ -367,7 +367,7 @@ TileList.prototype._removeTile = function(tileIndex) {
         // TODO: Change to a better name
         var tile = this.tiles[tileIndex];
         if (tileIndex > -1) {
-            tile.removed = true;
+            tile.active = false;
             this.tiles.splice(tileIndex, 1);
         }
         this.tileRemoved.emit(tile);

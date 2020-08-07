@@ -183,6 +183,7 @@ Tiling.prototype.deactivate = function() {
     // Unset keepBelow so they handle like true floating clients.
     for (var i = 0; i < this.layout.tiles.length; i++) {
         this.tiles[i].setKeepBelow(false);
+        this.tiles[i].active = false;
     }
 };
 
@@ -297,6 +298,7 @@ Tiling.prototype._updateAllTiles = function() {
 
                 var geometry = util.intersectRect(newRect, this.screenRectangle);
                 this.applyGaps(geometry);
+                this.tiles[i].active = true;
                 this.tiles[i].setGeometry(geometry);
             }
         }
