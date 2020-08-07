@@ -97,7 +97,6 @@ TileList.prototype.connectSignals = function(client) {
                 var tile = getTile(client);
                 if (tile != null) {
                     client.tiling_floating = false;
-                    client.keepBelow = true;
                     tile.onClientGeometryChanged(client);
                 } else {
                     self.addClient(client);

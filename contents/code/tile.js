@@ -426,7 +426,6 @@ Tile.prototype.removeClient = function(client) {
 Tile.prototype.addClient = function(client) {
     try {
         if (this.clients.indexOf(client) == -1) {
-            client.keepBelow = true;
             if (KWin.readConfig("noBorder", false)) {
                 client.noBorder = true;
             }

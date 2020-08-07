@@ -1256,7 +1256,7 @@ TilingManager.prototype._dumpClients = function() {
                 for (var k = 0; k < layout.tiles.length; k++) {
                     outp += "   Tile " + k + "\n";
                     layout.tiles[k].clients.forEach(function(c) {
-                        outp += "     " + c.resourceClass.toString() + '- "' + c.caption + '"\n';
+                        outp += "     " + c.resourceClass.toString() + '- "' + c.caption + " " + c.keepBelow + " " + c.keepAbove + '"\n';
                     });
                 }
             }
