@@ -375,11 +375,13 @@ Tile.prototype.onClientScreenChanged = function(client) {
 };
 
 Tile.prototype.onClientStartUserMovedResized = function(client) {
+    if (!this.active) return;
     // Let client stay above the other tilers so the user sees the move
     client.keepBelow = false;
 };
 
 Tile.prototype.onClientStepUserMovedResized = function(client) {
+    if (!this.active) return;
     try {
         if (client.resize) {
             this._resizing = true;
@@ -400,6 +402,7 @@ Tile.prototype.onClientStepUserMovedResized = function(client) {
 };
 
 Tile.prototype.onClientFinishUserMovedResized = function(client) {
+    if (!this.active) return;
     try {
         if (this._moving) {
             this._moving = false;

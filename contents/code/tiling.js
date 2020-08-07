@@ -117,6 +117,7 @@ Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
         }
         for (var i = 0; i < this.tiles.length; i++) {
             this.tiles[i].tileIndex = i;
+            this.tiles[i].active = this.userActive;
             this.tiles[i].syncCustomProperties();
         }
         this._updateAllTiles();
