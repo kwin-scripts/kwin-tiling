@@ -38,6 +38,16 @@ ignored._ignoredlist = [
     "wine",
     "yakuake",
     "gcr-prompter",
+    "org.kde.krunner",
+    "org.kde.yakuake",
+    "org.kde.kcalc",
+    "org.kde.klipper",
+    "org.kde.krunner",
+    "org.kde.ksmserver",
+    "org.kde.pinentry",
+    "org.kde.plasma",
+    "org.kde.plasma-desktop",
+    "org.kde.plasmashell",
 ]
 
 /**
