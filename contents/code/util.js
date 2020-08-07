@@ -163,9 +163,13 @@ util.printTile = function(tile) {
           " client ", tile.clients[0].resourceClass.toString());
 }
 
+util.clientToString = function(c) {
+    var outp = c.tiling_tileIndex + " " + c.resourceClass.toString() + '- "' + c.caption + '" ' + util.rectToString(c.geometry);
+    return outp;
+};
+
 util.printClient = function(client) {
-    print("Client ", client.resourceClass.toString(), " on desktop ", client.desktop,
-          " at ", util.rectToString(client.geometry), " on tile ", client.tiling_tileIndex);
+    print(util.clientToString(client));
 }
 
 util.assertRectInScreen = function(rect, screenRectangle) {
