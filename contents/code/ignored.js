@@ -65,6 +65,7 @@ ignored.isIgnored = function(client) {
     var floaters = KWin.readConfig("floaters", "").toLowerCase().trim().replace(/\s*,\s*/g,",").split("\\,");
 
     if (floaters.indexOf(client.resourceClass.toString()) > -1
+        || floaters.indexOf(client.resourceName.toString()) > -1
         || ignored._ignoredlist.indexOf(client.resourceClass.toString()) > -1) {
         print("Ignoring client because of ignoredlist: ", client.resourceClass.toString());
         return true;
