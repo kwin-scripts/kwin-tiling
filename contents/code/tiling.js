@@ -96,7 +96,10 @@ Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
             }
             this.layout.addTile(finalX,finalY);
             this.tiles.push(tile);
-        } else if (this.layout.isGridLayout)
+        }
+        // For Gridlayout we want to avoid moving every tile in the grid when adding a new tile
+        // So we swap the new tile with another one, and append the other one at the end
+        else if (this.layout.isGridLayout)
         {
             this.layout.addTile();
             // If a position was specified, we insert the tile at the specified position
@@ -150,6 +153,8 @@ Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
 
 Tiling.prototype.removeTile = function(tile) {
     try {
+        // For Gridlayout we want to avoid moving every tile in the grid when removing a tile
+        // So we remove the last tile and swap it with the tile that should be removed
         if (this.layout.isGridLayout)
         {
             var tileIndex = this.tiles.indexOf(tile);

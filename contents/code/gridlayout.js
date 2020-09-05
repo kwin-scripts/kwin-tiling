@@ -22,8 +22,8 @@
 Qt.include("layout.js");
 
 /**
- * Class which arranges the windows in a spiral with the largest window filling
- * the left half of the screen.
+ * Class which arranges the windows in a grid for slaveTiles and a sideways stack for the masterTiles
+ * The amount of masterTiles is changeable by shortcut and is 0 by default
  */
 function GridLayout(screenRectangle) {
     print("Creating GridLayout");
@@ -146,9 +146,7 @@ GridLayout.prototype.removeTile = function (tileIndex) {
             if (tileIndex < this.masterCount) {
                 // there is exactly one slave
                 if (this.tiles.length - this.masterCount === 1) {
-                    // remove tile from slaves
                     this.slaveRemoveTile()
-                    // masters take entire screen
                     this.adjustMastersWidth(this.screenRectangle.width / this.masterAreaWidth,
                         0,
                         this.masterCount - 1, this.screenRectangle.x,
@@ -161,7 +159,6 @@ GridLayout.prototype.removeTile = function (tileIndex) {
                 }
                 // there are more than one slave
                 else if (this.tiles.length - this.masterCount > 1) {
-                    // remove last tile from slaves
                     this.slaveRemoveTile();
                 }
             }
@@ -169,9 +166,7 @@ GridLayout.prototype.removeTile = function (tileIndex) {
             else if (tileIndex >= this.masterCount) {
                 // tile is only slave
                 if (this.masterCount === this.tiles.length - 1) {
-                    // remove last tile from slaves
                     this.slaveRemoveTile();
-                    // masters take entire screen
                     this.adjustMastersWidth(this.screenRectangle.width / this.masterAreaWidth,
                         0,
                         this.masterCount - 1, this.screenRectangle.x,
@@ -180,7 +175,6 @@ GridLayout.prototype.removeTile = function (tileIndex) {
                 }
                 // there is more than one slave
                 else if (this.masterCount < this.tiles.length - 1) {
-                    // remove last tile from slaves
                     this.slaveRemoveTile();
                 }
             }
@@ -193,10 +187,11 @@ GridLayout.prototype.removeTile = function (tileIndex) {
 
 GridLayout.prototype.increaseMaster = function () {
     try {
-        printAllRects(this.tiles)
+        this._applyGravity();
         // There are no tiles
         if (this.tiles.length === 0) {
             this.masterCount++;
+            this._unapplyGravity();
             return;
         }
         // masterCount 0 -> 1
@@ -207,6 +202,7 @@ GridLayout.prototype.increaseMaster = function () {
                 this.masterCount++;
                 this.master = 0;
                 this.masterAreaWidth = this.screenRectangle.width;
+                this._unapplyGravity();
                 return;
             }
             // There are multiple SlaveTiles
@@ -226,14 +222,16 @@ GridLayout.prototype.increaseMaster = function () {
                 this.tiles.splice(this.masterCount, 0, tempTile)
                 this.masterCount++;
                 this.master = 0;
+                this._unapplyGravity();
                 return;
             }
         }
-        // There are MasterTiles
+        // There is at least one MasterTile
         else if (this.masterCount > 0) {
             // There are no SlaveTiles
             if (this.tiles.length <= this.masterCount) {
                 this.masterCount++;
+                this._unapplyGravity();
                 return;
             }
             // There is one SlaveTile
@@ -246,6 +244,7 @@ GridLayout.prototype.increaseMaster = function () {
                     this.masterCount - 1, this.screenRectangle.x,
                     this.screenRectangle.x + this.screenRectangle.width);
                 this.masterAreaWidth = this.screenRectangle.width;
+                this._unapplyGravity();
                 return;
             }
             // There are multiple SlaveTiles
@@ -253,6 +252,7 @@ GridLayout.prototype.increaseMaster = function () {
                 var tempTile = this.slaveRemoveTile();
                 this.masterAddTile(tempTile);
                 this.masterCount++;
+                this._unapplyGravity();
                 return;
             }
         }
@@ -265,26 +265,30 @@ GridLayout.prototype.increaseMaster = function () {
 
 GridLayout.prototype.decrementMaster = function () {
     try {
+        this._applyGravity();
         // mastercount is already 0
         if (this.masterCount === 0) {
+            this._unapplyGravity();
             return;
         }
         // There are no tiles
         // Or Fewer Tiles than masterCount
         if (this.tiles.length === 0 || this.tiles.length < this.masterCount) {
             this.masterCount--;
+            this._unapplyGravity();
             return;
         }
-        // One MasterTile
+        // There is exatly one MasterTile
         if (this.masterCount === 1) {
-            // No SlaveTiles
+            // There are no SlaveTiles
             if (this.tiles.length === 1) {
                 this.masterCount--;
                 this.master = -1;
                 this.masterAreaWidth = 0;
+                this._unapplyGravity();
                 return;
             }
-            // Existing SlaveTiles
+            // There is at least one SlaveTile
             if (this.tiles.length > 1) {
                 var tempTile = this.tiles.splice(0, 1)[0];
                 this.masterCount--;
@@ -296,12 +300,13 @@ GridLayout.prototype.decrementMaster = function () {
                     this.tiles.length - 1, this.screenRectangle.x,
                     this.screenRectangle.x + this.screenRectangle.width);
                 this.masterAreaWidth = 0;
+                this._unapplyGravity();
                 return;
             }
         }
-        // Multiple MasterTiles
+        // There are Multiple MasterTiles
         if (this.masterCount > 1) {
-            // No SlaveTiles
+            // There are no SlaveTiles
             if (this.tiles.length === this.masterCount) {
                 var tempTile = this.masterRemoveTile(this.masterCount - 1);
                 this.masterCount--;
@@ -315,13 +320,15 @@ GridLayout.prototype.decrementMaster = function () {
                     this.screenRectangle.width - this.masterAreaWidth,
                     this.screenRectangle.height);
                 this.tiles.push(tempTile);
+                this._unapplyGravity();
                 return;
             }
-            // Existing SlaveTiles
+            // There is at least one SlaveTile
             if (this.tiles.length > this.masterCount) {
                 var tempTile = this.masterRemoveTile(this.masterCount - 1);
                 this.masterCount--;
                 this.slaveAddTile(tempTile);
+                this._unapplyGravity();
                 return;
             }
         }
@@ -332,7 +339,7 @@ GridLayout.prototype.decrementMaster = function () {
     }
 }
 
-
+// adds a tile to the slave grid
 GridLayout.prototype.slaveAddTile = function (tile) {
     var slaveAreaWidth = this.screenRectangle.width - this.masterAreaWidth;
     this.tiles.splice(this.tiles.length, 0, tile);
@@ -340,11 +347,13 @@ GridLayout.prototype.slaveAddTile = function (tile) {
     var [oldc, oldr] = this.getGridMeasurements(this.tiles.length - this.masterCount - 1);
     var [changedc, changedr] = [newc - oldc, newr - oldr];
 
+    // The grid measurements dont change
     if (!changedc && !changedr) {
         var [prevc, prevr] = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount - 2);
         var [c, r] = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount - 1);
         var [dc, dr] = [c - prevc, r - prevr];
 
+        // The new tile has different column and same row as the previous tile
         if (dc > 0) {
             var prevRectOld = util.copyRect(this.tiles[this.tiles.length - 2].rectangle);
             var prevRectNew = this.tiles[this.tiles.length - 2].rectangle;
@@ -355,7 +364,9 @@ GridLayout.prototype.slaveAddTile = function (tile) {
                 prevRectOld.width - prevRectNew.width,
                 prevRectNew.height);
             tile.rectangle = newRect;
-        } else if (dr > 0) {
+        }
+        // The new tile has different row and same column as the previous tile
+        else if (dr > 0) {
             var prevRectOld = util.copyRect(this.tiles[this.tiles.length - 2].rectangle);
             var prevRectNew = this.tiles[this.tiles.length - 2].rectangle;
             prevRectNew.y = prevRectOld.y + prevRectOld.height - this.screenRectangle.height / newr;
@@ -368,7 +379,9 @@ GridLayout.prototype.slaveAddTile = function (tile) {
         } else {
             print("Error in SlaveAddTile");
         }
-    } else if (changedc) {
+    }
+    // The number of columns changes
+    else if (changedc) {
         tile.rectangle = Qt.rect(this.screenRectangle.x - slaveAreaWidth / oldc,
             this.screenRectangle.y,
             slaveAreaWidth / oldc,
@@ -382,7 +395,9 @@ GridLayout.prototype.slaveAddTile = function (tile) {
             this.tiles.length - 1,
             this.screenRectangle.x + this.masterAreaWidth,
             this.screenRectangle.x + this.screenRectangle.width);
-    } else if (changedr) {
+    }
+    // The number of rows changes
+    else if (changedr) {
         tile.rectangle = Qt.rect(this.screenRectangle.x + this.masterAreaWidth,
             this.screenRectangle.y - this.screenRectangle.height / oldr,
             slaveAreaWidth,
@@ -398,6 +413,8 @@ GridLayout.prototype.slaveAddTile = function (tile) {
             this.screenRectangle.y + this.screenRectangle.height);
     }
 };
+
+// removes a tile from the slave grid
 GridLayout.prototype.slaveRemoveTile = function () {
     var slaveAreaWidth = this.screenRectangle.width - this.masterAreaWidth;
     var removed = this.tiles.pop();
@@ -405,17 +422,21 @@ GridLayout.prototype.slaveRemoveTile = function () {
     var [oldc, oldr] = this.getGridMeasurements(this.tiles.length - this.masterCount + 1);
     var [changedc, changedr] = [oldc - newc, oldr - newr];
 
+    // The new tile has different row and same column as the previous tile
     if (!changedc && !changedr) {
         var [prevc, prevr] = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount);
         var [c, r] = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount - 1);
         var [dc, dr] = [prevc - c, prevr - r];
 
+        // The removed tile has different column and same row as the new last tile
         if (dc > 0) {
             var oldRect = removed.rectangle;
             var rect = this.tiles[this.tiles.length - 1].rectangle;
             rect.x = oldRect.x;
             rect.width = oldRect.width + rect.width;
-        } else if (dr > 0) {
+        }
+        // The removed tile has different row and same column as the new last tile
+        else if (dr > 0) {
             var oldRect = removed.rectangle;
             var rect = this.tiles[this.tiles.length - 1].rectangle;
             rect.y = oldRect.y;
@@ -423,7 +444,9 @@ GridLayout.prototype.slaveRemoveTile = function () {
         } else {
             print("Error in SlaveRemoveTile");
         }
-    } else if (changedc) {
+    }
+    // The number of columns changes
+    else if (changedc) {
         var newWidthSum = slaveAreaWidth;
         var oldWidthSum = newWidthSum - removed.rectangle.width
         var widthRatio = newWidthSum / oldWidthSum;
@@ -432,7 +455,9 @@ GridLayout.prototype.slaveRemoveTile = function () {
             this.tiles.length - 1,
             this.screenRectangle.x + this.masterAreaWidth,
             this.screenRectangle.x + this.screenRectangle.width);
-    } else if (changedr) {
+    }
+    // The number of rows changes
+    else if (changedr) {
         var newHeightSum = this.screenRectangle.height;
         var oldHeightSum = newHeightSum - removed.rectangle.height
         var heightRatio = newHeightSum / oldHeightSum;
@@ -445,6 +470,7 @@ GridLayout.prototype.slaveRemoveTile = function () {
     return removed;
 };
 
+// adds a tile to the master stack
 GridLayout.prototype.masterAddTile = function (tile) {
     tile.rectangle.width = this.masterAreaWidth / Math.min(this.masterCount, this.tiles.length);
     tile.rectangle.height = this.screenRectangle.height;
@@ -461,6 +487,7 @@ GridLayout.prototype.masterAddTile = function (tile) {
         this.screenRectangle.x + this.masterAreaWidth);
 };
 
+// removes a tile from the master stack
 GridLayout.prototype.masterRemoveTile = function (tileIndex) {
     var removed = this.tiles.splice(tileIndex, 1)[0];
     var newWidthSum = this.masterAreaWidth;
@@ -474,6 +501,8 @@ GridLayout.prototype.masterRemoveTile = function (tileIndex) {
     return removed;
 };
 
+// adjusts width of specified slaveTtiles keeping size ratio between tiles
+// should pass indices for all slaveTiles
 GridLayout.prototype.adjustSlavesWidth = function (ratio, firstIndex, lastIndex, leftBorder, rightBorder) {
     let [col_nr, row_nr] = this.getGridMeasurements(lastIndex - firstIndex + 1)
 
@@ -499,6 +528,8 @@ GridLayout.prototype.adjustSlavesWidth = function (ratio, firstIndex, lastIndex,
     }
 };
 
+// adjusts height of specified slaveTiles keeping size ratio between tiles
+// should pass indices for all slaveTiles
 GridLayout.prototype.adjustSlavesHeight = function (ratio, firstIndex, lastIndex, upperBorder, lowerBorder) {
     let [col_nr, row_nr] = this.getGridMeasurements(lastIndex - firstIndex + 1)
 
@@ -524,6 +555,8 @@ GridLayout.prototype.adjustSlavesHeight = function (ratio, firstIndex, lastIndex
     }
 };
 
+// adjusts height of specified masterTiles keeping size ratio between tiles
+// should pass indices for all master tiles
 GridLayout.prototype.adjustMastersWidth = function (ratio, firstIndex, lastIndex, leftBorder, rightBorder) {
     var nextX = leftBorder;
     for (var i = firstIndex; i <= lastIndex; i++) {
@@ -539,6 +572,7 @@ GridLayout.prototype.adjustMastersWidth = function (ratio, firstIndex, lastIndex
     }
 };
 
+// returns column and row count of a grid with slaveTileCount many tiles
 GridLayout.prototype.getGridMeasurements = function (slaveTileCount) {
     if (slaveTileCount === 0)
         return [0, 0];
@@ -548,7 +582,7 @@ GridLayout.prototype.getGridMeasurements = function (slaveTileCount) {
     return [columns, rows];
 }
 
-//returns [column,row]
+//returns [column,row] for a given index
 //col and row starting at 1
 //index starting at 0
 GridLayout.prototype.getCoordinatesFromIndex = function (i) {
@@ -568,6 +602,7 @@ GridLayout.prototype.getCoordinatesFromIndex = function (i) {
     return [col, row];
 };
 
+//returns index for a given column and row
 //col and row starting at 1
 //index starting at 0
 GridLayout.prototype.getIndexFromCoordinates = function (col, row) {
@@ -583,14 +618,3 @@ GridLayout.prototype.getIndexFromCoordinates = function (col, row) {
     let c = b + offset;
     return c;
 };
-
-function printRect(rect) {
-    print(rect.x + "\t" + rect.y + "\t" + rect.width + "\t" + rect.height);
-}
-
-function printAllRects(tiles) {
-    print("all Rects")
-    for (let i = 0; i < tiles.length; i++)
-        printRect(tiles[i].rectangle)
-    print("all Rects done")
-}
