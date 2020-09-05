@@ -96,6 +96,28 @@ Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
             }
             this.layout.addTile(finalX,finalY);
             this.tiles.push(tile);
+        } else if (this.layout.isGridLayout)
+        {
+            this.layout.addTile();
+            // If a position was specified, we insert the tile at the specified position
+            if (x != null && y != null) {
+                var index = this._getTileIndex(x, y);
+                if (index == -1) {
+                    this.tiles.push(tile);
+                } else {
+                    var removedTile = this.tiles.splice(index, 1, tile);
+                    if(removedTile.length > 0)
+                        this.tiles.push(removedTile[0])
+                }
+            } else {
+                if (tile.tileIndex > -1 && tile.tileIndex <= this.tiles.length) {
+                    var removedTile = this.tiles.splice(tile.tileIndex, 1, tile);
+                    if(removedTile.length > 0)
+                        this.tiles.push(removedTile[0])
+                } else {
+                    this.tiles.push(tile);
+                }
+            }
         }
         else {
             this.layout.addTile();
@@ -128,6 +150,29 @@ Tiling.prototype.addTile = function(tile, previouslyFocusedClient, x, y) {
 
 Tiling.prototype.removeTile = function(tile) {
     try {
+        if (this.layout.isGridLayout)
+        {
+            var tileIndex = this.tiles.indexOf(tile);
+            if (tileIndex > -1) {
+                var temp = this.tiles.pop();
+                if(tileIndex < this.tiles.length)
+                    this.tiles.splice(tileIndex, 1,temp);
+                this.layout.removeTile(tileIndex);
+                // Correct tileIndex
+                for (var i = 0; i < this.tiles.length; i++) {
+                    this.tiles[i].tileIndex = i;
+                    this.tiles[i].syncCustomProperties();
+                }
+                // TODO: Unregister tile callbacks
+                this._updateAllTiles();
+            } else {
+                print("removeTile: No such tile ", tile._currentDesktop,
+                    tile._currentScreen, tile.clients[0].resourceClass.toString());
+                print(this.desktop, this.screen);
+            }
+            return;
+        }
+
         var tileIndex = this.tiles.indexOf(tile);
         if (tileIndex > -1) {
             this.tiles.splice(tileIndex, 1);
