@@ -128,6 +128,13 @@
         </widget>
        </item>
        <item row="11" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string>Layouts for each Desktop &lt;br&gt;desktopNr:layoutname[,...]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
         <widget class="QLineEdit" name="kcfg_layouts"/>
        </item>
        <item row="7" column="0">
@@ -383,7 +390,7 @@
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QLabel" name="label_11">
+        <widget class="QLabel" name="label_13">
          <property name="text">
           <string>Default master width</string>
          </property>
