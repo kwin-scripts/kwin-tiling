@@ -396,6 +396,20 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="kcfg_gridLayoutColSpan">
+         <property name="text">
+          <string>Allow Windows to span two columns</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="kcfg_gridLayoutRowSpan">
+         <property name="text">
+          <string>Allow Windows to span two rows</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -423,6 +437,8 @@
   <tabstop>kcfg_windowsGapSizeHeight</tabstop>
   <tabstop>kcfg_halfLayoutMasterRatio</tabstop>
   <tabstop>kcfg_gridLayoutMasterRatio</tabstop>
+  <tabstop>kcfg_gridLayoutColSpan</tabstop>
+  <tabstop>kcfg_gridLayoutRowSpan</tabstop>
  </tabstops>
  <resources/>
  <connections>

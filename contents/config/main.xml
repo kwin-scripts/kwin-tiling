@@ -85,5 +85,13 @@
           <label>Default Grid Layout master ratio</label>
           <default>50</default>
         </entry>
+        <entry name="gridLayoutColSpan" type="bool">
+          <label>Should windows be able to span across two columns?</label>
+          <default>false</default>
+        </entry>
+        <entry name="gridLayoutRowSpan" type="bool">
+          <label>Should windows be able to span across two rows?</label>
+          <default>false</default>
+        </entry>
     </group>
 </kcfg>
