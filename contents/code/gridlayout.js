@@ -426,18 +426,18 @@ GridLayout.prototype.slaveAddTile = function (tile) {
         {
             let it = this.getIndexFromCoordinates(oldc, 1);
             let tempRect = this.tiles[this.tiles.length - 1 - it].rectangle;
-            tile.rectangle = Qt.rect(tempRect.x - Math.floor(this.screenRectangle.width / oldc),
+            tile.rectangle = Qt.rect(tempRect.x - Math.floor(slaveAreaWidth / oldc),
                 tempRect.y,
-                Math.floor(this.screenRectangle.width / oldc),
+                Math.floor(slaveAreaWidth / oldc),
                 tempRect.height);
 
             for (let rt = 2; rt <= oldr; rt++)
             {
-                let it = this.getIndexFromCoordinates(oldc,rt);
+                let it = this.getIndexFromCoordinates(oldc, rt);
                 let tempRect = this.tiles[this.tiles.length - 1 - it].rectangle;
-                this.tiles[this.tiles.length - 1 - it].rectangle = Qt.rect(tempRect.x - Math.floor(this.screenRectangle.width / oldc),
+                this.tiles[this.tiles.length - 1 - it].rectangle = Qt.rect(tempRect.x - Math.floor(slaveAreaWidth / oldc),
                     tempRect.y,
-                    tempRect.width + Math.floor(this.screenRectangle.width / oldc),
+                    tempRect.width + Math.floor(slaveAreaWidth / oldc),
                     tempRect.height);
             }
 
@@ -452,7 +452,7 @@ GridLayout.prototype.slaveAddTile = function (tile) {
         }
         else
         {
-            tile.rectangle = Qt.rect(this.screenRectangle.x,
+            tile.rectangle = Qt.rect(this.screenRectangle.x + this.masterAreaWidth,
                 this.screenRectangle.y,
                 Math.floor(slaveAreaWidth / newc),
                 this.screenRectangle.height);
@@ -599,7 +599,7 @@ GridLayout.prototype.slaveRemoveTile = function () {
 
 // adds a tile to the master stack
 GridLayout.prototype.masterAddTile = function (tile) {
-    tile.rectangle.width = this.masterAreaWidth / Math.min(this.masterCount, this.tiles.length);
+    tile.rectangle.width = Math.floor(this.masterAreaWidth / Math.min(this.masterCount, this.tiles.length));
     tile.rectangle.height = this.screenRectangle.height;
     tile.rectangle.y = this.screenRectangle.y;
     tile.rectangle.x = this.screenRectangle.x + this.masterAreaWidth + tile.rectangle.width;
@@ -623,7 +623,8 @@ GridLayout.prototype.masterRemoveTile = function (tileIndex) {
 
     this.adjustMastersWidth(widthRatio,
         0,
-        Math.min(this.masterCount - 2, this.tiles.length - 1), this.screenRectangle.x,
+        Math.min(this.masterCount - 2, this.tiles.length - 1),
+        this.screenRectangle.x,
         this.screenRectangle.x + this.masterAreaWidth);
     return removed;
 };
@@ -650,7 +651,7 @@ GridLayout.prototype.adjustSlavesWidth = function (ratio, firstIndex, lastIndex,
                     tile.rectangle.width = nextX - leftBorder;
                     nextX = leftBorder;
                 }
-                else
+                else if (this.spanCols)
                 {
                     var tile = this.tiles[lastIndex - this.getIndexFromCoordinates(c - 1, r)];
                     tile.rectangle.width = tile.rectangle.width + (tile.rectangle.x - leftBorder);
@@ -684,7 +685,7 @@ GridLayout.prototype.adjustSlavesHeight = function (ratio, firstIndex, lastIndex
                     tile.rectangle.height = nextY - upperBorder;
                     nextY = upperBorder;
                 }
-                else
+                else if (this.spanRows)
                 {
                     var tile = this.tiles[lastIndex - this.getIndexFromCoordinates(c, r - 1)];
                     tile.rectangle.height = tile.rectangle.height + (tile.rectangle.y - upperBorder);
@@ -703,7 +704,7 @@ GridLayout.prototype.adjustMastersWidth = function (ratio, firstIndex, lastIndex
     for (var i = firstIndex; i <= lastIndex; i++) {
         if (i !== lastIndex) {
             this.tiles[i].rectangle.x = nextX;
-            this.tiles[i].rectangle.width = ratio * this.tiles[i].rectangle.width;
+            this.tiles[i].rectangle.width = Math.floor(ratio * this.tiles[i].rectangle.width);
             nextX = this.tiles[i].rectangle.x + this.tiles[i].rectangle.width;
         } else {
             this.tiles[i].rectangle.x = nextX;
