@@ -17,8 +17,8 @@
 
    - Support for minimizing and unminimizing windows
 
-   - Support for setting windows to floating or quitting tiling altogether, per-desktop (Meta+Shift+F11) and per-window (Meta-f)
-     ("Meta" refers to the "super" or "windows" key here)
+   - Support for setting windows to floating or quitting tiling altogether, per-desktop (Super+Shift+F11) and per-window (Super-f)
+     ("Super" refers to the "windows" key here)
 
    - Support for a list of ignored windows in configuration (by class)
 
@@ -26,7 +26,7 @@
 
    - Mouse resizing
 
-   - Useractionsmenu and keybinding (Meta+f) for toggling tiling/floating
+   - Useractionsmenu and keybinding (Super+f) for toggling tiling/floating
 
    - An option to turn off borders for tiled windows
 
@@ -60,41 +60,41 @@
    Declare shortcuts (in Systemsettings->Shortcuts_and_Gestures->Global_Keyboard_Shortcuts)
    for resize, minimize and maximize operations.
 
-   Press Meta-Shift-PgUp or Meta-Shift-PgDn to switch the layout
+   Press Super-Shift-PgUp or Super-Shift-PgDn to switch the layout
 
    Use the configuration menu (in System Settings->Window Management->KWin Scripts)
 
 ** Comprehensive list of keyboard shorcuts:
 
-| Shortcut                           | Default Binding   |
-|------------------------------------|-------------------|
-| Next Tiling Layout                 | Meta+Shift+PgDown |
-| Previous Tiling Layout             | Meta+Shift+PgUp   |
-| Toggle Floating                    | Meta+F            |
-| Toggle Border for all              |                   |
-| Move Window Left                   | Meta+Shift+H      |
-| Move Window Right                  | Meta+Shift+L      |
-| Move Window Up                     | Meta+Shift+K      |
-| Move Window Down                   | Meta+Shift+J      |
-| Toggle Tiling                      | Meta+Shift+f11    |
-| Tile now                           |                   |
-| Swap Window With Master            | Meta+Shift+M      |
-| Resize Active Window To The Left   | Meta+Alt+H        |
-| Resize Active Window To The Right  | Meta+Alt+L        |
-| Resize Active Window To The Top    | Meta+Alt+K        |
-| Resize Active Window To The Bottom | Meta+Alt+J        |
-| Increase Number Of Masters         | Meta+*            |
-| Decrease Number Of Masters         | Meta+_            |
-| Focus next tile                    |                   |
-| Focus previous tile                |                   |
-| Swap with next tile                |                   |
-| Swap with previous tile            |                   |
-| I3: Set Wrap Horizontal Mode       |                   |
-| I3: Set Wrap Vertical Mode         |                   |
-| I3: Set Normal Mode                |                   |
-| Move Window To New Desktop         | Meta+Shift+D      |
-| Dump Clients                       | Meta+Shift+Escape |
-| Cycle Rotations                    | Meta+Shift+R      |
+| Shortcut                           | Default Binding    |
+|------------------------------------|--------------------|
+| Next Tiling Layout                 | Super+Shift+PgDown |
+| Previous Tiling Layout             | Super+Shift+PgUp   |
+| Toggle Floating                    | Super+F            |
+| Toggle Border for all              |                    |
+| Move Window Left                   | Super+Shift+H      |
+| Move Window Right                  | Super+Shift+L      |
+| Move Window Up                     | Super+Shift+K      |
+| Move Window Down                   | Super+Shift+J      |
+| Toggle Tiling                      | Super+Shift+f11    |
+| Tile now                           |                    |
+| Swap Window With Master            | Super+Shift+M      |
+| Resize Active Window To The Left   | Super+Alt+H        |
+| Resize Active Window To The Right  | Super+Alt+L        |
+| Resize Active Window To The Top    | Super+Alt+K        |
+| Resize Active Window To The Bottom | Super+Alt+J        |
+| Increase Number Of Masters         | Super+*            |
+| Decrease Number Of Masters         | Super+_            |
+| Focus next tile                    |                    |
+| Focus previous tile                |                    |
+| Swap with next tile                |                    |
+| Swap with previous tile            |                    |
+| I3: Set Wrap Horizontal Mode       |                    |
+| I3: Set Wrap Vertical Mode         |                    |
+| I3: Set Normal Mode                |                    |
+| Move Window To New Desktop         | Super+Shift+D      |
+| Dump Clients                       | Super+Shift+Escape |
+| Cycle Rotations                    | Super+Shift+R      |
 
 ** Troubleshooting:
    No configuration option is available for the KWin Scripts entry
