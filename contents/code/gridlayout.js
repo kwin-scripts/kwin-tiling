@@ -375,10 +375,13 @@ GridLayout.prototype.slaveAddTile = function (tile) {
             }
             else
             {
+                let it = this.getIndexFromCoordinates(c - 1,r - 1);
+                let belowPrevRect = util.copyRect(this.tiles[this.tiles.length - 1 - it].rectangle);
+
                 var prevRectOld = util.copyRect(this.tiles[this.masterCount + 1].rectangle);
                 var prevRectNew = this.tiles[this.masterCount + 1].rectangle;
-                prevRectNew.x = prevRectOld.x + prevRectOld.width - Math.floor(slaveAreaWidth / newc);
-                prevRectNew.width = Math.floor(slaveAreaWidth / newc);
+                prevRectNew.x = belowPrevRect.x
+                prevRectNew.width = belowPrevRect.width
                 var newRect = Qt.rect(prevRectOld.x,
                     prevRectNew.y,
                     prevRectOld.width - prevRectNew.width,
@@ -406,10 +409,13 @@ GridLayout.prototype.slaveAddTile = function (tile) {
             }
             else
             {
+                let it = this.getIndexFromCoordinates(c - 1,r - 1);
+                let rightPrevRect = util.copyRect(this.tiles[this.tiles.length - 1 - it].rectangle);
+
                 var prevRectOld = util.copyRect(this.tiles[this.masterCount + 1].rectangle);
                 var prevRectNew = this.tiles[this.masterCount + 1].rectangle;
-                prevRectNew.y = prevRectOld.y + prevRectOld.height - Math.floor(this.screenRectangle.height / newr);
-                prevRectNew.height = Math.floor(this.screenRectangle.height / newr);
+                prevRectNew.y = rightPrevRect.y;
+                prevRectNew.height = rightPrevRect.height;
                 var newRect = Qt.rect(prevRectNew.x,
                     prevRectOld.y,
                     prevRectNew.width,
