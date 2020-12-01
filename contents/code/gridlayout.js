@@ -33,9 +33,15 @@ function GridLayout(screenRectangle) {
         print(err, "in GridLayout");
     }
     this.masterAreaRatio = KWin.readConfig("gridLayoutMasterRatio", 50) / 100;
+    this.masterCount = KWin.readConfig("gridLayoutMasterCount", 0);
+    this.master = this.masterCount - 1;
     this.masterAreaWidth = 0;
-    this.master = -1;
-    this.masterCount = 0;
+
+    if(this.masterCount > 0)
+    {
+        this.masterAreaWidth = this.screenRectangle.width;
+    }
+
     this.isGridLayout = true;
     this.spanRows = KWin.readConfig("gridLayoutRowSpan", false);
     this.spanCols = KWin.readConfig("gridLayoutColSpan", false);

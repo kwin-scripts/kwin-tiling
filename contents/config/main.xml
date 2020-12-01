@@ -93,5 +93,9 @@
           <label>Should windows be able to span across two rows?</label>
           <default>false</default>
         </entry>
+        <entry name="gridLayoutMasterCount" type="int">
+          <label>Default master count for Grid Layout</label>
+          <default>0</default>
+        </entry>
     </group>
 </kcfg>
