@@ -26,6 +26,7 @@ Qt.include("layout.js");
 Qt.include("spirallayout.js");
 Qt.include("halflayout.js");
 Qt.include("bladelayout.js");
+Qt.include("gridlayout.js");
 Qt.include("i3layout.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
@@ -50,7 +51,8 @@ function TilingManager(timerResize, timerGeometryChanged) {
         I3Layout,
         HalfLayout,
         BladeLayout,
-        SpiralLayout/*,
+        SpiralLayout,
+        GridLayout/*,
                       ZigZagLayout,
                       ColumnLayout,
                       RowLayout,
@@ -966,7 +968,7 @@ TilingManager.prototype._onTileActivitiesChanged = function(tile) {
     this._changeTileLayouts(tile, oldLayouts, newLayouts);
     this._getLayouts(this._currentDesktop, this._currentScreen)[0].activate();
 };
-  
+
 TilingManager.prototype._onTileMovingStarted = function(tile) {
     // NOTE: This supports only one moving window, breaks with multitouch input
     this._moving = true;

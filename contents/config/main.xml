@@ -77,9 +77,25 @@
 		  <label>Tile vertically on portrait oriented displays</label>
 		  <default>false</default>
 		</entry>
-		<entry name="halfLayoutMasterRatio" type="int">
-		  <label>Default Half Layout master ratio</label>
-		  <default>50</default>
-		</entry>
+        <entry name="halfLayoutMasterRatio" type="int">
+          <label>Default Half Layout master ratio</label>
+          <default>50</default>
+        </entry>
+        <entry name="gridLayoutMasterRatio" type="int">
+          <label>Default Grid Layout master ratio</label>
+          <default>50</default>
+        </entry>
+        <entry name="gridLayoutColSpan" type="bool">
+          <label>Should windows be able to span across two columns?</label>
+          <default>false</default>
+        </entry>
+        <entry name="gridLayoutRowSpan" type="bool">
+          <label>Should windows be able to span across two rows?</label>
+          <default>false</default>
+        </entry>
+        <entry name="gridLayoutMasterCount" type="int">
+          <label>Default master count for Grid Layout</label>
+          <default>0</default>
+        </entry>
     </group>
 </kcfg>
