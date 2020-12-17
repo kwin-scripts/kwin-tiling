@@ -351,15 +351,26 @@ GridLayout.prototype.decrementMaster = function () {
 GridLayout.prototype.slaveAddTile = function (tile) {
     var slaveAreaWidth = this.screenRectangle.width - this.masterAreaWidth;
     this.tiles.splice(this.masterCount, 0, tile);
-    var [newc, newr] = this.getGridMeasurements(this.tiles.length - this.masterCount);
-    var [oldc, oldr] = this.getGridMeasurements(this.tiles.length - this.masterCount - 1);
-    var [changedc, changedr] = [newc - oldc, newr - oldr];
+    var cr = this.getGridMeasurements(this.tiles.length - this.masterCount);
+    var newc = cr.col;
+    var newr = cr.row;
+    cr = this.getGridMeasurements(this.tiles.length - this.masterCount - 1);
+    var oldc = cr.col;
+    var oldr = cr.row;
+    var changedc = newc - oldc;
+    var changedr = newr - oldr;
 
     // The grid measurements dont change
     if (!changedc && !changedr) {
-        var [prevc, prevr] = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount - 2);
-        var [c, r] = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount - 1);
-        var [dc, dr] = [c - prevc, r - prevr];
+        var cr = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount - 2);
+        var prevc = cr.col;
+        var prevr = cr.row;
+
+        cr = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount - 1);
+        var c = cr.col;
+        var r = cr.row;
+        var dc = c - prevc;
+        var dr = r - prevr;
 
         // The new tile has different column and same row as the previous tile
         if (dc > 0) {
@@ -533,15 +544,26 @@ GridLayout.prototype.slaveAddTile = function (tile) {
 GridLayout.prototype.slaveRemoveTile = function () {
     var slaveAreaWidth = this.screenRectangle.width - this.masterAreaWidth;
     var removed = this.tiles.splice(this.masterCount, 1)[0];
-    var [newc, newr] = this.getGridMeasurements(this.tiles.length - this.masterCount);
-    var [oldc, oldr] = this.getGridMeasurements(this.tiles.length - this.masterCount + 1);
-    var [changedc, changedr] = [oldc - newc, oldr - newr];
+    var cr = this.getGridMeasurements(this.tiles.length - this.masterCount);
+    var newc = cr.col;
+    var newr = cr.row;
+    cr = this.getGridMeasurements(this.tiles.length - this.masterCount + 1);
+    var oldc = cr.col;
+    var oldr = cr.row;
+    var changedc = oldc - newc;
+    var changedr = oldr - newr;
 
     // The new tile has different row and same column as the previous tile
     if (!changedc && !changedr) {
-        var [prevc, prevr] = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount);
-        var [c, r] = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount - 1);
-        var [dc, dr] = [prevc - c, prevr - r];
+        var cr = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount);
+        var prevc = cr.col;
+        var prevr = cr.row;
+
+        cr = this.getCoordinatesFromIndex(this.tiles.length - this.masterCount - 1);
+        var c = cr.col;
+        var r = cr.row;
+        var dc = prevc - c;
+        var dr = prevr - r;
 
         // The removed tile has different column and same row as the new last tile
         if (dc > 0) {
@@ -644,7 +666,9 @@ GridLayout.prototype.masterRemoveTile = function (tileIndex) {
 // adjusts width of specified slaveTiles keeping size ratio between tiles
 // should pass indices for all slaveTiles
 GridLayout.prototype.adjustSlavesWidth = function (ratio, firstIndex, lastIndex, leftBorder, rightBorder) {
-    let [col_nr, row_nr] = this.getGridMeasurements(lastIndex - firstIndex + 1)
+    var cr = this.getGridMeasurements(lastIndex - firstIndex + 1);
+    var col_nr = cr.col;
+    var row_nr = cr.row;
 
     for (let r = 1; r <= row_nr; r++) {
         let nextX = rightBorder;
@@ -678,7 +702,9 @@ GridLayout.prototype.adjustSlavesWidth = function (ratio, firstIndex, lastIndex,
 // adjusts height of specified slaveTiles keeping size ratio between tiles
 // should pass indices for all slaveTiles
 GridLayout.prototype.adjustSlavesHeight = function (ratio, firstIndex, lastIndex, upperBorder, lowerBorder) {
-    let [col_nr, row_nr] = this.getGridMeasurements(lastIndex - firstIndex + 1)
+    var cr = this.getGridMeasurements(lastIndex - firstIndex + 1);
+    var col_nr = cr.col;
+    var row_nr = cr.row;
 
     for (let c = 1; c <= col_nr; c++) {
         let nextY = lowerBorder;
@@ -733,7 +759,7 @@ GridLayout.prototype.getGridMeasurements = function (slaveTileCount) {
 
     var columns = Math.ceil(Math.sqrt(slaveTileCount));
     var rows = Math.ceil((slaveTileCount / columns));
-    return [columns, rows];
+    return { "col": columns, "row": rows };
 }
 
 //returns [column,row] for a given index
@@ -753,7 +779,7 @@ GridLayout.prototype.getCoordinatesFromIndex = function (i) {
         row = a + 1;
         col = (i - b) - a;
     }
-    return [col, row];
+    return { "col": col, "row": row };
 };
 
 //returns index for a given column and row
