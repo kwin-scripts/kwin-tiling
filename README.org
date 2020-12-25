@@ -48,6 +48,9 @@
    plasmapkg2 --type kwinscript -u .
    #+END_SRC
 
+*** AUR
+    [kwin-scripts-tiling](http://aur.archlinux.org/packages/kwin-scripts-tiling) or [kwin-scripts-tiling-git](http://aur.archlinux.org/packages/kwin-scripts-tiling-git)
+
 ** Usage:
    Install
 
