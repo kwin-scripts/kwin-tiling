@@ -103,19 +103,27 @@ TileList.prototype.connectSignals = function(client) {
                 }
             }
         });
+        client.shadeChanged.connect(function() {
+            if (client.shade == true) {
+                // Untile shaded clients since we get the unshaded geometry,
+                // so we can't otherwise use them.
+                self.removeClient(client);
+            } else {
+                // If we already have a tile, just reset the geometry
+                var tile = getTile(client);
+                if (tile != null) {
+                    client.tiling_floating = false;
+                    tile.onClientGeometryChanged(client);
+                } else {
+                    self.addClient(client);
+                }
+            }
+        });
         client.tiling_connected1 = true;
     }
     if (client.tiling_connected2 == true) {
         return;
     }
-    // Just tile the shaded clients since we get the border geometry
-    // TODO: This needs improvement in our resizing/tile-finding logic
-    client.shadeChanged.connect(function() {
-        var tile = getTile(client);
-        if (tile != null) {
-            tile.onClientGeometryChanged(client);
-        }
-    });
     // geometryChanged fires also on maximizedStateChanged and stepUserMovedResized
     // (from a cursory reading of the KWin source code)
     // so use geometryShapeChanged
@@ -262,11 +270,12 @@ TileList.prototype.addClient = function(client) {
 
     this.connectSignals(client);
 
-    // Ignore fullscreen or minimized clients,
+    // Ignore fullscreen, shaded or minimized clients,
     // but after connecting signals, so
     // they'll be added once that changes.
     if (client.fullScreen
-       || client.minimized) {
+        || client.shade
+        || client.minimized) {
         client.keepBelow = false;
         return;
     }
