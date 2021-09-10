@@ -48,6 +48,7 @@ ignored._ignoredlist = [
     "org.kde.plasma",
     "org.kde.plasma-desktop",
     "org.kde.plasmashell",
+    "urxvt",
 ]
 
 /**
