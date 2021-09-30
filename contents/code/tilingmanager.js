@@ -213,6 +213,21 @@ function TilingManager(timerResize, timerGeometryChanged) {
     // KWin versions before 5.8.3 do not have this and will crash if we try to call it
     // So just check if the function is available
     if (KWin.registerShortcut) {
+        for(let desiredLayout of self.availableLayouts) {
+            let layoutName = desiredLayout.name.replace("Layout", " Tiling Layout");
+            KWin.registerShortcut("TILING: Switch to " + layoutName,
+                                  "TILING: Switch to " + layoutName,
+                                  "",
+                                  function() {
+                                      var currentLayout = self._getCurrentLayoutType();
+                                      if (desiredLayout.index != currentLayout.index) {
+                                          self._switchLayout(workspace.currentDesktop,
+                                                             workspace.activeScreen,
+                                                             desiredLayout.index);
+                                          self._notifyLayoutChanged();
+                                      }
+                                  });
+        }
         KWin.registerShortcut("TILING: Next Tiling Layout",
                               "TILING: Next Tiling Layout",
                               "Meta+Shift+PgDown",
