@@ -49,6 +49,7 @@ ignored._ignoredlist = [
     "org.kde.plasma-desktop",
     "org.kde.plasmashell",
     "urxvt",
+    "Tor Browser",
 ]
 
 /**
