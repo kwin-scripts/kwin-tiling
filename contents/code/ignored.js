@@ -93,7 +93,7 @@ ignored.isIgnored = function(client) {
     // so we check for their captions.
     if (["Firefox — Sharing Indicator"].includes(client.caption)) {
         print("Ignoring client because of firefox workaround", client.caption);
-	return true;
+        return true;
     }
 
     // KFind is annoying. It sets the window type to dialog (which is arguably wrong) and more importantly sets
