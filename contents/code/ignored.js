@@ -90,6 +90,7 @@ ignored.isIgnored = function(client) {
     }
 
     // HACK: On Wayland, Firefox's secondary windows doesn't have any resourceName
+    // so we check for their captions.
     if (["Firefox — Sharing Indicator"].includes(client.caption)) {
         print("Ignoring client because of firefox workaround", client.caption);
 	return true;
