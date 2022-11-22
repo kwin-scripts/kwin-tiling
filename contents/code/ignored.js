@@ -89,6 +89,13 @@ ignored.isIgnored = function(client) {
         return true;
     }
 
+    // HACK: On Wayland, Firefox's secondary windows doesn't have any resourceName
+    // so we check for their captions.
+    if (["Firefox — Sharing Indicator"].includes(client.caption)) {
+        print("Ignoring client because of firefox workaround", client.caption);
+        return true;
+    }
+
     // KFind is annoying. It sets the window type to dialog (which is arguably wrong) and more importantly sets
     // the transient_for property for some bogus "Qt Client Leader Window".
     //
